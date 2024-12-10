@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Event;
 
 class SuperAdminLoginDashboard extends Controller
 {
@@ -136,6 +137,12 @@ public function changePassword(Request $request, $userId)
         return response()->json(['success' => false, 'message' => 'User not found.']);
     }
 
+
+    public function shit(){
+    $shit = Event::all();
+    return response()->json($shit);
+
+    }
 
 
 }

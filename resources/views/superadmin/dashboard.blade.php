@@ -177,9 +177,11 @@
         </div>
 
         <!-- Pending User Approvals Card -->
+
         <div class="card bg-white p-4 rounded-lg shadow-lg mt-6 mx-auto max-w-lg">
             <h3 class="text-2xl font-semibold text-gray-800">Pending User Approvals</h3>
-            <p class="text-gray-600 mb-4">Here you can approve or reject user accounts that require verification.</p>
+            <p class="text-gray-600 mb-4">Here you can approve or reject user accounts that require verification.
+            </p>
             <a href="javascript:void(0)" class="btn btn-primary" onclick="openModal()">View Pending Approvals</a>
         </div>
         <x-admin.user-list />
@@ -193,8 +195,11 @@
             </a>
         </div>
 
-
         <x-admin.user-crud />
+
+
+
+
 
         <script>
             const sidebar = document.querySelector("aside");
