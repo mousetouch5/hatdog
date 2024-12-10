@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
 use App\Models\SurveyResponse;
-
+use Barryvdh\DomPDF\Facade\PDF; 
 use Illuminate\Support\Facades\DB;
 
 class SurveyLikeController extends Controller
@@ -107,6 +107,41 @@ public function getSurveyCounts(Request $request)
 
 
 
+public function ohMyGod(){
+    $surveyResponses = SurveyResponse::with('user')->get();
+
+    return view('official.OfficialSurveyResult',compact('surveyResponses'));
+}
+
+
+
+public function surveyResults()
+{
+    // Fetch all survey responses with user data
+    $surveyResponses = SurveyResponse::with('user')->get();
+
+    // Total count of survey responses
+    $totalResponses = $surveyResponses->count();
+
+    // Count of each participation level
+    $participationCounts = SurveyResponse::select('participation', DB::raw('COUNT(*) as count'))
+        ->groupBy('participation')
+        ->orderBy('participation') // Orders them alphabetically
+        ->get();
+
+    // Count of specific event types (since they are JSON, you'll need to handle this)
+    $eventTypeCounts = SurveyResponse::select(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(event_types, '$[0]')) as event_type"), DB::raw('COUNT(*) as count'))
+        ->groupBy('event_type')
+        ->get();
+
+    return view('official.OfficialSurveyResult', compact(
+        'surveyResponses',
+        'totalResponses',
+        'participationCounts',
+        'eventTypeCounts'
+    ));
+}
+
 
 
 
@@ -184,6 +219,21 @@ public function store(Request $request)
 
 
 
+public function print($id){
+        // Fetch the survey response by ID
+        $response = SurveyResponse::with('user')->findOrFail($id);
+
+        // Return a view to display the print layout
+        return view('events.print5', compact('response'));
+}
+
+public function downloadPDF($id)
+{
+    $response = SurveyResponse::with('user')->findOrFail($id);
+    $pdf = PDF::loadView('events.print5', compact('response'));
+
+    return $pdf->download('survey_' . $id . '.pdf');
+}
 
 
 

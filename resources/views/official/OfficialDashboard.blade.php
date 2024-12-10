@@ -222,6 +222,7 @@
             <aside class="w-full lg:w-1/3 grid grid-cols-1 gap-6 mt-5" data-aos="fade-right" data-aos-duration="2000">
                 <x-community-outreach />
                 <!-- Barangay Officials -->
+                <x-survey-button />
                 <x-admin.officials />
             </aside>
         </div>

@@ -156,6 +156,7 @@
                 <div class="bg-white shadow-md rounded-lg w-80 p-4">
 
                     <x-community-outreach />
+                    <x-survey-button />
                     <!-- Barangay Officials -->
                     <x-admin.officials />
         </aside>

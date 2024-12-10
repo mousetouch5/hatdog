@@ -128,3 +128,10 @@ Route::get('/survey-count', [SurveyLikeController::class, 'getSurveyCounts']);
 
 
 Route::post('/submit-survey', [SurveyLikeController::class, 'store']);
+
+
+
+Route::get('/survey-survey-survey',[SurveyLikeController::class, 'ohMyGod'])->name('yudipota');
+
+Route::get('/print-survey/{id}', [SurveyLikeController::class, 'print'])->name('survey.print');
+Route::get('/download-survey/{id}', [SurveyLikeController::class, 'downloadPDF'])->name('survey.download');
