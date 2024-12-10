@@ -111,19 +111,15 @@
                                         onclick="openEventModal('{{ $event->eventName }}',
                                         '{{ $event->userId }}',
                                         '{{ $event->id }}',
-                               '{{ $event->eventEndDate }}', 
-                                '{{ $event->eventTime }}', 
-                                '{{ $event->eventType }}', 
-                                 '{{ $event->eventDescription }}', 
-                                  '{{ $event->eventLocation }}', 
-                                  '{{ $event->organizer }}', 
-                                         '{{ asset('storage/' . $event->eventImage) }}',
-                                             '{{ $event->budget }}', 
-                                     {{ $event->expenses->isNotEmpty() ? json_encode($event->expenses) : 'null' }},
-
-            
-        )">
-
+                                        '{{ $event->eventEndDate }}', 
+                                        '{{ $event->eventTime }}', 
+                                        '{{ $event->eventType }}', 
+                                        '{{ $event->eventDescription }}', 
+                                        '{{ $event->eventLocation }}', 
+                                        '{{ $event->organizer }}', 
+                                        '{{ asset('storage/' . $event->eventImage) }}',
+                                        '{{ $event->budget }}', 
+                                        {{ $event->expenses->isNotEmpty() ? json_encode($event->expenses) : 'null' }},)">
                                         <img src="{{ asset('storage/' . $event->eventImage) }}" alt="Event"
                                             class="rounded-lg w-full h-48 object-cover">
                                         <div>
@@ -248,10 +244,6 @@
                                     });
                                 </script>
 
-
-
-
-
                                 <!-- button group recent , incoming , upcoming  javascript function -->
 
 
@@ -297,8 +289,6 @@
 
 
                                 <!-- Expenses Table Section -->
-
-
                                 <div class="hero min-h-screen mt-3"
                                     style="background-image: url('{{ asset('storage/' . $event->eventImage) }}');">
                                     <div class="hero-overlay bg-opacity-60"></div>
@@ -311,7 +301,6 @@
                                         </div>
                                     </div>
                                 </div>
-
 
 
                         </section>
@@ -348,7 +337,6 @@
 
 
                         <x-admin.officials />
-
 
 
 

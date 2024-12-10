@@ -3,41 +3,35 @@ namespace App\Http\Controllers;
 use App\Models\Expense;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log; // Import Log facade
 use Carbon\Carbon;
+
 class EventController extends Controller
 {
     // Display a listing of events
     public function index()
     {
-        // Log the retrieval of events
-        Log::info('Retrieving all events.');
+    $user = Auth::user(); // Get the currently authenticated user
 
-        // Retrieve all events from the database
-        $events = Event::all();
-        $expenses = Expense::all()
-        ->groupBy('event_id')
-        ->map(function ($group) {
-            return [
-                'id' => $group->first()->event_id, // Get the event_id
-                'items' => $group->map(function ($expense) {
-                    return [
-                        'name' => $expense->expense_description,
-                        'date' => Carbon::parse($expense->expense_date)->format('d M h:ia'), // Convert date to Carbon and format
-                        'amount' => $expense->expense_amount,
-                    ];
-                }),
-                'total' => $group->sum('expense_amount'), // Calculate the total for the group
-            ];
+    // Fetch events and map over them to include userId
+    $events = Event::with('expenses')
+        ->get()
+        ->map(function($event) use ($user) {
+            // Add the userId to each event object
+            $event->userId = $user->id;
+
+            // Optionally, you can add more logic here for event categories, etc.
+            return $event;
         });
-        $totalAmount = $events->flatMap(function ($event) {
-            return $event->expenses;
-        })->sum('expense_amount');
+    $totalAmount = $events->flatMap(function ($event) {
+        return $event->expenses;
+    })->sum('expense_amount');
 
 
         
         // Pass the events to the view for display
-        return view('Resident.Event', compact('events', 'expenses','totalAmount')); // Assuming your view is 'Resident.Event'
+        return view('Resident.Event', compact('events','totalAmount')); // Assuming your view is 'Resident.Event'
     }
 
 

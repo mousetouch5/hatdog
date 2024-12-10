@@ -124,6 +124,8 @@
                                         Projects</button>
                                 </div>
                             </div>
+
+
                             <div class="grid grid-cols-3 gap-4 mt-4">
                                 <!-- Event Card with modal function -->
                                 @foreach ($events as $event)
@@ -147,19 +149,15 @@
                                         onclick="openEventModal('{{ $event->eventName }}',
                                         '{{ $event->userId }}',
                                         '{{ $event->id }}',
-                               '{{ $event->eventEndDate }}', 
-                                '{{ $event->eventTime }}', 
-                                '{{ $event->eventType }}', 
-                                 '{{ $event->eventDescription }}', 
-                                  '{{ $event->eventLocation }}', 
-                                  '{{ $event->organizer }}', 
-                                         '{{ asset('storage/' . $event->eventImage) }}',
-                                             '{{ $event->budget }}', 
-                                     {{ $event->expenses->isNotEmpty() ? json_encode($event->expenses) : 'null' }},
-
-            
-        )">
-
+                                        '{{ $event->eventEndDate }}', 
+                                        '{{ $event->eventTime }}', 
+                                        '{{ $event->eventType }}', 
+                                        '{{ $event->eventDescription }}', 
+                                        '{{ $event->eventLocation }}', 
+                                        '{{ $event->organizer }}', 
+                                        '{{ asset('storage/' . $event->eventImage) }}',
+                                        '{{ $event->budget }}', 
+                                        {{ $event->expenses->isNotEmpty() ? json_encode($event->expenses) : 'null' }},)">
                                         <img src="{{ asset('storage/' . $event->eventImage) }}" alt="Event"
                                             class="rounded-lg w-full h-48 object-cover">
                                         <div>
@@ -172,231 +170,114 @@
                                         </div>
                                     </div>
                                 @endforeach
+
                                 <x-event-modal2 />
                                 <x-budget-breakdown-modal />
 
                             </div>
-                        </section>
 
 
 
 
-
-                        <script>
-                            // Global object to store the event data
-                            let currentEventData = {};
-
-                            function openEventModal(eventName, userId, eventId, eventDate, eventTime, eventType, eventDescription,
-                                eventLocation,
-                                eventOrganizer,
-                                eventImage, eventBudget, expenseAmount, expenseDescription) {
-                                // Store the event data in the global object
-                                currentEventData = {
-                                    userId,
-                                    eventId,
-                                    eventBudget,
-                                    eventBudget,
-                                    eventName: eventName,
-                                    expenseAmount: expenseAmount,
-                                    expenseDescription: expenseDescription,
-                                    eventDate: eventDate,
-                                    eventTime: eventTime,
-                                    eventType: eventType,
-                                    eventDescription: eventDescription,
-                                    eventLocation: eventLocation,
-                                    eventOrganizer: eventOrganizer,
-                                    eventImage: eventImage,
-                                };
-                                console.log(eventId);
-                                console.log("User: " + userId);
-                                console.log("Current Event Data:", currentEventData);
-
-                                // Populate Modal 1 fields with event data
-                                // Format the eventDate to match the input field format (YYYY-MM-DD)
-                                const formattedDate = eventDate.split(" ")[0];
-
-                                // Set the formatted date into the input field
-                                document.getElementById('eventDate').value = formattedDate;
-
-                                document.getElementById('eventTime').value = eventTime;
-                                document.getElementById('eventType').value = eventType;
-                                document.getElementById('eventDescription').value = eventDescription;
-                                document.getElementById('eventLocation').value = eventLocation;
-                                document.getElementById('eventOrganizer').value = eventOrganizer;
-                                document.getElementById('eventImage').src = eventImage;
-
-                                // Open Modal 1
-                                document.getElementById('my_modal_1').showModal();
-                            }
-
-                            function openBudgetModal() {
-                                const eventData = currentEventData;
-
-                                // Check if expenseAmount is an array or a single value
-                                let expenses = Array.isArray(eventData.expenseAmount) ? eventData.expenseAmount : [eventData.expenseAmount];
-
-                                const expenseTableBody = document.getElementById('expenseTableBody');
-                                expenseTableBody.innerHTML = ''; // Clear any previous rows
-
-                                let totalExpense = 0; // Initialize total expenses
-
-                                // Populate table rows and calculate total expenses
-                                expenses.forEach((expense) => {
-                                    const amount = parseFloat(expense.expense_amount) || 0;
-                                    const description = expense.expense_description || 'No Description';
-
-                                    const row = document.createElement('tr');
-                                    row.innerHTML = `<td>${description}</td><td>${amount.toFixed(2)}</td>`;
-                                    expenseTableBody.appendChild(row);
-
-                                    // Add to the total expense
-                                    totalExpense += amount;
-                                });
-
-                                // Populate budget summary data
-                                document.getElementById('eventName').value = eventData.eventName;
-                                document.getElementById('totalBudget').value = eventData.eventBudget; // Total budget
-                                //  document.getElementById('additionalExpenses').value = 0; // Placeholder for additional expenses
-                                document.getElementById('totalSpent').value = totalExpense.toFixed(2); // Example calculation
-
-                                // Open Modal 2
-                                document.getElementById('budgetModal').showModal();
-                            }
-
-                            // Close modals when clicking outside
-                            document.addEventListener('DOMContentLoaded', function() {
-                                const modal = document.getElementById('my_modal_1');
-                                const budgetModal = document.getElementById('budgetModal');
-
-                                [modal, budgetModal].forEach(modalElement => {
-                                    modalElement.addEventListener('click', (e) => {
-                                        if (e.target === modalElement) {
-                                            modalElement.close();
-                                        }
-                                    });
-                                });
-                            });
-                        </script>
-
-
-
-
-
-
-
-
-                        <script>
-                            // JavaScript to handle the event category toggle
-                            document.addEventListener("DOMContentLoaded", function() {
-                                const buttons = document.querySelectorAll("button");
-                                const eventCards = document.querySelectorAll(".event-card");
-
-                                // Function to filter event cards based on category
-                                function filterEvents(category) {
-                                    eventCards.forEach(card => {
-                                        if (category === "all" || card.getAttribute("data-category") === category) {
-                                            card.classList.remove("hidden");
-                                        } else {
-                                            card.classList.add("hidden");
-                                        }
-                                    });
-                                }
-
-                                // Event listener for button clicks
-                                buttons.forEach(button => {
-                                    button.addEventListener("click", () => {
-                                        // Reset all buttons' styles
-                                        buttons.forEach(btn => btn.classList.remove("bg-blue-100"));
-                                        button.classList.add("bg-blue-100");
-
-                                        // Determine which category to filter by
-                                        if (button.id === "recent-events") {
-                                            filterEvents("recent");
-                                        } else if (button.id === "ongoing-events") {
-                                            filterEvents("ongoing");
-                                        } else if (button.id === "upcoming-events") {
-                                            filterEvents("upcoming");
-                                        }
-                                    });
-                                });
-
-                                // Initial load, show all events
-                                filterEvents("all");
-                            });
-                        </script>
-
-
-
-
-
-
-                        <section>
-
-
-
-
-
-                            <!-- Highlight Section image-->
-                            <div class="carousel w-full relative" data-aos="fade-up" data-aos-duration="2000"
-                                id="carousel">
-                                @foreach ($events as $item)
-                                    <section class="bg-white shadow-lg rounded-lg p-6 flex flex-col"data-aos="fade-in"
-                                        data-aos-duration="2000">
-                                        <img src="{{ asset('storage/' . $item->eventImage) }}"
-                                            alt="Barangay Clean-Up Drive" class="rounded-lg w-full mb-4 h-72">
-                                        <div>
-                                            <h3 class="text-xl font-semibold">{{ $item->eventName }}</h3>
-                                            <p class="mt-4 text-sm text-gray-500">{{ $item->eventDescription }}
-                                            </p>
-                                        </div>
-                                    </section>
-                                @endforeach
-
-                            </div>
 
 
                             <script>
-                                document.addEventListener('DOMContentLoaded', () => {
-                                    const slides = document.querySelectorAll('.carousel-item');
-                                    const nextButton = document.getElementById('next-btn');
-                                    const prevButton = document.getElementById('prev-btn');
-                                    let currentIndex = 0;
-                                    const slideInterval = 3000; // 3 seconds
+                                // Global object to store the event data
+                                let currentEventData = {};
 
-                                    const showSlide = (index) => {
-                                        slides.forEach((slide, i) => {
-                                            slide.classList.toggle('hidden', i !== index);
+                                // Function to open Event Modal and populate data
+                                function openEventModal(eventName, userId, eventId, eventDate, eventTime, eventType, eventDescription,
+                                    eventLocation,
+                                    eventOrganizer,
+                                    eventImage, eventBudget, expenseAmount, expenseDescription) {
+                                    // Store the event data in the global object
+                                    currentEventData = {
+                                        userId,
+                                        eventId,
+                                        eventBudget,
+                                        eventBudget,
+                                        eventName: eventName,
+                                        expenseAmount: expenseAmount,
+                                        expenseDescription: expenseDescription,
+                                        eventDate: eventDate,
+                                        eventTime: eventTime,
+                                        eventType: eventType,
+                                        eventDescription: eventDescription,
+                                        eventLocation: eventLocation,
+                                        eventOrganizer: eventOrganizer,
+                                        eventImage: eventImage,
+                                    };
+                                    console.log(eventId);
+                                    console.log("User: " + userId);
+                                    console.log("Current Event Data:", currentEventData);
+
+                                    // Populate Modal 1 fields with event data
+                                    // Format the eventDate to match the input field format (YYYY-MM-DD)
+                                    const formattedDate = eventDate.split(" ")[0];
+
+                                    // Set the formatted date into the input field
+                                    document.getElementById('eventDate').value = formattedDate;
+
+                                    document.getElementById('eventTime').value = eventTime;
+                                    document.getElementById('eventType').value = eventType;
+                                    document.getElementById('eventDescription').value = eventDescription;
+                                    document.getElementById('eventLocation').value = eventLocation;
+                                    document.getElementById('eventOrganizer').value = eventOrganizer;
+                                    document.getElementById('eventImage').src = eventImage;
+
+                                    // Open Modal 1
+                                    document.getElementById('my_modal_1').showModal();
+                                }
+
+                                // Function to open Budget Modal and populate data
+                                // Function to open Budget Modal and populate data
+                                function openBudgetModal() {
+                                    const eventData = currentEventData;
+
+                                    // Check if expenseAmount is an array or a single value
+                                    let expenses = Array.isArray(eventData.expenseAmount) ? eventData.expenseAmount : [eventData.expenseAmount];
+
+                                    const expenseTableBody = document.getElementById('expenseTableBody');
+                                    expenseTableBody.innerHTML = ''; // Clear any previous rows
+
+                                    let totalExpense = 0; // Initialize total expenses
+
+                                    // Populate table rows and calculate total expenses
+                                    expenses.forEach((expense) => {
+                                        const amount = parseFloat(expense.expense_amount) || 0;
+                                        const description = expense.expense_description || 'No Description';
+
+                                        const row = document.createElement('tr');
+                                        row.innerHTML = `<td>${description}</td><td>${amount.toFixed(2)}</td>`;
+                                        expenseTableBody.appendChild(row);
+
+                                        // Add to the total expense
+                                        totalExpense += amount;
+                                    });
+
+                                    // Populate budget summary data
+                                    document.getElementById('eventName').value = eventData.eventName;
+                                    document.getElementById('totalBudget').value = eventData.eventBudget; // Total budget
+                                    //  document.getElementById('additionalExpenses').value = 0; // Placeholder for additional expenses
+                                    document.getElementById('totalSpent').value = totalExpense.toFixed(2); // Example calculation
+
+                                    // Open Modal 2
+                                    document.getElementById('budgetModal').showModal();
+                                }
+
+
+                                // Close modals when clicking outside
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const modal = document.getElementById('my_modal_1');
+                                    const budgetModal = document.getElementById('budgetModal');
+
+                                    [modal, budgetModal].forEach(modalElement => {
+                                        modalElement.addEventListener('click', (e) => {
+                                            if (e.target === modalElement) {
+                                                modalElement.close();
+                                            }
                                         });
-                                    };
-
-                                    const nextSlide = () => {
-                                        currentIndex = (currentIndex + 1) % slides.length;
-                                        showSlide(currentIndex);
-                                    };
-
-                                    const prevSlide = () => {
-                                        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-                                        showSlide(currentIndex);
-                                    };
-
-                                    // Auto-slide
-                                    let autoSlideInterval = setInterval(nextSlide, slideInterval);
-
-                                    // Next/Prev Button Click Handlers
-                                    nextButton.addEventListener('click', () => {
-                                        nextSlide();
-                                        clearInterval(autoSlideInterval);
-                                        autoSlideInterval = setInterval(nextSlide, slideInterval);
                                     });
-
-                                    prevButton.addEventListener('click', () => {
-                                        prevSlide();
-                                        clearInterval(autoSlideInterval);
-                                        autoSlideInterval = setInterval(nextSlide, slideInterval);
-                                    });
-
-                                    // Initialize first slide
-                                    showSlide(currentIndex);
                                 });
                             </script>
 
@@ -407,96 +288,56 @@
 
 
 
-
-
-
-
                             <script>
-                                let slideIndex = 0;
+                                // JavaScript to handle the event category toggle
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    const buttons = document.querySelectorAll("button");
+                                    const eventCards = document.querySelectorAll(".event-card");
 
-                                function showSlides() {
-                                    const slides = document.querySelectorAll('.slider section');
-                                    if (slides.length === 0) return; // No slides to show
-
-                                    const offset = -slideIndex * 100; // Each slide takes up 100% of the width
-                                    document.querySelector('.slider').style.transform = `translateX(${offset}%)`;
-                                }
-
-                                function moveSlide(n) {
-                                    const slides = document.querySelectorAll('.slider section');
-
-                                    slideIndex += n;
-
-                                    if (slideIndex >= slides.length) {
-                                        slideIndex = 0; // Loop back to the first slide
-                                    } else if (slideIndex < 0) {
-                                        slideIndex = slides.length - 1; // Loop to the last slide
+                                    // Function to filter event cards based on category
+                                    function filterEvents(category) {
+                                        eventCards.forEach(card => {
+                                            if (category === "all" || card.getAttribute("data-category") === category) {
+                                                card.classList.remove("hidden");
+                                            } else {
+                                                card.classList.add("hidden");
+                                            }
+                                        });
                                     }
 
-                                    showSlides();
-                                }
+                                    // Event listener for button clicks
+                                    buttons.forEach(button => {
+                                        button.addEventListener("click", () => {
+                                            // Reset all buttons' styles
+                                            buttons.forEach(btn => btn.classList.remove("bg-blue-100"));
+                                            button.classList.add("bg-blue-100");
 
-                                // Initialize the slider on page load
-                                document.addEventListener('DOMContentLoaded', () => {
-                                    showSlides();
+                                            // Determine which category to filter by
+                                            if (button.id === "recent-events") {
+                                                filterEvents("recent");
+                                            } else if (button.id === "ongoing-events") {
+                                                filterEvents("ongoing");
+                                            } else if (button.id === "upcoming-events") {
+                                                filterEvents("upcoming");
+                                            }
+                                        });
+                                    });
+
+                                    // Initial load, show all events
+                                    filterEvents("all");
                                 });
                             </script>
 
-                            <style>
-                                .slider-container {
-                                    position: relative;
-                                    max-width: 600px;
-                                    /* Adjust as needed */
-                                    margin: auto;
-                                    overflow: hidden;
-                                }
-
-                                .slider {
-                                    display: flex;
-                                    transition: transform 0.5s ease-in-out;
-                                    /* Smooth transition */
-                                }
-
-                                section {
-                                    min-width: 100%;
-                                    /* Each section takes full width */
-                                }
-
-                                .prev,
-                                .next {
-                                    position: absolute;
-                                    top: 50%;
-                                    transform: translateY(-50%);
-                                    background-color: rgba(255, 255, 255, 0.8);
-                                    border: none;
-                                    cursor: pointer;
-                                }
-
-                                .prev {
-                                    left: 10px;
-                                }
-
-                                .next {
-                                    right: 10px;
-                                }
-                            </style>
-
-
-
                         </section>
-
                     </main>
 
                     <!-- Right-Side Content Section -->
                     <aside class="w-full lg:w-1/3 grid grid-cols-1 gap-6 mt-5"data-aos="fade-left"
                         data-aos-duration="2000">
-
-
-
                         <x-community-outreach />
                         <x-admin.officials />
                     </aside>
                 </div>
-
-
+        </aside>
+    </div>
 </x-app-layout>
