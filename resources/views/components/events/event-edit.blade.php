@@ -4,6 +4,17 @@
 
         <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
+            <label for="event_status" class="block text-sm font-semibold text-gray-700">Select Transactions:</label>
+            <select id="transaction" name="transaction_id"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <option value="">-- Select a Transaction --</option>
+                @foreach ($transactions as $transaction)
+                    <option value="{{ $transaction->id }}" data-item="{{ $transaction->description }}"
+                        data-budget="{{ $transaction->budget }}">
+                        {{ $transaction->description }}
+                    </option>
+                @endforeach
+            </select>
 
             <!-- Event Name -->
             <div class="mb-4">
@@ -20,11 +31,8 @@
 
             <div class="mb-4">
                 <label for="event_name" class="block text-sm font-semibold text-gray-700">Event Name:</label>
-                <input type="text" id="event_name" name="eventName" placeholder="Enter Event Name"
-                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-                @error('eventName')
-                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                @enderror
+                <input type="text" id="event_name" placeholder="Event Name" name="eventName"
+                    class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
             </div>
 
 
@@ -112,13 +120,11 @@
             <div class="mb-6">
                 <h3 class="text-lg font-semibold text-gray-700">Event Budget:</h3>
                 <div class="flex justify-between mt-4">
-                    <div class="w-full mr-2">
+                    <div class="mb-4">
                         <label for="event_budget" class="block text-sm font-semibold text-gray-700">Event
-                            Amount:</label>
-                        <input type="text" id="event_budget" name="budget" placeholder="Enter Budget"
-                            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-                        <span id="event_budget_error" class="text-red-500 text-xs mt-1 hidden">Error: Budget amount is
-                            required.</span>
+                            Budget:</label>
+                        <input type="text" id="event_budget" placeholder="Event Budget" name="budget"
+                            class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
                     </div>
 
                     <div class="w-full ml-2">
@@ -264,3 +270,16 @@
         </form>
     </div>
 </section>
+
+
+<script>
+    document.getElementById('transaction').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const eventName = selectedOption.getAttribute('data-item');
+        const eventBudget = selectedOption.getAttribute('data-budget');
+
+        // Populate the Event Name and Budget fields
+        document.getElementById('event_name').value = eventName || '';
+        document.getElementById('event_budget').value = eventBudget || '';
+    });
+</script>

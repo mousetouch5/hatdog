@@ -281,7 +281,7 @@
 
                     <x-community-outreach />
                     <!-- Barangay Officials -->
-                    <x-barangay-officials />
+                    <x-admin.officials />
         </aside>
     </div>
     </div>

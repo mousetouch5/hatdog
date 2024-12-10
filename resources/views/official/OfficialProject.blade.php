@@ -223,7 +223,7 @@
             <aside class="w-full lg:w-1/3 grid grid-cols-1 gap-6 mt-5" data-aos="fade-left" data-aos-duration="2000">
                 <x-community-outreach />
                 <!-- Barangay Officials -->
-                <x-barangay-officials />
+                <x-admin.officials />
             </aside>
         </div>
 
@@ -241,40 +241,4 @@
                 background-color: rgba(205, 243, 255, 1);
             }
         </style>
-
-
-
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            var ctx = document.getElementById('pieChart').getContext('2d');
-            var pieChart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: [''],
-                    datasets: [{
-                        label: 'Community Outreach',
-                        data: [40, 30, 30], // Example data points, adjust as needed
-                        backgroundColor: ['#4CD7F6', '#CDF3FF'],
-                        borderColor: '#ffffff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    return tooltipItem.label + ': ' + tooltipItem.raw + '%';
-                                }
-                            }
-                        }
-                    }
-                } // Close the options object
-            }); // Close the Chart initialization
-        </script>
-
 </x-app-layout>

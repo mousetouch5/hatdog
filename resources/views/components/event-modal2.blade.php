@@ -115,8 +115,8 @@
                  }
              })
              .catch(error => {
-                 console.error('Error:', error.message);
-                 alert(error.message); // Display the error message to the user
+                 console.log('Error:', error.message);
+                 console.log(error.message); // Display the error message to the user
              });
      }
  </script>

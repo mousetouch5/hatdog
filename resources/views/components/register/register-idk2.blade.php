@@ -5,6 +5,7 @@
             @csrf <!-- This directive adds the CSRF token -->
             <input type="hidden" name="usertype" value="resident">
             <input type="hidden" name="brgy_id" value="doesntmatter">
+            <input type="hidden" name="brgy_city_zipcode" value="idk">
             <!-- Form Fields -->
             <div class="space-y-4">
                 <!-- Row 1 -->
@@ -89,30 +90,16 @@
 
                 <div class="grid grid-cols-3 gap-6">
                     <div>
-                        <label for="brgy_city_zipcode" class="block text-sm font-semibold">Barangay, City,
-                            Zip Code</label>
-                        <input type="text" id="brgy_city_zipcode" name="brgy_city_zipcode"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
                         <label for="city" class="block text-sm font-semibold">City</label>
                         <input type="text" id="city" name="city"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     </div>
-
                     <div>
                         <label for="zipcode" class="block text-sm font-semibold">Zip Code</label>
                         <input type="text" id="zipcode" name="zipcode"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     </div>
                 </div>
-
-
-
-
-
-
-
             </div>
 
             <!-- Modal Footer -->

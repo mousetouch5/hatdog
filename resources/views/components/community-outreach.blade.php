@@ -111,7 +111,7 @@
             });
         })
         .catch(error => {
-            console.error('Error:', error.message); // Log any errors to the console
+            console.log('Error:', error.message); // Log any errors to the console
             console.log('Failed to load survey data. Please try again later.');
         });
 </script>

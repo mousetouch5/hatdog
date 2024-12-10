@@ -141,7 +141,7 @@
                     <h2 class="text-xl font-semibold text-gray-700">Events</h2>
                 </div>
 
-                <x-events.event-edit />
+                <x-events.event-edit :transactions="$transactions" />
 
 
             </main>
@@ -157,7 +157,7 @@
 
                     <x-community-outreach />
                     <!-- Barangay Officials -->
-                    <x-barangay-officials />
+                    <x-admin.officials />
         </aside>
     </div>
     </div>
