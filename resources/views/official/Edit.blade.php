@@ -141,7 +141,6 @@
                     <h2 class="text-xl font-semibold text-gray-700">Events</h2>
                 </div>
 
-
                 <x-events.event-edit />
 
 
@@ -156,94 +155,11 @@
             <div class="bg-white shadow-lg rounded-lg p-6 relative">
                 <div class="bg-white shadow-md rounded-lg w-80 p-4">
 
-
-                    <!-- Pie Chart Placeholder -->
-                    <div class="text-center">
-                        <h3 class="text-sm font-semibold text-gray-700 mb-2">Community Outreach </h3>
-
-                        <!-- Simulated Pie Chart -->
-                        <canvas id="pieChart" class="mt-4 h-72"></canvas>
-
-
-                        <!-- Feedback -->
-                        <div class="mt-4 space-y-2">
-                            <div class="flex items-center justify-center space-x-2">
-                                <span class="text-2xl">😊</span>
-                                <span class="text-sm font-semibold text-gray-700">80%</span>
-                            </div>
-                            <div class="flex items-center justify-center space-x-2">
-                                <span class="text-2xl">😞</span>
-                                <span class="text-sm font-semibold text-gray-700">20%</span>
-                            </div>
-                        </div>
-                    </div>
-
+                    <x-community-outreach />
                     <!-- Barangay Officials -->
-                    <div class="bg-white shadow-lg rounded-lg p-6 mt-5">
-                        <h4 class="text-lg font-semibold">Barangay Officials</h4>
-                        <ul class="mt-4 space-y-4">
-                            <li class="flex items-center space-x-4">
-                                <img src="https://via.placeholder.com/40" alt="Official"
-                                    class="w-10 h-10 rounded-full">
-                                <div>
-                                    <p class="text-sm font-semibold">Maria Catarina Agoncillo</p>
-                                    <p class="text-xs text-gray-500">Barangay Captain</p>
-                                </div>
-                            </li>
-                            <li class="flex items-center space-x-4">
-                                <img src="https://via.placeholder.com/40" alt="Official"
-                                    class="w-10 h-10 rounded-full">
-                                <div>
-                                    <p class="text-sm font-semibold">Joshua Cabatuan</p>
-                                    <p class="text-xs text-gray-500">Barangay Secretary</p>
-                                </div>
-                            </li>
-                            <li class="flex items-center space-x-4">
-                                <img src="https://via.placeholder.com/40" alt="Official"
-                                    class="w-10 h-10 rounded-full">
-                                <div>
-                                    <p class="text-sm font-semibold">Juan Dela Cruz</p>
-                                    <p class="text-xs text-gray-500">Barangay Treasurer</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <x-barangay-officials />
         </aside>
     </div>
     </div>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var ctx = document.getElementById('pieChart').getContext('2d');
-        var pieChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: [''],
-                datasets: [{
-                    label: 'Community Outreach',
-                    data: [40, 30, 30], // Example data points, adjust as needed
-                    backgroundColor: ['#4CD7F6', '#CDF3FF'],
-                    borderColor: '#ffffff',
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                return tooltipItem.label + ': ' + tooltipItem.raw + '%';
-                            }
-                        }
-                    }
-                }
-            } // Close the options object
-        }); // Close the Chart initialization
-    </script>
 
 </x-app-layout>
