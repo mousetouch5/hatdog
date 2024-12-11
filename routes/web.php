@@ -49,7 +49,7 @@ Route::middleware([
     });
 });
 
-
+Route::middleware(['auth'])->group(function () {
 Route::get('/users', [SuperAdminLoginDashboard::class, 'listofAllUsers']);
 Route::get('superadmin/dashboard', [SuperAdminLoginDashboard::class, 'index'])->name('superadmin.dashboard');
 Route::get('pending-approvals', [SuperAdminLoginDashboard::class, 'listPendingApprovals'])->name('superadmin.pendingApprovals');
@@ -135,3 +135,6 @@ Route::get('/survey-survey-survey',[SurveyLikeController::class, 'ohMyGod'])->na
 
 Route::get('/print-survey/{id}', [SurveyLikeController::class, 'print'])->name('survey.print');
 Route::get('/download-survey/{id}', [SurveyLikeController::class, 'downloadPDF'])->name('survey.download');
+
+
+});
