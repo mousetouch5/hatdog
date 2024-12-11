@@ -20,7 +20,7 @@
 
             <!-- Event Name -->
             <div class="mb-4">
-                <label for="event_status" class="block text-sm font-semibold text-gray-700">Event Status:</label>
+                <label for="event_status" class="block text-sm font-semibold text-gray-700">Project Status:</label>
                 <select id="event_status" name="eventStatus"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
                     <option value="ongoing">Ongoing</option>
@@ -32,7 +32,7 @@
             </div>
 
             <div class="mb-4">
-                <label for="event_name" class="block text-sm font-semibold text-gray-700">Event Name:</label>
+                <label for="event_name" class="block text-sm font-semibold text-gray-700">Project Name:</label>
                 <input type="text" id="event_name" placeholder="Event Name" name="eventName"
                     class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
             </div>
@@ -40,7 +40,7 @@
 
             <!-- Event Description -->
             <div class="mb-4">
-                <label for="description" class="block text-sm font-semibold text-gray-700">Event Description:</label>
+                <label for="description" class="block text-sm font-semibold text-gray-700">Project Description:</label>
                 <textarea id="description" name="eventDescription" placeholder="Enter Event Description" rows="4"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
                 @error('eventDescription')
@@ -50,7 +50,7 @@
 
             <!-- Event Start Date -->
             <div class="mb-4">
-                <label for="event_start_date" class="block text-sm font-semibold text-gray-700">Event Start
+                <label for="event_start_date" class="block text-sm font-semibold text-gray-700">Project Start
                     Date:</label>
                 <input type="date" id="event_start_date" name="eventStartDate"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -58,14 +58,14 @@
 
             <!-- Event End Date -->
             <div class="mb-4">
-                <label for="event_end_date" class="block text-sm font-semibold text-gray-700">Event End Date:</label>
+                <label for="event_end_date" class="block text-sm font-semibold text-gray-700">Project End Date:</label>
                 <input type="date" id="event_end_date" name="eventEndDate"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
             <!-- Event Time -->
             <div class="mb-4">
-                <label for="event_time" class="block text-sm font-semibold text-gray-700">Event Time:</label>
+                <label for="event_time" class="block text-sm font-semibold text-gray-700">Project Time:</label>
                 <input type="time" id="event_time" name="eventTime"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
                 @error('eventTime')
@@ -75,10 +75,10 @@
 
             <!-- Event Type -->
             <div class="mb-4">
-                <label for="event_type" class="block text-sm font-semibold text-gray-700">Event Type:</label>
+                <label for="event_type" class="block text-sm font-semibold text-gray-700">Project Type:</label>
                 <select id="event_type" name="eventType"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option value="">Select Event Type</option>
+                    <option value="">Select Project Type</option>
                     <option value="Conference">Conference</option>
                     <option value="Workshop">Workshop</option>
                     <option value="Seminar">Seminar</option>
@@ -90,7 +90,7 @@
             </div>
 
             <div class="mb-4">
-                <label for="event_image" class="block text-sm font-semibold text-gray-700">Event Image:</label>
+                <label for="event_image" class="block text-sm font-semibold text-gray-700">Project Image:</label>
                 <input type="file" id="event_image" name="eventImage"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
                 @error('eventImage')
@@ -100,7 +100,7 @@
 
             <!-- Event Location -->
             <div class="mb-4">
-                <label for="event_location" class="block text-sm font-semibold text-gray-700">Event Location:</label>
+                <label for="event_location" class="block text-sm font-semibold text-gray-700">Project Location:</label>
                 <input type="text" id="event_location" name="eventLocation" placeholder="Enter Event Location"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
                 @error('eventLocation')
@@ -110,7 +110,7 @@
 
             <!-- Event Organizer -->
             <div class="mb-4">
-                <label for="event_organizer" class="block text-sm font-semibold text-gray-700">Event
+                <label for="event_organizer" class="block text-sm font-semibold text-gray-700">Project
                     Organizer:</label>
                 <input type="text" id="event_organizer" name="organizer" placeholder="Enter Organizer Name"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -121,10 +121,10 @@
 
             <!-- Event Budget and Expenses -->
             <div class="mb-6">
-                <h3 class="text-lg font-semibold text-gray-700">Event Budget:</h3>
+                <h3 class="text-lg font-semibold text-gray-700">Project Budget:</h3>
                 <div class="flex justify-between mt-4">
                     <div class="mb-4">
-                        <label for="event_budget" class="block text-sm font-semibold text-gray-700">Event
+                        <label for="event_budget" class="block text-sm font-semibold text-gray-700">Project
                             Budget:</label>
                         <input type="text" id="event_budget" placeholder="Event Budget" name="budget"
                             class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
