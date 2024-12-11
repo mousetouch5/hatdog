@@ -208,10 +208,7 @@
                                 });
                             });
                         </script>
-
-
-
-
+                        <x-events.event-edit-button2 />
 
 
 

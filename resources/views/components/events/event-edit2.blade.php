@@ -1,10 +1,11 @@
 <section class="bg-white shadow-lg rounded-lg p-6 flex flex-col">
     <div class="container mx-auto p-8">
-        <h2 class="text-2xl font-semibold mb-6">Add New Event</h2>
+        <h2 class="text-2xl font-semibold mb-6">Add New Project</h2>
 
         <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <input type="hidden" name="type" value="Event">
+
+            <input type="hidden" name="type" value="Project">
             <label for="event_status" class="block text-sm font-semibold text-gray-700">Select Transactions:</label>
             <select id="transaction" name="transaction_id"
                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">

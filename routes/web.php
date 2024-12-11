@@ -85,7 +85,7 @@ Route::get('/Official/OfficialTransaction', [OfficialTransactionController::clas
 Route::get('/Official/OfficialReport', [OfficialReportController::class, 'index'])->name('Official.OfficialReport.index');
 Route::get('/Official/OfficialProject', [OfficialProjectController::class, 'index'])->name('Official.OfficialProject.index');
 Route::get('/Official/Edit', [EditController::class, 'index'])->name('Official.Edit.index');
-
+Route::get('/Official/Edit2', [EditController::class, 'putangina'])->name('Official.Edit2.index');
 Route::get('/generate-liquidation-report/{event}', [OfficialReportController::class, 'generateLiquidationReport'])->name('download.liquidation.report');
 
 //Post

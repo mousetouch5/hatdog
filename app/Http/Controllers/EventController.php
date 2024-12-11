@@ -161,7 +161,7 @@ public function updateStatus(Request $request, $id)
     Log::info('Event created successfully', ['event_id' => $event->id]);
 
     // Redirect back with a success message
-    return redirect()->route('Official.OfficialEvent.index')->with('success', 'Event created successfully!');
+    return redirect()->route('Official.OfficialDashboard.index')->with('success', 'Event created successfully!');
 }
 
 

@@ -13,4 +13,10 @@ class EditController extends Controller
       //  dd($transactions);
         return view('official.Edit',compact('transactions')); // This will load the 'events.index' view
     }
+    public function putangina()
+    {
+        $transactions = Transaction::all();
+      //  dd($transactions);
+        return view('official.Edit2',compact('transactions')); // This will load the 'events.index' view
+    }
 }

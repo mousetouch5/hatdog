@@ -2,7 +2,6 @@
 
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script>
         AOS.init();
     </script>
@@ -52,8 +51,7 @@
                                         <button
                                             class="px-3 py-1 bg-gray-700 text-white font-semibold rounded-lg shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all duration-300"
                                             onclick="printUserResponse({{ $response->id }})">
-                                            <i class="material-icons text-green-500 text-lg mr-2">thumb_up</i>
-                                            Like
+                                            <i class="material-icons">print</i>
                                         </button>
 
                                         <!-- Download Button -->

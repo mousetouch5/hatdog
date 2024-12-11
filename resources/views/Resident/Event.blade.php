@@ -43,9 +43,6 @@
                         <section>
 
 
-
-
-
                             <x-recent-events-header />
 
 
