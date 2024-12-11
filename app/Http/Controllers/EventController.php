@@ -16,6 +16,7 @@ class EventController extends Controller
 
     // Fetch events and map over them to include userId
     $events = Event::with('expenses')
+        ->where('type', 'Event')
         ->get()
         ->map(function($event) use ($user) {
             // Add the userId to each event object
@@ -90,6 +91,7 @@ public function updateStatus(Request $request, $id)
         'eventTime' => 'required|date_format:H:i',
         'eventSpent' => 'required|numeric',
         'eventType' => 'required|in:Workshop,Conference,Seminar,Community Outreach',
+        'type' => 'required|string|max:255',
     ]);
 
     // Log the validated data
@@ -131,6 +133,7 @@ public function updateStatus(Request $request, $id)
         'eventType' => $validated['eventType'],
         'eventSpent' => $validated['eventSpent'],
         'eventTime' => $validated['eventTime'],
+        'type' => $validated['type'],
     ]);
 
 

@@ -11,6 +11,7 @@ use App\Models\User;
 class DashboardController extends Controller
 {
     public function index() {
+        $user = Auth::user();
         $events = Event::all();     
         return view('Resident.dashboard',compact('events'));
     }

@@ -30,6 +30,17 @@
             </div>
 
             <div class="mb-4">
+                <label for="event_type" class="block text-sm font-semibold text-gray-700">TYPE:</label>
+                <select id="type" name="type"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <option value="" disabled selected>Select Position</option>
+                    <option value="Event">Event</option>
+                    <option value="Project">Project</option>
+                </select>
+            </div>
+
+
+            <div class="mb-4">
                 <label for="event_name" class="block text-sm font-semibold text-gray-700">Event Name:</label>
                 <input type="text" id="event_name" placeholder="Event Name" name="eventName"
                     class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
@@ -108,7 +119,8 @@
 
             <!-- Event Organizer -->
             <div class="mb-4">
-                <label for="event_organizer" class="block text-sm font-semibold text-gray-700">Event Organizer:</label>
+                <label for="event_organizer" class="block text-sm font-semibold text-gray-700">Event
+                    Organizer:</label>
                 <input type="text" id="event_organizer" name="organizer" placeholder="Enter Organizer Name"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
                 @error('eventOrganizer')

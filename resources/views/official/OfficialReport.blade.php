@@ -84,8 +84,8 @@
                     <table class="table w-full">
                         <thead class="bg-gray-200">
                             <tr>
-                                <th class="px-4 py-2 text-left">Event Name</th>
-                                <th class="px-4 py-2 text-left">Event Date</th>
+                                <th class="px-4 py-2 text-left">Activity Name</th>
+                                <th class="px-4 py-2 text-left">Activity Date</th>
                                 <th class="px-4 py-2 text-left">Budget</th>
                                 <th class="px-4 py-2 text-left">Total Spent</th>
                                 <th class="px-4 py-2 text-left">Action</th>

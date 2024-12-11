@@ -13,7 +13,7 @@ class OfficialEventController extends Controller
 public function index()
 {
     // Eager load expenses with their associated events
-    $events = Event::all(); 
+    $events = Event::where('type', 'Event')->get();
     $expenses = Expense::all()
         ->groupBy('event_id')
         ->map(function ($group) {

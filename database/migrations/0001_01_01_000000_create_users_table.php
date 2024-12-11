@@ -105,7 +105,7 @@ return new class extends Migration
         'created_at' => now(),
         'updated_at' => now(),
         'position' => null,
-        'is_approved' => false,
+        'is_approved' => true,
         'current_team_id' => null, // Ensure this is filled if needed
         'profile_photo_path' => null, // Set to null if not available
     ],

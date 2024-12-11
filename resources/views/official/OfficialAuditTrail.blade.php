@@ -38,7 +38,7 @@
                             class="py-2 px-4 font-medium text-gray-700 border-b-2 border-blue-600 focus:border-blue-600"
                             id="allButton">All</button>
                         <button class="py-2 px-4 font-medium text-gray-700 hover:border-b-2 hover:border-gray-300"
-                            id="organizerButton">Event Organizer</button>
+                            id="organizerButton">Activity Organizer</button>
                         <button class="py-2 px-4 font-medium text-gray-700 hover:border-b-2 hover:border-gray-300"
                             id="budgetButton">Budget Allocation</button>
                         <button class="py-2 px-4 font-medium text-gray-700 hover:border-b-2 hover:border-gray-300"

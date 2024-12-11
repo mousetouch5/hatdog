@@ -24,6 +24,7 @@ class Event extends Model
         'eventLocation',
         'eventType',
         'eventStatus',
+        'type',
     ];
 
     protected $casts = [

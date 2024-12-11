@@ -13,8 +13,9 @@ class OfficialProjectController extends Controller
 public function index()
 {
     // Get all events with their related expenses
-    $events = Event::with('expenses')->get();
-
+   $events = Event::with('expenses')
+               ->where('type', 'Project')
+               ->get();
     // Calculate the total amount of all expenses
     $totalAmount = $events->flatMap(function ($event) {
         return $event->expenses;

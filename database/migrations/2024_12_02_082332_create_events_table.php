@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('organizer')->nullable(); // Event Organizer (nullable if not provided)
             $table->string('eventLocation')->nullable(); // Event Location (nullable if not provided)
             $table->enum('eventType', ['Workshop', 'Conference', 'Seminar', 'Community Outreach']); // Event Type as ENUM
+            $table->enum('type', ['Event', 'Project']);
             $table->timestamps(); // Created_at and updated_at timestamps
         });
     }

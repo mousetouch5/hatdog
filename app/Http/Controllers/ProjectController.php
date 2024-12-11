@@ -16,6 +16,7 @@ class ProjectController extends Controller
 
     // Fetch events and map over them to include userId
     $events = Event::with('expenses')
+        ->where('type', 'Project')
         ->get()
         ->map(function($event) use ($user) {
             // Add the userId to each event object
@@ -31,4 +32,6 @@ class ProjectController extends Controller
 
         return view('Resident.Project',compact('events','totalAmount')); // This will load the 'events.index' view
     }
+
+
 }

@@ -21,7 +21,7 @@
             <main class="flex-1 px-8 py-6 space-y-6 bg-gray-50">
                 <!-- Events Section -->
                 <section>
-                    <x-recent-events-header />
+                    <x-recent-projects-header />
 
                     <!-- button group -->
 
