@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use App\Actions\Fortify\PasswordValidationRules;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -37,6 +38,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'usertype' => ['required', 'string', 'in:official,resident'],
             'profile_picture' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'password' => $this->passwordRules(),
         ];
 
         // Add ID picture and position validation for officials

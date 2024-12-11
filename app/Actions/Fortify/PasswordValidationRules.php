@@ -13,6 +13,15 @@ trait PasswordValidationRules
      */
     protected function passwordRules(): array
     {
-        return ['required', 'string', Password::default(), 'confirmed'];
+        return [
+            'required', // Password is required
+            'string', // It must be a string
+            Password::min(12) // Minimum length of 12 characters
+                ->mixedCase() // Must include both uppercase and lowercase characters
+                ->numbers() // Must include numbers
+                ->symbols() // Must include special characters (e.g., !, @, #, $, etc.)
+                ->uncompromised(), // Checks if the password has been compromised in known data breaches
+            'confirmed', // Password confirmation must match
+        ];
     }
 }

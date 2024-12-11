@@ -15,14 +15,19 @@ class DashboardController extends Controller
         $events = Event::all();     
         return view('Resident.dashboard',compact('events'));
     }
+    
     public function getOfficials()
     {
-    // Fetching the barangay officials who are approved and have a specific position
-    $officials = \App\Models\User::whereIn('position', ['Barangay Captain', 'Barangay Secretary', 'Barangay Treasurer'])
-                                  ->where('is_approved', 1)  // Filter to only approved officials
-                                  ->get();
+    $officials = User::whereIn('position', ['Barangay Captain', 'Barangay Secretary', 'Barangay Treasurer'])
+        ->where('is_approved', 1)
+        ->get()
+        ->map(function ($official) {
+            $official->profile_photo_path = $official->profile_photo_path 
+                ? asset($official->profile_photo_path) 
+                : 'https://via.placeholder.com/40';
+            return $official;
+        });
 
-    // Returning as a JSON response
     return response()->json($officials);
     }
 

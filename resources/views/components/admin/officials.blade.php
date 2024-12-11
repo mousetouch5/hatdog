@@ -26,6 +26,7 @@
                     'https://via.placeholder.com/40';
                 img.alt = 'Official';
                 img.classList.add('w-10', 'h-10', 'rounded-full');
+                console.log(official.profile_photo_path);
 
                 const infoDiv = document.createElement('div');
 
