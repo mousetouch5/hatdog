@@ -68,17 +68,18 @@
 
 
         </div>
-         <!-- Links for switching between login and register -->
-    <p class="text-gray-600 text-sm" id="loginPrompt">
-        Don't Have an account?
-        <a href="javascript:void(0);" id="loginLink" class="text-blue-500 hover:underline">Login Here</a>.
-    </p>
+        <!-- Links for switching between login and register -->
+        <p class="text-gray-600 text-sm" id="loginPrompt">
+            Have an Account?
+            <a href="javascript:void(0);" id="loginLink" class="text-blue-500 hover:underline">Login Here</a>.
+        </p>
 
-    <!-- Alternate link for creating an account -->
-    <p class="text-gray-600 text-sm hidden" id="registerPrompt">
-        Don't have an account? 
-        <a href="{{ route('login') }}" id="registerLink" class="text-blue-500 hover:underline">Create an Account</a>.
-    </p>
+        <!-- Alternate link for creating an account -->
+        <p class="text-gray-600 text-sm hidden" id="registerPrompt">
+            Don't have an account?
+            <a href="{{ route('login') }}" id="registerLink" class="text-blue-500 hover:underline">Create an
+                Account</a>.
+        </p>
     </div>
 </body>
 <!-- script for offbutton residentbutton  hide -->

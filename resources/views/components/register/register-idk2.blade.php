@@ -4,7 +4,6 @@
         <form id="signup_form" method="POST" action="{{ route('register') }}" class="grid grid-cols-1 gap-6 p-6">
             @csrf <!-- This directive adds the CSRF token -->
             <input type="hidden" name="usertype" value="resident">
-            <input type="hidden" name="brgy_id" value="doesntmatter">
             <input type="hidden" name="brgy_city_zipcode" value="idk">
             <!-- Form Fields -->
             <div class="space-y-4">
@@ -43,12 +42,11 @@
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     </div>
 
-                    <!--  <div>
-                        <label for="brgy_id" class="block text-sm font-semibold">Barangay ID</label>
+                    <div>
+                        <label for="brgy_id" class="block text-sm font-semibold">Barangay</label>
                         <input type="text" id="brgy_id" name="brgy_id"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     </div>
-                -->
                 </div>
 
                 <div class="grid grid-cols-1 gap-6">
