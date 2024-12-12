@@ -43,10 +43,11 @@
             <p><strong>Total Refunded:</strong> {{ number_format($total_refunded, 2) }}</p>
             <p><strong>Total To Be Reimbursed:</strong> {{ number_format($total_to_be_reimbursed, 2) }}</p>
         </div>
-        <div class="footer">
-            <button onclick="window.print()">Print</button>
-        </div>
     </div>
 </body>
 
 </html>
+
+<script>
+    window.print();
+</script>

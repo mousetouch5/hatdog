@@ -61,11 +61,12 @@
         </div>
     @endif
 </div>
-<div class="footer">
-    <button onclick="window.print()">Print</button>
-</div>
 
 
+
+<script>
+    window.print();
+</script>
 <style>
     <style>
 
