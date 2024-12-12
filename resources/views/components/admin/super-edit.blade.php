@@ -99,20 +99,39 @@
     // Handle search input
     document.getElementById("searchEvent").addEventListener("input", function() {
         const searchValue = this.value;
-        loadPendingUsers(searchValue);
+        loadPendingEvents(searchValue);
     });
 </script>
 
 
 <div id="changeEventModal" class="modal modal-open hidden">
     <div class="modal-box w-full max-w-lg p-6 mt-6">
-        <span class="absolute top-4 right-4 text-2xl cursor-pointer" onclick="closeChangePasswordModal()">&times;</span>
+        <span class="absolute top-4 right-4 text-2xl cursor-pointer" onclick="closeChangeEventModal()">&times;</span>
         <div class="modal-header">
-            <h2 class="text-3xl font-semibold text-gray-800">Change Activity </h2>
+            <h2 class="text-3xl font-semibold text-gray-800">Change Activity</h2>
         </div>
         <div class="modal-body mt-4">
-            <p class="text-gray-600 mb-4">Enter new details.</p>
-            <form id="changeActivity">
+            <form id="changeActivityForm" enctype="multipart/form-data">
+                @csrf
+                <label class="block mb-2 font-medium">Event Name:</label>
+                <input type="text" id="eventName" name="eventName" class="w-full px-4 py-2 border rounded-md mb-4"
+                    required />
+
+                <label class="block mb-2 font-medium">Event Image URL:</label>
+                <input type="file" id="event_image" name="eventImage"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+                <label class="block mb-2 font-medium">Organizer</label>
+                <input type="text" id="organizer" name="organizer" class="w-full px-4 py-2 border rounded-md mb-4"
+                    required />
+
+                <label class="block mb-2 font-medium">Status</label>
+                <select id="status" name="eventStatus" class="w-full px-4 py-2 border rounded-md mb-4" required>
+                    <option value="" disabled selected>Select Status</option>
+                    <option value="ongoing">ongoing</option>
+                    <option value="done">done</option>
+                </select>
+
 
                 <button type="submit"
                     class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Submit</button>
@@ -120,3 +139,49 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    let currentEventId = null;
+
+    // Open the change event modal
+    function viewEvent(eventId) {
+        currentEventId = eventId;
+        document.getElementById("changeEventModal").classList.remove("hidden");
+    }
+
+    // Close the modal
+    function closeChangeEventModal() {
+        document.getElementById("changeEventModal").classList.add("hidden");
+    }
+
+    // Submit the update form
+    document.getElementById("changeActivityForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        let formData = new FormData();
+        formData.append("eventName", document.getElementById("eventName").value);
+        formData.append("eventImage", document.getElementById("event_image").files[0]);
+        formData.append("organizer", document.getElementById("organizer").value);
+        formData.append("eventStatus", document.getElementById("status").value);
+
+        fetch(`/events/${currentEventId}/update`, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                },
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    alert(data.success);
+                    closeChangeEventModal();
+                    loadPendingEvents(); // Reload the events table
+                } else if (data.error) {
+                    alert(data.error); // Display error messages to users
+                }
+            })
+            .catch((error) => console.error("Error updating event:", error));
+    });
+</script>

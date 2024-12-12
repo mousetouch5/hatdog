@@ -135,6 +135,7 @@ Route::get('/survey-count', [SurveyLikeController::class, 'getSurveyCounts']);
 Route::get('/events/load', [SuperAdminLoginDashboard::class, 'loadEvents'])->name('events.load');
 
 
+Route::post('/events/{id}/update', [SuperAdminLoginDashboard::class, 'updates']);
 
 
 

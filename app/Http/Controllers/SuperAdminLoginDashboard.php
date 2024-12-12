@@ -19,6 +19,73 @@ class SuperAdminLoginDashboard extends Controller
 
 
 
+public function updates(Request $request, $id)
+{
+    try {
+        Log::info('Received request to update event', ['event_id' => $id]);
+
+        // Validation rules
+        $request->validate([
+            'eventName' => 'nullable|string|max:255',
+            'eventImage' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'organizer'  => 'nullable|string|max:255',
+            'eventStatus'=> 'required|string|in:ongoing,done',
+        ]);
+
+        Log::info('Validation passed for event update', ['data' => $request->all()]);
+
+        // Find the event or fail
+        $event = Event::findOrFail($id);
+
+        // Handle the image upload if provided
+        if ($request->hasFile('eventImage')) {
+            // Delete old image if exists
+            if ($event->eventImage) {
+                $oldImagePath = public_path('storage/' . $event->eventImage);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+
+            $file = $request->file('eventImage');
+            $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+            $file->move(public_path('storage/event_images'), $filename);
+            $event->eventImage = 'event_images/' . $filename;
+
+            Log::info('Event image uploaded', ['image_path' => $event->eventImage]);
+        } else {
+            Log::info('No new event image uploaded. Retaining existing image.');
+        }
+
+        // Update other fields
+        $event->eventName    = $request->input('eventName', $event->eventName);
+        $event->organizer    = $request->input('organizer', $event->organizer);
+        $event->eventStatus  = $request->input('eventStatus');
+
+        // Save the updated event
+        $event->save();
+
+        Log::info('Event updated successfully', ['event_id' => $id]);
+
+        return response()->json([
+            'success' => 'Event updated successfully!',
+            'event'   => $event,
+        ], 200);
+    } catch (\Exception $e) {
+        Log::error('Error updating event', [
+            'error' => $e->getMessage(),
+            'event_id' => $id,
+        ]);
+
+        return response()->json(['error' => 'Error updating event'], 500);
+    }
+}
+
+
+    
+
+
+
     public function update(Request $request, Event $event)
     {
         Log::info('Storing a new event', ['data' => $request->all()]);
@@ -88,7 +155,7 @@ public function listofAllUsers()
         if ($event->eventImage) {
             // Remove leading slash and correct the path
             $relativePath = ltrim($event->eventImage, '/');
-            $event->eventImage = asset("public/{$relativePath}");
+            $event->eventImage = asset("storage/{$relativePath}");
         } else {
             $event->eventImage = null; // Set to null if no image exists
         }

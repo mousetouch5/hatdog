@@ -129,6 +129,7 @@ public function updateStatus(Request $request, $id)
 
     // Validate the incoming request data
     $validated = $request->validate([
+        'eventStatus' => 'required|string',
         'eventName' => 'required|string|max:255',
         'eventDescription' => 'required|string',
         'eventStartDate' => 'required|date',
@@ -183,6 +184,7 @@ public function updateStatus(Request $request, $id)
         'eventSpent' => $validated['eventSpent'],
         'eventTime' => $validated['eventTime'],
         'type' => $validated['type'],
+        'eventStatus' =>$validated['eventStatus'],
     ]);
 
 
