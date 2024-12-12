@@ -1,4 +1,4 @@
-<div class="bg-white shadow-lg rounded-lg p-6" data-aos="fade-left" data-aos-duration="2000">
+<div class="bg-white shadow-lg rounded-lg p-6 mt-5" data-aos="fade-left" data-aos-duration="2000">
     <h4 class="text-lg font-semibold">Barangay Officials</h4>
     <ul id="officials-list" class="mt-4 space-y-4">
         <!-- Officials will be rendered here -->
