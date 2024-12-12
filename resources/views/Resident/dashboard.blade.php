@@ -14,7 +14,7 @@
             </div>
             <div class="flex h-full min-h-screen">
                 <!-- Sidebar -->
-                <aside class="w-1/4 bg-gray-100 shadow-lg h-[100vh]">
+                <aside class="w-1/4 bg-gray-100 shadow-lg h-[100vh] sticky top-1">
 
                     <nav class="mt-4">
                         <a href="{{ route('dashboard') }}"
@@ -74,8 +74,6 @@
                                             fill="black" />
                                     </g>
                                 </svg>
-
-
 
                                 <span class="ml-4">Back to Admin</span>
                             </a>
@@ -349,19 +347,25 @@
                                 </script>
 
 
-                                <!-- Expenses Table Section -->
+                                @php
+                                    // Shuffle the events array to ensure a random order and pick the first one
+                                    $randomEvent = $events->shuffle()->first();
+                                @endphp
+
                                 <div class="hero min-h-screen mt-3"
-                                    style="background-image: url('{{ asset('storage/' . $event->eventImage) }}');">
+                                    style="background-image: url('{{ asset('storage/' . $randomEvent->eventImage) }}');">
                                     <div class="hero-overlay bg-opacity-60"></div>
                                     <div class="hero-content text-neutral-content text-center">
                                         <div class="max-w-md">
-                                            <h1 class="mb-5 text-5xl font-bold">{{ $event->eventName }}</h1>
+                                            <h1 class="mb-5 text-5xl font-bold">{{ $randomEvent->eventName }}</h1>
                                             <p class="mb-5">
-                                                {{ $event->eventDescription }}
+                                                {{ $randomEvent->eventDescription }}
                                             </p>
                                         </div>
                                     </div>
                                 </div>
+
+
 
 
                         </section>

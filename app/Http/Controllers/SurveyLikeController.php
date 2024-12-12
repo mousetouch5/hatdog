@@ -134,13 +134,36 @@ public function surveyResults()
         ->groupBy('event_type')
         ->get();
 
+
+    $mostLikedEvent = SurveyLike::select('event_id', DB::raw('count(*) as like_count'))
+                                ->where('liked', true)
+                                ->groupBy('event_id')
+                                ->orderByDesc('like_count')
+                                ->first(); // Get the event with the highest like count
+
+    $mostLikedEventName = Event::find($mostLikedEvent->event_id)->eventName;
+
+    // Get the total number of responses for each event type
+    $eventCounts = SurveyLike::select('event_id', DB::raw('count(*) as total_responses'))
+                             ->groupBy('event_id')
+                             ->get();
+
+    $eventNames = Event::whereIn('id', $eventCounts->pluck('event_id'))->pluck('eventName', 'id');
+
+
     return view('official.OfficialSurveyResult', compact(
         'surveyResponses',
         'totalResponses',
         'participationCounts',
-        'eventTypeCounts'
+        'eventTypeCounts',
+        'mostLikedEvent', 
+        'eventCounts',
+        'eventNames',
+        'mostLikedEventName',
     ));
 }
+
+
 
 
 
@@ -149,6 +172,7 @@ public function surveyResults()
 public function getSurveyData()
 {
     // Fetch likes and unlikes grouped by event with event details
+
   $data = DB::table('surveys')
     ->select(
         'events.eventName as event_name', // Use the correct column name
