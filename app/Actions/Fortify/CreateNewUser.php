@@ -41,13 +41,20 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),
         ];
 
-        // Add ID picture and position validation for officials
-        if ($input['usertype'] === 'official') {
-            $rules['id_picture'] = ['required', 'file', 'image', 'mimes:jpg,jpeg,png', 'max:2048'];
-            $rules['position'] = ['required', 'string', 'max:255'];
-        } else {
-            $rules['position'] = ['nullable', 'string', 'max:255']; // Optional for residents
-        }
+    // Add ID picture and position validation for officials and residents
+    if ($input['usertype'] === 'official') {
+    $rules['id_picture'] = ['required', 'file', 'image', 'mimes:jpg,jpeg,png', 'max:2048'];
+    $rules['position'] = ['required', 'string', 'max:255'];
+    } elseif ($input['usertype'] === 'resident') {
+    $rules['id_picture'] = ['required', 'file', 'image', 'mimes:jpg,jpeg,png', 'max:2048'];
+    $rules['position'] = ['nullable', 'string', 'max:255']; // Optional for residents
+    } else {
+    // Handle other user types or set defaults if necessary
+     $rules['position'] = ['nullable', 'string', 'max:255']; // Optional for other types
+    }
+
+
+    
 
         // Validate user input
         Validator::make($input, $rules)->validate();

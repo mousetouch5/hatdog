@@ -19,6 +19,7 @@ class Transaction extends Model {
             'authorize_official',
             'date',
             'description',
+            'reciept',
         ];
 
         // Relationship with User

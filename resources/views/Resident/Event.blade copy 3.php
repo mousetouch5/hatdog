@@ -41,10 +41,9 @@
                     <main class="flex-1 px-8 py-6 space-y-6 bg-gray-50">
 
                         <section>
+
+
                             <x-recent-events-header />
-
-
-
 
 
 
@@ -275,7 +274,19 @@
 
 
                                 <!-- Expenses Table Section -->
-                                <x-expenses-table :events="$events" :totalAmount="$totalAmount" />
+                                <div class="hero min-h-screen mt-3"
+                                    style="background-image: url('{{ asset('storage/' . $event->eventImage) }}');">
+                                    <div class="hero-overlay bg-opacity-60"></div>
+                                    <div class="hero-content text-neutral-content text-center">
+                                        <div class="max-w-md">
+                                            <h1 class="mb-5 text-5xl font-bold">{{ $event->eventName }}</h1>
+                                            <p class="mb-5">
+                                                {{ $event->eventDescription }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                         </section>
                     </main>

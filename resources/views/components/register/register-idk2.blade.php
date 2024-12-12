@@ -42,11 +42,6 @@
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     </div>
 
-                    <div>
-                        <label for="brgy_id" class="block text-sm font-semibold">Barangay</label>
-                        <input type="text" id="brgy_id" name="brgy_id"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 gap-6">
@@ -87,16 +82,38 @@
                 </div>
 
                 <div class="grid grid-cols-3 gap-6">
+
+
+                    <div>
+                        <label for="brgy_id" class="block text-sm font-semibold">Barangay</label>
+                        <input type="text" id="brgy_id" name="brgy_id"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+
                     <div>
                         <label for="city" class="block text-sm font-semibold">City</label>
                         <input type="text" id="city" name="city"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     </div>
+
                     <div>
                         <label for="zipcode" class="block text-sm font-semibold">Zip Code</label>
                         <input type="text" id="zipcode" name="zipcode"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                     </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-6">
+                <div>
+                    <label for="id_picture" class="block text-sm font-semibold">ID Picture Must Contain
+                        Address</label>
+                    <input type="file" id="id_picture" name="id_picture"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    @error('id_picture')
+                        <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
 

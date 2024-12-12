@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('authorize_official') // Foreign key
                   ->constrained('users') // Refers to 'id' in 'users' table
                   ->onDelete('cascade');
+            $table->string('reciept');
             $table->date('date'); // Transaction date
             $table->text('description')->nullable(); // Optional description
             $table->timestamps(); // created_at and updated_at

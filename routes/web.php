@@ -104,6 +104,8 @@ Route::post('/events', [EventController::class, 'storeEvents'])->name('events.st
 Route::get('/barangay/officials', [DashboardController::class, 'getOfficials']);
 
 
+Route::put('/shit/fuckyou',[SuperAdminLoginDashboard::class, 'update'])->name('event.update');
+
 
 //Route::post('/events/store', [OfficialEventController::class, 'store'])->name('events.store'); test routes ni boss pwede mani gamiton 
 

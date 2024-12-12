@@ -19,7 +19,10 @@ public function index()
 
    $transactions = Transaction::with('authorizeOfficial')->get();
 
-    $officials = User::select('name', 'position','id')->get();
+   // $officials = User::select('name', 'position','id')->get();
+    $officials = User::whereIn('position', ['Barangay Captain', 'Barangay Secretary', 'Barangay Treasurer'])
+        ->where('is_approved', 1)
+        ->get();
     // Calculate the sum of te 'eventbudget' column
     $totalBudget = Event::sum('budget');
 
@@ -43,6 +46,7 @@ public function store(Request $request)
         'authorize_official' => $request->input('authorize_official'),
         'date' => $request->input('date'),
         'description' => $request->input('description'),
+        'reciept' => $request->input('reciept'),
     ]);
 
     // Validate the incoming request data
@@ -53,10 +57,33 @@ public function store(Request $request)
         'authorize_official' => 'required|exists:users,id',
         'date' => 'required|date',
         'description' => 'nullable|string',
+        'reciept' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ]);
 
     // Log that validation passed
     Log::info('Validation passed successfully.');
+
+    $imagePath = null;
+
+
+        if ($request->hasFile('reciept')) {
+        // Get the uploaded file
+        $file = $request->file('reciept');
+
+        // Define a custom filename (optional)
+        $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+
+        // Move the file to the public storage path
+        $file->move(public_path('storage/reciepts'), $filename);
+
+        // Set the image path for database storage
+        $imagePath = 'reciepts/' . $filename;
+
+        // Log the uploaded image path
+        Log::info('Event image uploaded', ['image_path' => $imagePath]);
+    } else {
+        Log::info('No event image uploaded.');
+    }
 
     // Create a new transaction
     $transaction = Transaction::create([
@@ -66,6 +93,8 @@ public function store(Request $request)
         'authorize_official' => $request->input('authorize_official'),
         'date' => $request->input('date'),
         'description' => $request->input('description'),
+        'reciept' => $imagePath,
+
     ]);
 
     // Log the successful creation of a transaction
@@ -73,6 +102,7 @@ public function store(Request $request)
         'transaction_id' => $transaction->id,
         'budget' => $transaction->budget,
         'money_spent' => $transaction->money_spent,
+        'reciept' => $transaction->reciept,
     ]);
 
     // Redirect to a specific route or return a success response
@@ -81,18 +111,18 @@ public function store(Request $request)
 
 
 
-    public function print($transactionId)
-    {
-        // Retrieve the specific transaction with its related authorize official
-        $transaction = Transaction::with('authorizeOfficial')->findOrFail($transactionId);
+public function print($transactionId)
+{
+    // Retrieve the specific transaction with its related authorize official
+    $transaction = Transaction::with('authorizeOfficial')->findOrFail($transactionId);
+    //dd($transaction);
+    // Return a view with the transaction data for printing
+    return view('events.print2', compact('transaction'));
+}
 
-        // Return a view with the transaction data for printing
-        return view('events.print2', compact('transaction'));
-    }
 
-
-    public function downloadPDF($transactionId)
-    {
+public function downloadPDF($transactionId)
+{
         $transaction = Transaction::with('authorizeOfficial')->findOrFail($transactionId);
         $pdf = PDF::loadView('events.print3', compact('transaction'));
 

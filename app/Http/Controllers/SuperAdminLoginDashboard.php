@@ -13,7 +13,24 @@ class SuperAdminLoginDashboard extends Controller
 {
     //
     public function index(){
-        return view('superadmin.dashboard');
+        $events = Event::all();
+        return view('superadmin.dashboard',compact('events'));
+    }
+
+
+
+    public function update(Request $request, Event $event)
+    {
+        Log::info('Storing a new event', ['data' => $request->all()]);
+        $request->validate([
+            'event_name' => 'required|string|max:255',
+             //'event_start_date' => 'required|date',
+             // Add other validation rules as needed
+        ]);
+
+        $event->update($request->all());
+
+        return redirect()->route('superadmin.dashboard')->with('success', 'Event updated successfully.');
     }
 
 

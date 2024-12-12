@@ -33,7 +33,7 @@
             <div class="mb-4">
                 <label for="event_name" class="block text-sm font-semibold text-gray-700">Event Name:</label>
                 <input type="text" id="event_name" placeholder="Event Name" name="eventName"
-                    class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
+                    class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md" readonly>
             </div>
 
 
@@ -126,7 +126,7 @@
                         <label for="event_budget" class="block text-sm font-semibold text-gray-700">Event
                             Budget:</label>
                         <input type="text" id="event_budget" placeholder="Event Budget" name="budget"
-                            class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
+                            class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md" readonly>
                     </div>
 
                     <div class="w-full ml-2">

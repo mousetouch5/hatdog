@@ -1,5 +1,3 @@
-<!-- resources/views/transactions/print.blade.php -->
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,6 +19,8 @@
         .transaction-details {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
+            /* Add margin to separate from button */
         }
 
         .transaction-details th,
@@ -42,12 +42,23 @@
             text-decoration: none;
             border-radius: 5px;
         }
+
+        .receipt-image {
+            display: block;
+            margin: 10px auto;
+            /* Center the image */
+            max-width: 100%;
+            /* Responsive image */
+            height: auto;
+            /* Maintain aspect ratio */
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h1>Transaction Details</h1>
+
         <table class="transaction-details">
             <tr>
                 <th>Authorized Official</th>
@@ -72,12 +83,23 @@
             </tr>
             <tr>
                 <th>Received By</th>
-                <td>{{ $transaction->recieve_by }}</td>
+                <td>{{ $transaction->receive_by }}</td> <!-- Corrected spelling -->
+            </tr>
+            <tr>
+                <th>Receipt</th> <!-- Corrected spelling -->
+                <td>
+                    <!-- Ensure the receipt path is valid -->
+                    <img src="{{ asset('storage/' . $transaction->reciept) }}" alt="Receipt Image" class="receipt-image">
             </tr>
         </table>
 
-        <a href="javascript:window.print()" class="button">Print this page</a>
     </div>
+
+    <!-- JavaScript for debugging (optional) -->
+    <script>
+        console.log("Receipt Path:", "{{ $transaction->reciept }}"); // Log the receipt path for debugging
+    </script>
+
 </body>
 
 </html>

@@ -114,7 +114,8 @@
                 <!-- Modal Body -->
                 <div class="p-6 space-y-4">
 
-                    <form id="addTransactionForm" action="{{ route('transactions.store') }}" method="POST">
+                    <form id="addTransactionForm" action="{{ route('transactions.store') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         <!-- Authorized Official -->
                         <div>
@@ -132,7 +133,7 @@
 
                         <!-- Item -->
                         <div class="mt-20">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Item</label>
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Title</label>
                             <input type="text" name="description" required
                                 class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
@@ -150,20 +151,28 @@
                             <input type="number" name="budget" min="0" required
                                 class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
-
+                        <input type="hidden" name="money_spent" value="123">
                         <!-- Money Spent -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Money Spent</label>
-                            <input type="number" name="money_spent" min="0" required
+                        <!-- Received By -->
+
+                        <div class="mb-4">
+                            <label for="reciept" class="block text-sm font-semibold text-gray-700">Reciept
+                                Image:</label>
+                            <input type="file" id="event_image" name="reciept"
                                 class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            @error('eventImage')
+                                <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                            @enderror
                         </div>
 
-                        <!-- Received By -->
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mt-2">Received By</label>
                             <input type="text" name="recieve_by" required
                                 class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
+
+
 
                         <!-- Modal Footer -->
                         <div class="flex justify-end space-x-2 bg-gray-200 px-4 py-2 rounded-b-lg">

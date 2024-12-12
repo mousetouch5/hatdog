@@ -133,7 +133,8 @@
                         @enderror
                     </div>
                     <div>
-                        <label for="id_picture" class="block text-sm font-semibold">ID Picture</label>
+                        <label for="id_picture" class="block text-sm font-semibold">ID Picture Must Contain
+                            Address</label>
                         <input type="file" id="id_picture" name="id_picture"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         @error('id_picture')
