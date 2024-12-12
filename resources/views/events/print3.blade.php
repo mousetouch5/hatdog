@@ -57,10 +57,6 @@
                 <td>${{ number_format($transaction->budget, 2) }}</td>
             </tr>
             <tr>
-                <th>Money Spent</th>
-                <td>${{ number_format($transaction->money_spent, 2) }}</td>
-            </tr>
-            <tr>
                 <th>Received By</th>
                 <td>{{ $transaction->recieve_by }}</td>
             </tr>

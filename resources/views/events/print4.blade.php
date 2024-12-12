@@ -40,7 +40,6 @@
                 <th>Description</th>
                 <th>Date</th>
                 <th>Budget</th>
-                <th>Money Spent</th>
                 <th>Received By</th>
             </tr>
         </thead>
@@ -51,7 +50,6 @@
                     <td>{{ $trs->description }}</td>
                     <td>{{ \Carbon\Carbon::parse($trs->date)->format('F Y') }}</td>
                     <td>{{ $trs->budget }}</td>
-                    <td>{{ $trs->money_spent }}</td>
                     <td>{{ $trs->recieve_by }}</td>
                 </tr>
             @endforeach

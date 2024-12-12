@@ -198,9 +198,15 @@
         <x-admin.user-crud />
 
 
+        <div class="card bg-white p-4 rounded-lg shadow-lg mt-6 mx-auto max-w-lg">
+            <h3 class="text-2xl font-semibold text-gray-800">Events Controller</h3>
+            <p class="text-gray-600 mb-4">Here you can manage Events</p>
+            <a href="javascript:void(0)" class="btn btn-primary" onclick="openModal2()">
+                <i class="fas fa-hammer"></i> Settings
+            </a>
+        </div>
 
-
-
+        <x-admin.super-edit />
 
 
 

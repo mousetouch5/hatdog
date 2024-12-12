@@ -130,6 +130,15 @@ Route::get('/survey-count', [SurveyLikeController::class, 'getSurveyCounts']);
 
 
 
+
+
+Route::get('/events/load', [SuperAdminLoginDashboard::class, 'loadEvents'])->name('events.load');
+
+
+
+
+
+
 Route::post('/submit-survey', [SurveyLikeController::class, 'store']);
 
 

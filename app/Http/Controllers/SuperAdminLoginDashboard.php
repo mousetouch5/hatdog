@@ -73,6 +73,33 @@ public function listofAllUsers()
 }
 */
 
+
+    public function loadEvents(Request $request)
+    {
+    $search = $request->query('search'); // Optional search query
+
+    // Fetch events with optional search filter
+    $events = Event::when($search, function ($query, $search) {
+        return $query->where('eventName', 'LIKE', "%{$search}%");
+    })->paginate(10);
+
+    // Transform event data for the response
+    $events->getCollection()->transform(function ($event) {
+        if ($event->eventImage) {
+            // Remove leading slash and correct the path
+            $relativePath = ltrim($event->eventImage, '/');
+            $event->eventImage = asset("public/{$relativePath}");
+        } else {
+            $event->eventImage = null; // Set to null if no image exists
+        }
+        return $event;
+    });
+
+    return response()->json($events);
+    }
+
+
+
 public function listofAllUsers(Request $request)
 {
     $search = $request->get('search', '');

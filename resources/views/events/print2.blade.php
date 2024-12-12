@@ -77,13 +77,10 @@
                 <th>Budget</th>
                 <td>${{ number_format($transaction->budget, 2) }}</td>
             </tr>
-            <tr>
-                <th>Money Spent</th>
-                <td>${{ number_format($transaction->money_spent, 2) }}</td>
-            </tr>
+
             <tr>
                 <th>Received By</th>
-                <td>{{ $transaction->receive_by }}</td> <!-- Corrected spelling -->
+                <td>{{ $transaction->recieve_by }}</td> <!-- Corrected spelling -->
             </tr>
             <tr>
                 <th>Receipt</th> <!-- Corrected spelling -->

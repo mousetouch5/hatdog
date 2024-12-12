@@ -1,9 +1,8 @@
-                <aside class="w-1/4 bg-gray-100 shadow-lg h-[100vh]">
+                <aside class="w-1/4 bg-gray-100 shadow-lg h-[100vh] sticky top-1">
 
                     <nav class="mt-4">
                         <a href="{{ route('dashboard') }}"
-                            class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100"
-                           >
+                            class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
