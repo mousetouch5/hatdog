@@ -136,10 +136,10 @@ public function print($transactionId)
 public function downloadPDF($transactionId)
 {
         $transaction = Transaction::with('authorizeOfficial')->findOrFail($transactionId);
-        $pdf = PDF::loadView('events.print2', compact('transaction'));
+        $pdf = PDF::loadView('events.print3', compact('transaction'));
 
         return $pdf->download('transaction_' . $transactionId . '.pdf');
-    }
+}
 
 
     public function printAll()
