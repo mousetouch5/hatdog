@@ -38,6 +38,14 @@ public function index()
 
 public function store(Request $request)
 {
+
+    $eventNames = Event::pluck('eventName')->toArray();
+
+    // Fetch transactions that do not match event names
+    $transactions = Transaction::whereNotIn('description', $eventNames)->get();
+
+
+
     // Log the incoming request data for debugging purposes
     Log::info('Transaction creation requested', [
         'budget' => $request->input('budget'),
@@ -56,7 +64,11 @@ public function store(Request $request)
         'recieve_by' => 'required|string|max:255',
         'authorize_official' => 'required|exists:users,id',
         'date' => 'required|date',
-        'description' => 'nullable|string',
+        'description' => [
+            'nullable',
+            'string',
+            'unique:events,eventName',  // Ensure the description is unique in the Event names
+         ],
         'reciept' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ]);
 
@@ -124,7 +136,7 @@ public function print($transactionId)
 public function downloadPDF($transactionId)
 {
         $transaction = Transaction::with('authorizeOfficial')->findOrFail($transactionId);
-        $pdf = PDF::loadView('events.print3', compact('transaction'));
+        $pdf = PDF::loadView('events.print2', compact('transaction'));
 
         return $pdf->download('transaction_' . $transactionId . '.pdf');
     }

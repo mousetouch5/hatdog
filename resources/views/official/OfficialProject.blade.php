@@ -69,14 +69,15 @@
                                 onclick="openEventModal('{{ $event->eventName }}',
                                 '{{ $event->id }}',
                                '{{ $event->eventStartDate }}',
+                               '{{ $event->eventEndDate }}',
                                '{{ $event->eventStatus }}', 
                                 '{{ $event->eventTime }}', 
                                 '{{ $event->eventType }}', 
                                  '{{ $event->eventDescription }}', 
                                   '{{ $event->eventLocation }}', 
                                   '{{ $event->organizer }}', 
-                                         '{{ asset('storage/' . $event->eventImage) }}',
-                                             '{{ $event->budget }}', 
+                                    '{{ asset('storage/' . $event->eventImage) }}',
+                                    '{{ $event->budget }}', 
                                      {{ $event->expenses->isNotEmpty() ? json_encode($event->expenses) : 'null' }},
 
             
@@ -106,20 +107,19 @@
                             let currentEventData = {};
 
                             // Function to open Event Modal and populate data
-                            function openEventModal(eventName, eventId, eventStartDate, eventStatus, eventTime, eventType, eventDescription,
-                                eventLocation,
-                                eventOrganizer,
-                                eventImage, eventBudget, expenseAmount, expenseDescription) {
+                            function openEventModal(eventName, eventId, eventStartDate, eventEndDate, eventStatus, eventTime, eventType,
+                                eventDescription, eventLocation, eventOrganizer, eventImage, eventBudget, expenseAmount, expenseDescription) {
+
                                 // Store the event data in the global object
                                 currentEventData = {
+                                    eventStartDate,
+                                    eventEndDate,
                                     eventStatus,
                                     eventId,
-                                    eventBudget,
                                     eventBudget,
                                     eventName: eventName,
                                     expenseAmount: expenseAmount,
                                     expenseDescription: expenseDescription,
-                                    eventStartDate: eventDate,
                                     eventTime: eventTime,
                                     eventType: eventType,
                                     eventDescription: eventDescription,
@@ -130,9 +130,11 @@
 
                                 console.log("Current Event Data:", currentEventData);
 
-                                // Populate Modal 1 fields with event data
+                                // Store eventStartDate into another variable for splitting
+                                const eventDate = eventStartDate;
+
                                 // Format the eventDate to match the input field format (YYYY-MM-DD)
-                                const formattedDate = eventStartDate.split(" ")[0];
+                                const formattedDate = eventDate.split(" ")[0];
 
                                 // Set the formatted date into the input field
                                 document.getElementById('eventDate').value = formattedDate;
@@ -178,21 +180,28 @@
                                 });
 
                                 const markAsDoneBtn = document.getElementById('markAsDoneBtn');
+                                const updateButton = document.getElementById('bts');
                                 if (eventData.eventStatus === 'done') {
                                     markAsDoneBtn.classList.add('hidden'); // Hide button
+                                    updateButton.classList.add('hidden');
                                 } else {
                                     markAsDoneBtn.classList.remove('hidden'); // Show button
+                                    updateButton.classList.remove('hidden');
                                 }
+
 
                                 // Populate budget summary data
                                 document.getElementById('eventName').value = eventData.eventName;
                                 document.getElementById('totalBudget').value = eventData.eventBudget; // Total budget
                                 //  document.getElementById('additionalExpenses').value = 0; // Placeholder for additional expenses
                                 document.getElementById('totalSpent').value = totalExpense.toFixed(2); // Example calculation
-
+                                const remainingBudget = parseFloat(eventData.eventBudget) - totalExpense;
+                                document.getElementById('remainingBudget').value = remainingBudget.toFixed(2);
                                 // Open Modal 2
                                 document.getElementById('budgetModal').showModal();
                             }
+
+
 
                             // Close modals when clicking outside
                             document.addEventListener('DOMContentLoaded', function() {
@@ -209,6 +218,7 @@
                             });
                         </script>
 
+                        <!-- Update Expense Modal -->
 
 
 
@@ -222,7 +232,7 @@
                 <x-survey-button /> <!-- button here -->
 
 
-                
+
                 <x-admin.officials />
             </aside>
         </div>
@@ -241,4 +251,8 @@
                 background-color: rgba(205, 243, 255, 1);
             }
         </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+
 </x-app-layout>

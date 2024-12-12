@@ -50,7 +50,6 @@
                                 <th class="py-3 px-4">Item</th>
                                 <th class="py-3 px-4">Date</th>
                                 <th class="py-3 px-4">Budget Given</th>
-                                <th class="py-3 px-4">Money Spent</th>
                                 <th class="py-3 px-4">Received By</th>
                                 <th class="py-3 px-4">Action</th>
                             </tr>
@@ -66,7 +65,6 @@
                                     <td class="py-3 px-4">{{ \Carbon\Carbon::parse($trs->date)->format('F Y') }}
                                     </td>
                                     <td class="py-3 px-4 text-green-500">{{ $trs->budget }}</td>
-                                    <td class="py-3 px-4 text-red-500">{{ $trs->money_spent }}</td>
                                     <td class="py-3 px-4">{{ $trs->recieve_by }}</td>
                                     <td class="py-3 px-4 flex space-x-2">
                                         <a href="{{ route('transactions.print', $trs->id) }}" target="_blank"
@@ -125,7 +123,7 @@
                                 <option value="" disabled selected>Select an official</option>
                                 @foreach ($officials as $official)
                                     <option value="{{ $official->id }}">
-                                        {{ $official->name }} - {{ $official->position }} -{{ $official->id }}
+                                        {{ $official->name }} - {{ $official->position }}
                                     </option>
                                 @endforeach
                             </select>
@@ -198,12 +196,13 @@
                     }
                 </script>
 
-
-
             </div>
         </div>
 
 
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
 
 </x-app-layout>

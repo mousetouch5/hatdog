@@ -33,6 +33,10 @@
                     <label for="totalSpent" class="block text-sm font-medium text-gray-700">Total Spent</label>
                     <input type="text" id="totalSpent" class="input input-bordered w-full" readonly>
                 </div>
+                <div>
+                    <label for="remainingBudget" class="block text-sm font-medium text-gray-700">Remaing Budget</label>
+                    <input type="text" id="remainingBudget" class="input input-bordered w-full" readonly>
+                </div>
 
                 <div class="modal-action">
                     <form method="dialog">

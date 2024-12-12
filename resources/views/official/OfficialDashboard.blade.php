@@ -195,7 +195,8 @@
                                 document.getElementById('totalBudget').value = eventData.eventBudget; // Total budget
                                 //  document.getElementById('additionalExpenses').value = 0; // Placeholder for additional expenses
                                 document.getElementById('totalSpent').value = totalExpense.toFixed(2); // Example calculation
-
+                                const remainingBudget = parseFloat(eventData.eventBudget) - totalExpense;
+                                document.getElementById('remainingBudget').value = remainingBudget.toFixed(2);
                                 // Open Modal 2
                                 document.getElementById('budgetModal').showModal();
                             }
@@ -226,8 +227,16 @@
                 <x-admin.officials />
             </aside>
         </div>
-
         <script>
             AOS.init();
         </script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+
+
+        <!-- JavaScript for Modal Survey -->
+
+
 </x-app-layout>

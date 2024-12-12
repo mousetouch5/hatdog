@@ -95,11 +95,10 @@
 
     </div>
 
-    <!-- JavaScript for debugging (optional) -->
-    <script>
-        console.log("Receipt Path:", "{{ $transaction->reciept }}"); // Log the receipt path for debugging
-    </script>
-
 </body>
 
 </html>
+
+<script>
+    window.print();
+</script>

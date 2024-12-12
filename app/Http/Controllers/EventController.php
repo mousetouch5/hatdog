@@ -73,6 +73,55 @@ public function updateStatus(Request $request, $id)
 
 
 
+    public function updateExpense(Request $request)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'expenses.*' => 'required|string',
+            'expense_amount.*' => 'required|numeric',
+            'expense_date.*' => 'required|date',
+            'expense_time.*' => 'required|date_format:H:i',
+            'event_id' => 'required|integer'
+        ]);
+
+        // Process the expenses
+        try {
+            foreach ($request->expenses as $index => $expenseDescription) {
+                Expense::create([
+                    'event_id' => $request->event_id,
+                    'expense_description' => $expenseDescription,
+                    'expense_amount' => $request->expense_amount[$index],
+                    'expense_date' => $request->expense_date[$index],
+                    'expense_time' => $request->expense_time[$index],
+                ]);
+            }
+
+            return response()->json(['message' => 'Expenses updated successfully.']);
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Error updating expenses: ' . $e->getMessage());
+
+            return response()->json(['error' => 'There was an error updating the expenses.'], 500);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function storeEvents(Request $request)
 {
     // Log the incoming request data

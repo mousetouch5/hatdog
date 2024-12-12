@@ -209,7 +209,8 @@
                                         document.getElementById('totalBudget').value = eventData.eventBudget; // Total budget
                                         //  document.getElementById('additionalExpenses').value = 0; // Placeholder for additional expenses
                                         document.getElementById('totalSpent').value = totalExpense.toFixed(2); // Example calculation
-
+                                        const remainingBudget = parseFloat(eventData.eventBudget) - totalExpense;
+                                        document.getElementById('remainingBudget').value = remainingBudget.toFixed(2);
                                         // Open Modal 2
                                         document.getElementById('budgetModal').showModal();
                                     }
@@ -275,8 +276,6 @@
 
 
                                 <!-- Expenses Table Section -->
-                                <x-expenses-table :events="$events" :totalAmount="$totalAmount" />
-
                         </section>
                     </main>
 

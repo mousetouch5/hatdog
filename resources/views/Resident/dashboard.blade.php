@@ -18,8 +18,7 @@
 
                     <nav class="mt-4">
                         <a href="{{ route('dashboard') }}"
-                            class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100"
-                            >
+                            class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -92,7 +91,7 @@
 
 
 
-    <!-- end side bar -->
+                <!-- end side bar -->
 
 
 
@@ -119,7 +118,7 @@
                         <section>
 
 
-                            <x-recent-events-header />
+                            <x-recent-all-header />
 
 
 
@@ -284,7 +283,8 @@
                                         document.getElementById('totalBudget').value = eventData.eventBudget; // Total budget
                                         //  document.getElementById('additionalExpenses').value = 0; // Placeholder for additional expenses
                                         document.getElementById('totalSpent').value = totalExpense.toFixed(2); // Example calculation
-
+                                        const remainingBudget = parseFloat(eventData.eventBudget) - totalExpense;
+                                        document.getElementById('remainingBudget').value = remainingBudget.toFixed(2);
                                         // Open Modal 2
                                         document.getElementById('budgetModal').showModal();
                                     }

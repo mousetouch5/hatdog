@@ -5,6 +5,7 @@
         <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="type" value="Event">
+            <input type="hidden" name="eventType" value="Conference">
             <label for="event_status" class="block text-sm font-semibold text-gray-700">Select Transactions:</label>
             <select id="transaction" name="transaction_id"
                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -68,22 +69,6 @@
                 <input type="time" id="event_time" name="eventTime"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
                 @error('eventTime')
-                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <!-- Event Type -->
-            <div class="mb-4">
-                <label for="event_type" class="block text-sm font-semibold text-gray-700">Event Type:</label>
-                <select id="event_type" name="eventType"
-                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    <option value="">Select Event Type</option>
-                    <option value="Conference">Conference</option>
-                    <option value="Workshop">Workshop</option>
-                    <option value="Seminar">Seminar</option>
-                    <option value="Community Outreach">Community Outreach</option>
-                </select>
-                @error('eventType')
                     <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
                 @enderror
             </div>

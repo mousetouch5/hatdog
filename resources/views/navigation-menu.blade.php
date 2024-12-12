@@ -18,7 +18,7 @@
                     </x-nav-link>
 
                     <div class="text-2xl font-semibold mt-4 text-center flex">
-                        <h1 class="text-2xl font-semibold pl-20 mb-5">Welcome,{{ Auth::user()->name }}</h1>
+                        <h1 class="text-2xl font-semibold pl-20 mb-5">Welcome, {{ Auth::user()->name }}</h1>
                     </div>
 
 
@@ -79,10 +79,10 @@
 
 
             <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
 
             <script>
                 document.getElementById('openModal').addEventListener('click', function() {
@@ -90,14 +90,16 @@
                     modal.showModal(); // Opens the modal
 
                     // Initialize FullCalendar once the modal is opened
-                    $('#calendar').fullCalendar({
-                        header: {
-                            left: 'prev,next today',
-                            center: 'title',
-                            right: 'month,agendaWeek,agendaDay'
-                        },
-                        editable: true,
-                        events: [] // Add your events here as an array of objects
+                    $(document).ready(function() {
+                        $('#calendar').fullCalendar({
+                            header: {
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'month,agendaWeek,agendaDay'
+                            },
+                            editable: true,
+                            events: [] // Add your events here
+                        });
                     });
                 });
 
@@ -109,17 +111,6 @@
                     });
                 });
             </script>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -195,14 +186,14 @@
                                 <button
                                     class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                                     <img class="size-8 rounded-full object-cover"
-                                        src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                                        src="{{ asset(Auth::user()->profile_photo_path) }}"
+                                        alt="{{ Auth::user()->name }}" />
                                 </button>
                             @else
                                 <span class="inline-flex rounded-md">
                                     <button type="button"
                                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
                                         {{ Auth::user()->name }}
-
                                         <svg class="ms-2 -me-0.5 size-4" xmlns="http://www.w3.org/2000/svg"
                                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -212,6 +203,12 @@
                                 </span>
                             @endif
                         </x-slot>
+                        <script>
+                            console.log({
+                                photo_path: '{{ Auth::user()->profile_photo_path }}'
+                            });
+                        </script>
+
 
                         <x-slot name="content">
                             <!-- Account Management -->

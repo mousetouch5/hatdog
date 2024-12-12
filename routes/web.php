@@ -98,7 +98,8 @@ Route::get('/liquidation-report', [OfficialReportController::class, 'showLiquida
 
 Route::post('/events', [EventController::class, 'storeEvents'])->name('events.store');
 
-
+// In routes/web.php
+Route::post('/update-expense', [EventController::class, 'updateExpense'])->name('update.expense');
 
 
 Route::get('/barangay/officials', [DashboardController::class, 'getOfficials']);
