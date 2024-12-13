@@ -140,8 +140,8 @@ public function updateStatus(Request $request, $id)
         'eventLocation' => 'nullable|string|max:255',
         'eventTime' => 'required|date_format:H:i',
         'eventSpent' => 'required|numeric',
+        'type' => 'required|string',
         'eventType' => 'required|in:Workshop,Conference,Seminar,Community Outreach',
-        'type' => 'required|string|max:255',
     ]);
 
     // Log the validated data
@@ -183,8 +183,8 @@ public function updateStatus(Request $request, $id)
         'eventType' => $validated['eventType'],
         'eventSpent' => $validated['eventSpent'],
         'eventTime' => $validated['eventTime'],
-        'type' => $validated['type'],
         'eventStatus' =>$validated['eventStatus'],
+        'type' => $validated['type'],
     ]);
 
 
