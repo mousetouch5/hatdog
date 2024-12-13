@@ -175,8 +175,21 @@ public function listofAllUsers(Request $request)
                 ->orWhere('email', 'like', "%{$search}%")
                 ->paginate(10); // Paginate results, 10 per page
 
+    // Transform the users collection to add the correct image path
+    $users->transform(function ($user) {
+        if ($user->id_picture_path) {
+            // Remove leading slash and correct the path to public/resources/id_pictures
+            $relativePath = ltrim($user->id_picture_path, '/');
+            $user->id_picture_path = asset($relativePath);
+        } else {
+            $user->id_picture_path = null;
+        }
+        return $user;
+    });
+
     return response()->json($users);
 }
+
 
 
 
@@ -190,7 +203,7 @@ public function listofAllUsers(Request $request)
         $user->save();
         return response()->json(['success' => true, 'message' => 'User approved successfully!']);
         }
-     return response()->json(['success' => false, 'message' => 'User not found!']);
+         return response()->json(['success' => false, 'message' => 'User not found!']);
      }
 
     public function rejectUser($id)
