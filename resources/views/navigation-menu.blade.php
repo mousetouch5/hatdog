@@ -113,6 +113,7 @@
             </script>
 
 
+            <x-notification-dropdown-admin />
 
 
 

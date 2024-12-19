@@ -99,13 +99,7 @@
         </p>
     </div>
 
-        <div class="mt-6 p-4 border rounded-lg shadow-sm bg-white">
-        <h2 class="text-xl font-semibold mb-2">Conclusions</h2>
-        <p class="text-lg">
-            Based on the survey data, the most popular participation level is {{ $mostLikedEvent->like_count }} likes,
-            while event or project "{{ $mostLikedEventName }}" was the most liked activity type.
-        </p>
-    </div>
+    
 
 
 

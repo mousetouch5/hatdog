@@ -139,6 +139,7 @@ Route::post('/events/{id}/update', [SuperAdminLoginDashboard::class, 'updates'])
 
 
 
+Route::post('/create-user', [SuperAdminLoginDashboard::class, 'CreateBullShit'])->name('user.create');
 
 Route::post('/submit-survey', [SurveyLikeController::class, 'store']);
 
@@ -148,6 +149,16 @@ Route::get('/survey-survey-survey',[SurveyLikeController::class, 'surveyResults'
 
 Route::get('/print-survey/{id}', [SurveyLikeController::class, 'print'])->name('survey.print');
 Route::get('/download-survey/{id}', [SurveyLikeController::class, 'downloadPDF'])->name('survey.download');
+
+Route::get('/schedules/unconfirmed/count', [DashboardController::class, 'getUnconfirmedSchedules']);
+
+Route::get('/transactions/unconfirmed', [DashboardController::class, 'unconfirmed']);
+
+
+// In your web.php or api.php
+Route::patch('/transactions/{id}/approve', [DashboardController::class, 'approve']);
+Route::delete('/transactions/{id}/reject', [DashboardController::class, 'reject']);
+
 
 
 });

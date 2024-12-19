@@ -36,6 +36,80 @@ public function index()
 
 
 
+
+public function store(Request $request)
+{
+
+
+    $eventNames = Event::pluck('eventName')->toArray();
+
+    // Fetch transactions that do not match event names
+    $transactions = Transaction::whereNotIn('description', $eventNames)->get();
+
+
+    // Log the incoming request data for debugging
+    Log::info('Transaction creation requested', $request->all());
+
+    // Validate the incoming request data
+    $request->validate([
+        'budget' => 'required|numeric',
+        'money_spent' => 'required|numeric',
+        'recieve_by' => 'required|exists:users,id',
+        'date' => 'required|date',
+        'description' => [
+            'nullable',
+            'string',
+            'unique:events,eventName', // Ensure 'description' is unique in the 'events' table
+        ],
+        'reciept' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    Log::info('Validation passed successfully.');
+
+    $imagePath = null;
+
+    // Handle file upload
+    if ($request->hasFile('reciept')) {
+        $file = $request->file('reciept');
+
+        // Define a custom filename to avoid conflicts
+        $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+
+        // Move the file to the public storage path
+        $file->move(public_path('storage/reciepts'), $filename);
+
+        // Set the image path for database storage
+        $imagePath = 'reciepts/' . $filename;
+
+        Log::info('Event image uploaded', ['image_path' => $imagePath]);
+    }
+
+    // Create a new transaction
+    $transaction = Transaction::create([
+        'budget' => $request->input('budget'),
+        'money_spent' => $request->input('money_spent'),
+        'recieve_by' => $request->input('recieve_by'),
+        'authorize_official' => auth()->user()->id, // Authenticated user ID
+        'date' => $request->input('date'),
+        'description' => $request->input('description'),
+        'reciept' => $imagePath,
+    ]);
+
+    Log::info('Transaction created successfully', [
+        'transaction_id' => $transaction->id,
+        'budget' => $transaction->budget,
+        'money_spent' => $transaction->money_spent,
+        'reciept' => $transaction->reciept,
+    ]);
+
+    // Redirect to a specific route or return a success response
+    return redirect()->route('Official.OfficialTransaction.index')->with('success', 'Transaction created successfully.');
+}
+
+
+
+
+/*
 public function store(Request $request)
 {
 
@@ -122,6 +196,7 @@ public function store(Request $request)
 }
 
 
+*/
 
 public function print($transactionId)
 {

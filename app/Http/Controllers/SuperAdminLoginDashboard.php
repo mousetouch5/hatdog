@@ -167,6 +167,71 @@ public function listofAllUsers()
 
 
 
+
+
+public function CreateBullShit(Request $request)
+{
+    // Validate the incoming request data
+    $request->validate([
+        'position' => 'required|string|max:255',
+        'first_name' => 'required|string|max:255',
+        'middle_name' => 'nullable|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|string|min:8|confirmed',
+        'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+
+    // Handle file upload for profile picture
+    $profilePicturePath = $this->storeFileIfExists($request->all(), 'profile_picture', 'storage/profile_pictures');
+
+    // Create a new user with additional fields
+    User::create([
+        'name' => $request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name, // Concatenate the name
+        'email' => $request->email,
+        'password' => Hash::make($request->password), // Hash the password for security
+        'profile_photo_path' => $profilePicturePath,
+        'first_name' =>$request['first_name'],
+        'middle_name' =>$request['middle_name'],
+        'last_name' => $request['last_name'],
+        'position' => $request['position'],
+        'user_type' => 'official', // Setting user type to 'official'
+        'is_approved' => true, // Automatically approve the user
+    ]);
+
+    // Return a JSON response with success message
+    return response()->json(['message' => 'User created successfully!'], 201)
+                 ->withHeaders(['Location' => route('superadmin.dashboard')]); // Optional: Add the location of the redirected page
+
+}
+
+private function storeFileIfExists(array $input, string $key, string $directory): ?string
+{
+    if (isset($input[$key])) {
+        $file = $input[$key];
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $destinationPath = public_path($directory);
+
+        // Ensure the directory exists
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        // Move the file to the specified directory
+        $file->move($destinationPath, $fileName);
+
+        // Return the path of the uploaded file
+        return "$directory/$fileName";
+    }
+    return null;
+}
+
+
+
+
+
+
+
 public function listofAllUsers(Request $request)
 {
     $search = $request->get('search', '');

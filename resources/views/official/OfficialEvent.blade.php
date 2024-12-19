@@ -81,7 +81,7 @@
                                      {{ $event->expenses->isNotEmpty() ? json_encode($event->expenses) : 'null' }},
 
             
-        )">
+                                         )">
 
                                 <img src="{{ asset('storage/' . $event->eventImage) }}" alt="Event"
                                     class="rounded-lg w-full h-48 object-cover">

@@ -33,6 +33,20 @@ class Event extends Model
         'budget' => 'decimal:2', // Ensure budget is cast to a decimal with 2 places
     ];
 
+
+
+    public function getIsExpiredAttribute()
+    {
+        // Check if the event/project is marked as 'done'
+        if ($this->eventStatus === 'done') {
+            // Check if 14 days have passed since the eventEndDate
+            return Carbon::parse($this->eventEndDate)->addDays(14)->isPast();
+        }
+
+        // If not 'done', it's not expired
+        return false;
+    }
+
     // Example of an accessor for formatted budget
     public function getFormattedBudgetAttribute()
     {

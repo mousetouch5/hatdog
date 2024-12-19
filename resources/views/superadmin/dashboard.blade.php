@@ -166,6 +166,20 @@
             </ol>
         </nav>
 
+
+        <div class="flex flex-col items-center mb-4">
+            <i id="icon" class="fas fa-user-shield text-3xl mb-2"></i>
+            <button id="officialButton"
+                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition mx-auto block"
+                onclick="my_modal_10.showModal()">
+                Official
+            </button>
+        </div>
+
+        <x-register.FuckYou />
+
+
+
         <!-- Centered Content -->
         <div class="flex justify-center items-center mt-6">
             <div class="flex items-center flex-none text-white">

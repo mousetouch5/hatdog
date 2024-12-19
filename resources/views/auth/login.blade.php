@@ -41,12 +41,6 @@
 
             <!-- Official Icon Above the Button -->
             <div class="flex flex-col items-center mb-4">
-                <i id="icon" class="fas fa-user-shield text-3xl mb-2"></i>
-                <button id="officialButton"
-                    class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition mx-auto block"
-                    onclick="my_modal_4.showModal()">
-                    Official
-                </button>
             </div>
 
             <!-- Resident Icon Above the Button -->
@@ -61,7 +55,7 @@
 
             <x-login.fucking-login />
             <x-register.register-idk2 />
-            <x-register.register-idk />
+
             <x-validation-errors class="mb-4" />
 
 

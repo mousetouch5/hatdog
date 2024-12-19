@@ -50,7 +50,9 @@
                                 <th class="py-3 px-4">Item</th>
                                 <th class="py-3 px-4">Date</th>
                                 <th class="py-3 px-4">Budget Given</th>
+
                                 <th class="py-3 px-4">Received By</th>
+                                <th class="py-3 px-4">Status</th>
                                 <th class="py-3 px-4">Action</th>
                             </tr>
                         </thead>
@@ -65,7 +67,10 @@
                                     <td class="py-3 px-4">{{ \Carbon\Carbon::parse($trs->date)->format('F Y') }}
                                     </td>
                                     <td class="py-3 px-4 text-green-500">{{ $trs->budget }}</td>
-                                    <td class="py-3 px-4">{{ $trs->recieve_by }}</td>
+                                    <td class="py-3 px-4">{{ $trs->recieveBy->name }}</td>
+                                    <td class="py-3 px-4">
+                                        {{ $trs->is_approved ? 'Confirmed' : 'Not Confirmed' }}
+                                    </td>
                                     <td class="py-3 px-4 flex space-x-2">
                                         <a href="{{ route('transactions.print', $trs->id) }}" target="_blank"
                                             class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">
@@ -116,18 +121,7 @@
                         enctype="multipart/form-data">
                         @csrf
                         <!-- Authorized Official -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Authorized Official</label>
-                            <select id="authorizedOfficial" name="authorize_official" required
-                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                <option value="" disabled selected>Select an official</option>
-                                @foreach ($officials as $official)
-                                    <option value="{{ $official->id }}">
-                                        {{ $official->name }} - {{ $official->position }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+
 
                         <!-- Item -->
                         <div class="mt-20">
@@ -152,7 +146,6 @@
                         <input type="hidden" name="money_spent" value="123">
                         <!-- Money Spent -->
                         <!-- Received By -->
-
                         <div class="mb-4">
                             <label for="reciept" class="block text-sm font-semibold text-gray-700">Reciept
                                 Image:</label>
@@ -165,11 +158,17 @@
 
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Received By</label>
-                            <input type="text" name="recieve_by" required
+                            <label class="block text-sm font-medium text-gray-700">Recieved By</label>
+                            <select id="recieve_by" name="recieve_by" required
                                 class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                <option value="" disabled selected>Select a reciever</option>
+                                @foreach ($officials as $official)
+                                    <option value="{{ $official->id }}">
+                                        {{ $official->name }} - {{ $official->position }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
-
 
 
                         <!-- Modal Footer -->
