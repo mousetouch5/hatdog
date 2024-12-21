@@ -15,7 +15,7 @@
         <!-- Sidebar -->
         <x-sidebar class="custom-sidebar-class" />
         </aside>
-        <!-- end side bar -->
+        <!-- end si >
 
 
 
@@ -42,13 +42,64 @@
                             class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
                             Add
                         </button>
-                        <button onclick="toggleModal2()"
-                            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                            History
-                        </button>
                     </div>
 
-                    <x-Officials.transactions-table />
+
+                    <table class="w-full table-auto">
+                        <thead>
+                            <tr class="bg-gray-200 text-gray-600 text-left text-sm font-semibold">
+                                <th class="py-3 px-4">Authorized Official</th>
+                                <th class="py-3 px-4">Item</th>
+                                <th class="py-3 px-4">Date</th>
+                                <th class="py-3 px-4">Budget Given</th>
+
+                                <th class="py-3 px-4">Received By</th>
+                                <th class="py-3 px-4">Status</th>
+                                <th class="py-3 px-4">Action</th>
+                                <th class="py-3 px-4">Archive</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($transactions as $trs)
+                                <tr class="odd:bg-gray-50">
+                                    <td class="py-3 px-4">
+                                        <!-- Correct relationship method call -->
+                                        {{ $trs->authorizeOfficial ? $trs->authorizeOfficial->name : 'No official assigned' }}
+                                    </td>
+                                    <td class="py-3 px-4">{{ $trs->description }}</td>
+                                    <td class="py-3 px-4">{{ \Carbon\Carbon::parse($trs->date)->format('F Y') }}
+                                    </td>
+                                    <td class="py-3 px-4 text-green-500">{{ $trs->budget }}</td>
+                                    <td class="py-3 px-4">{{ $trs->recieveBy->name }}</td>
+                                    <td class="py-3 px-4">
+                                        {{ $trs->is_approved ? 'Confirmed' : 'Not Confirmed' }}
+                                    </td>
+                                    <td class="py-3 px-4 flex space-x-2">
+                                        <a href="{{ route('transactions.print', $trs->id) }}" target="_blank"
+                                            class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">
+                                            Print
+                                        </a>
+                                        <a href="{{ route('transactions.download', $trs->id) }}"
+                                            class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">
+                                            Download
+                                        </a>
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <form action="{{ route('transactions.archive', $trs->id) }}" method="POST"
+                                            onsubmit="return confirm('Are you sure you want to archive this transaction?');">
+                                            @csrf
+                                            <button type="submit"
+                                                class="text-gray-500 hover:text-blue-600 focus:outline-none"
+                                                title="Archive">
+                                                <i class="fas fa-archive"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                     <!-- Footer -->
                     <div class="p-4">
                         <!-- Horizontal Line -->
@@ -65,7 +116,10 @@
             </main>
         </div>
 
-        <x-Officials.transactions-table2 />
+
+
+
+
         <!-- Modal -->
         <div id="addModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
             <div class="bg-white rounded-lg shadow-lg w-1/2">

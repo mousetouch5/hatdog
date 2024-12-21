@@ -25,6 +25,10 @@
         .content {
             margin-bottom: 20px;
         }
+
+        .text-muted {
+            color: gray;
+        }
     </style>
 </head>
 
@@ -42,6 +46,19 @@
             <p><strong>Total Expenses:</strong> {{ number_format($total_expense, 2) }}</p>
             <p><strong>Total Refunded:</strong> {{ number_format($total_refunded, 2) }}</p>
             <p><strong>Total To Be Reimbursed:</strong> {{ number_format($total_to_be_reimbursed, 2) }}</p>
+
+            @if ($event->expenses->isEmpty())
+                <p class="text-muted">No expenses recorded.</p>
+            @else
+                <ul>
+                    @foreach ($event->expenses as $expense)
+                        <li>
+                            <strong>{{ $expense->expense_description }}:</strong>
+                            {{ number_format($expense->expense_amount, 2) }}
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
         </div>
     </div>
 </body>

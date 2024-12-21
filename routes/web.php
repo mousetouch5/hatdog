@@ -88,7 +88,15 @@ Route::get('/Official/Edit', [EditController::class, 'index'])->name('Official.E
 Route::get('/Official/Edit2', [EditController::class, 'putangina'])->name('Official.Edit2.index');
 Route::get('/generate-liquidation-report/{event}', [OfficialReportController::class, 'generateLiquidationReport'])->name('download.liquidation.report');
 
-//Post
+
+
+Route::post('/transactions/{id}/archive', [OfficialTransactionController::class, 'archive'])->name('transactions.archive');
+
+Route::get('/api/transactions', [OfficialTransactionController::class, 'getTransactions'])->name('api.transactions');
+
+Route::get('transactions', [OfficialTransactionController::class, 'search'])->name('api.transactions2');;
+
+
 Route::get('/transactions/print-all', [OfficialTransactionController::class, 'printAll'])->name('transactions.printAll');
 Route::get('/transactions/{transaction}/print', [OfficialTransactionController::class, 'print'])->name('transactions.print');
 Route::get('/transactions/{transaction}/download', [OfficialTransactionController::class, 'downloadPDF'])->name('transactions.download');

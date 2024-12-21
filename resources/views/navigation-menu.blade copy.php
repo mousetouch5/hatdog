@@ -112,6 +112,9 @@
                 });
             </script>
 
+                <!-- remove if fixed
+            <x-notification-dropdown-admin />
+            -->
 
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">

@@ -12,7 +12,10 @@ class EditController extends Controller
     $eventNames = Event::pluck('eventName')->toArray();
 
     // Fetch transactions that do not match event names
-    $transactions = Transaction::whereNotIn('description', $eventNames)->get();
+ $transactions = Transaction::whereNotIn('description', $eventNames)
+                            ->where('is_approved', 1)
+                            ->get();
+
 
     return view('official.Edit',compact('transactions')); // This will load the 'events.index' view
     }
@@ -22,7 +25,10 @@ class EditController extends Controller
        $eventNames = Event::pluck('eventName')->toArray();
 
     // Fetch transactions that do not match event names
-       $transactions = Transaction::whereNotIn('description', $eventNames)->get();
+     $transactions = Transaction::whereNotIn('description', $eventNames)
+                            ->where('is_approved', 1)
+                            ->get();
+
       //  dd($transactions);
         return view('official.Edit2',compact('transactions')); // This will load the 'events.index' view
     }

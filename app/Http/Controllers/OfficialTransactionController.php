@@ -36,6 +36,41 @@ public function index()
 
 
 
+public function getTransactions()
+{
+    $transactions = Transaction::where('archive', false)  // or 'archive', 0
+        ->with(['authorizeOfficial', 'recieveBy'])
+        ->get();
+
+    return response()->json($transactions);
+}
+
+
+
+// Method to get transactions with search functionality
+public function search(Request $request)
+{
+    $query = $request->input('search', '');  // Get the search query from the request, defaults to empty string
+
+    // Check if the query is empty, return an empty array or handle the case accordingly
+    if (empty($query)) {
+        return response()->json([]);
+    }
+
+    $transactions = Transaction::where('authorize_official', 'LIKE', "%$query%")
+        ->orWhere('description', 'LIKE', "%$query%")
+        ->orWhere('recieve_by', 'LIKE', "%$query%")
+        ->get();
+
+    return response()->json($transactions);
+}
+
+
+
+
+
+
+
 
 public function store(Request $request)
 {
@@ -106,6 +141,19 @@ public function store(Request $request)
     return redirect()->route('Official.OfficialTransaction.index')->with('success', 'Transaction created successfully.');
 }
 
+
+    public function archive($id)
+    {
+        // Find the transaction
+        $transaction = Transaction::findOrFail($id);
+
+        // Update the archived status (assuming you have an 'is_archived' column in your database)
+        $transaction->archive = true;
+        $transaction->save();
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Transaction archived successfully!');
+    }
 
 
 

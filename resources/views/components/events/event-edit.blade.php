@@ -12,7 +12,7 @@
                 <option value="">-- Select a Transaction --</option>
                 @foreach ($transactions as $transaction)
                     <option value="{{ $transaction->id }}" data-item="{{ $transaction->description }}"
-                        data-budget="{{ $transaction->budget }}">
+                        data-budget="{{ $transaction->budget }}" data-date="{{ $transaction->date }}">
                         {{ $transaction->description }}
                     </option>
                 @endforeach
@@ -52,7 +52,7 @@
             <div class="mb-4">
                 <label for="event_start_date" class="block text-sm font-semibold text-gray-700">Event Start
                     Date:</label>
-                <input type="date" id="event_start_date" name="eventStartDate"
+                <input type="date" id="event_start_date" name="eventStartDate" readonly
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
 
@@ -264,9 +264,22 @@
         const selectedOption = this.options[this.selectedIndex];
         const eventName = selectedOption.getAttribute('data-item');
         const eventBudget = selectedOption.getAttribute('data-budget');
+        const eventStartDate = selectedOption.getAttribute('data-date');
 
         // Populate the Event Name and Budget fields
         document.getElementById('event_name').value = eventName || '';
         document.getElementById('event_budget').value = eventBudget || '';
+
+
+        if (eventStartDate) {
+            // Convert the date to the correct format if needed
+            const formattedDate = new Date(eventStartDate).toISOString().split('T')[0]; // yyyy-MM-dd format
+            document.getElementById('event_start_date').value = formattedDate;
+        } else {
+            document.getElementById('event_start_date').value = '';
+        }
+
+
+
     });
 </script>
