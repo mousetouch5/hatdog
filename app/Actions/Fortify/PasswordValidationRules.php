@@ -19,8 +19,8 @@ trait PasswordValidationRules
             Password::min(12) // Minimum length of 12 characters
                 ->mixedCase() // Must include both uppercase and lowercase characters
                 ->numbers() // Must include numbers
-                ->symbols() // Must include special characters (e.g., !, @, #, $, etc.)
-                ->uncompromised(), // Checks if the password has been compromised in known data breaches
+                ->symbols(), // Must include special characters (e.g., !, @, #, $, etc.)
+     // Checks if the password has been compromised in known data breaches
             'confirmed', // Password confirmation must match
         ];
     }

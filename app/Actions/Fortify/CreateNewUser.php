@@ -46,7 +46,7 @@ class CreateNewUser implements CreatesNewUsers
     $rules['id_picture'] = ['required', 'file', 'image', 'mimes:jpg,jpeg,png', 'max:2048'];
     $rules['position'] = ['required', 'string', 'max:255'];
     } elseif ($input['usertype'] === 'resident') {
-    $rules['id_picture'] = ['required', 'file', 'image', 'mimes:jpg,jpeg,png', 'max:2048'];
+    $rules['id_picture'] = ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'];
     $rules['position'] = ['nullable', 'string', 'max:255']; // Optional for residents
     } else {
     // Handle other user types or set defaults if necessary
@@ -95,7 +95,9 @@ class CreateNewUser implements CreatesNewUsers
 
     /**
      * Store file if it exists in the input.
-     */
+    */
+
+
     private function storeFileIfExists(array $input, string $key, string $directory): ?string
     {
         if (isset($input[$key])) {

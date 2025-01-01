@@ -1,7 +1,8 @@
 <dialog id="my_modal_3" class="modal">
     <div class="modal-box w-full max-w-4xl">
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="my_modal_3.close()">✕</button>
-        <form id="signup_form" method="POST" action="{{ route('register') }}" class="grid grid-cols-1 gap-6 p-6">
+        <form id="signup_form" method="POST" action="{{ route('register') }}" class="grid grid-cols-1 gap-6 p-6"
+            enctype="multipart/form-data">
             @csrf <!-- This directive adds the CSRF token -->
             <input type="hidden" name="usertype" value="resident">
             <input type="hidden" name="brgy_city_zipcode" value="idk">
@@ -128,5 +129,3 @@
 </dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-

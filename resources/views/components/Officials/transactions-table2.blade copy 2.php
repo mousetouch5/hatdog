@@ -34,8 +34,6 @@
     function toggleModal2() {
         $('#addModal2').toggleClass('hidden'); // Toggle the hidden class to show/hide the modal
     }
-
-
     $(document).ready(function() {
         // Function to fetch transactions and display them in the modal
         function fetchTransactions(query = '') {
@@ -58,32 +56,25 @@
                         let printUrl = `/transactions/${trs.id}/print`;
                         let downloadUrl = `/transactions/${trs.id}/download`;
 
-
-                        const formattedBudget = new Intl.NumberFormat('en-PH', {
-                            style: 'currency',
-                            currency: 'PHP',
-                            minimumFractionDigits: 2
-                        }).format(trs.budget);
-
                         // Constructing the table row with transaction data
                         let row = `
-                    <tr class="odd:bg-gray-50">
-                        <td class="py-3 px-4">${authorizedOfficial}</td>
-                        <td class="py-3 px-4">${trs.description}</td>
-                        <td class="py-3 px-4">${new Date(trs.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</td>
-                        <td class="py-3 px-4 text-green-500">${formattedBudget}</td>
-                        <td class="py-3 px-4">${receivedBy}</td>
-                        <td class="py-3 px-4">${status}</td>
-                        <td class="py-3 px-4 flex space-x-2">
-                            <a href="${printUrl}" target="_blank" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">
-                                Print
-                            </a>
-                            <a href="${downloadUrl}" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">
-                                Download
-                            </a>
-                        </td>
-                    </tr>
-                `;
+                        <tr class="odd:bg-gray-50">
+                            <td class="py-3 px-4">${authorizedOfficial}</td>
+                            <td class="py-3 px-4">${trs.description}</td>
+                            <td class="py-3 px-4">${new Date(trs.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</td>
+                            <td class="py-3 px-4 text-green-500">${trs.budget}</td>
+                            <td class="py-3 px-4">${receivedBy}</td>
+                            <td class="py-3 px-4">${status}</td>
+                            <td class="py-3 px-4 flex space-x-2">
+                                <a href="${printUrl}" target="_blank" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">
+                                    Print
+                                </a>
+                                <a href="${downloadUrl}" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">
+                                    Download
+                                </a>
+                            </td>
+                        </tr>
+                    `;
                         tableBody.append(row);
                     });
                 },
@@ -93,10 +84,11 @@
             });
         }
 
-        // Open modal and fetch data only when needed
-        $('#addModal2').on('show', function() {
-            fetchTransactions(); // Fetch transactions when modal is shown
-        });
+        // Initial call to fetch data
+        fetchTransactions();
+
+        // Call fetchTransactions every second (1000ms) to keep data updated
+        setInterval(fetchTransactions, 1000);
 
         // Close modal when the "Close" button is clicked
         $('#closeModal').click(function() {

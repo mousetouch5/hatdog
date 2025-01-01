@@ -35,13 +35,20 @@
                         let printUrl = `/transactions/${trs.id}/print`;
                         let downloadUrl = `/transactions/${trs.id}/download`;
 
+                        const formattedBudget = new Intl.NumberFormat('en-PH', {
+                            style: 'currency',
+                            currency: 'PHP',
+                            minimumFractionDigits: 2
+                        }).format(trs.budget);
+
+
                         // Constructing the table row with transaction data
                         let row = `
                     <tr class="odd:bg-gray-50">
                         <td class="py-3 px-4">${authorizedOfficial}</td>
                         <td class="py-3 px-4">${trs.description}</td>
                         <td class="py-3 px-4">${new Date(trs.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</td>
-                        <td class="py-3 px-4 text-green-500">${trs.budget}</td>
+                        <td class="py-3 px-4 text-green-500">${formattedBudget}</td>
                         <td class="py-3 px-4">${receivedBy}</td>
                         <td class="py-3 px-4">${status}</td>
                         <td class="py-3 px-4 flex space-x-2">

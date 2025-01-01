@@ -94,7 +94,7 @@ Route::post('/transactions/{id}/archive', [OfficialTransactionController::class,
 
 Route::get('/api/transactions', [OfficialTransactionController::class, 'getTransactions'])->name('api.transactions');
 
-Route::get('transactions', [OfficialTransactionController::class, 'search'])->name('api.transactions2');;
+Route::get('transactions', [OfficialTransactionController::class, 'search'])->name('api.transactions2');
 
 
 Route::get('/transactions/print-all', [OfficialTransactionController::class, 'printAll'])->name('transactions.printAll');

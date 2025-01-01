@@ -114,18 +114,29 @@
 
  </aside>
  <script>
-     //let isDropdownOpen = true;
-     let count = 0;
+     let isDropdownOpen = false;
 
      function handleDashboardClick() {
-         //     const dropdownMenu = document.getElementById('dropdownMenu');
-         count++;
-         console.log(count);
-         if (count == 2) {
-             window.location.href = "{{ route('Official.OfficialDashboard.index') }}"
+         const dropdownMenu = document.getElementById('dropdownMenu');
+
+         if (isDropdownOpen) {
+             // If dropdown is open, clicking again routes to dashboard
+             window.location.href = "{{ route('Official.OfficialDashboard.index') }}";
          } else {
-
+             // If dropdown is closed, toggle it open
+             dropdownMenu.classList.toggle('hidden');
+             isDropdownOpen = true;
          }
-
      }
+
+     // Close dropdown when clicking outside
+     document.addEventListener('click', function(event) {
+         const dashboardButton = document.getElementById('dashboardButton');
+         const dropdownMenu = document.getElementById('dropdownMenu');
+
+         if (!dashboardButton.contains(event.target)) {
+             dropdownMenu.classList.add('hidden');
+             isDropdownOpen = false;
+         }
+     });
  </script>

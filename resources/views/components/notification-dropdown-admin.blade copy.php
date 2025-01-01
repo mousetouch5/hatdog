@@ -1,7 +1,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
-<div class="relative mt-5 ml-1">
-    <button class="relative" id="notification-button" onclick="toggleNotificationDropdown()">
+<div class="relative inline-block">
+    <button class="relative z-20" id="notification-button" onclick="toggleNotificationDropdown()">
         <span class="material-symbols-outlined">notifications</span>
         <!-- Badge for unread notifications -->
         <span
@@ -11,30 +11,67 @@
 
     <!-- Notification Dropdown -->
     <div id="notification-dropdown"
-        class="hidden absolute right-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg">
+        class="hidden fixed right-4 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg max-h-[80vh] overflow-y-auto z-50">
         <div class="p-4">
-            <h3 class="text-gray-700 font-semibold text-sm mb-2">Notifications</h3>
-            <div id="notification-list">
+            <h3 class="text-gray-700 font-semibold text-sm mb-2 sticky top-0 bg-white">Notifications</h3>
+            <div id="notification-list" class="max-h-[60vh] overflow-y-auto">
                 <!-- Notifications will be dynamically loaded here -->
             </div>
             <!-- See all notifications -->
-            <div class="text-center mt-2">
+            <div class="text-center mt-2 sticky bottom-0 bg-white pt-2">
                 <a href="#" class="text-blue-500 hover:underline text-sm">See all notifications</a>
             </div>
         </div>
     </div>
 </div>
 
-@include('components.admin.ApprovalsModal')
+<style>
+    /* Ensure the body maintains scrollability */
+    body {
+        overflow-y: auto !important;
+    }
 
+    /* Custom scrollbar styling */
+    #notification-dropdown::-webkit-scrollbar {
+        width: 6px;
+    }
 
+    #notification-dropdown::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
 
+    #notification-dropdown::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
 
+    #notification-dropdown::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
 
+    /* Ping animation */
+    @keyframes ping {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
 
+        75% {
+            transform: scale(1.2);
+            opacity: 0.75;
+        }
 
+        100% {
+            transform: scale(1);
+            opacity: 0;
+        }
+    }
 
-
+    .ping {
+        animation: ping 1s infinite;
+    }
+</style>
 
 <script>
     // Function to toggle the notification dropdown
@@ -52,7 +89,6 @@
     // Function to fetch notifications and unconfirmed approvals
     function fetchNotifications() {
         Promise.all([
-                // Fetching unconfirmed schedule count and details
                 fetch('/schedules/unconfirmed/count').then(response => response.json())
             ])
             .then(([unconfirmedData]) => {
@@ -77,8 +113,8 @@
                         const notificationItem = document.createElement('div');
                         notificationItem.className = 'border-b border-gray-300 py-2';
                         notificationItem.innerHTML = `
-                    <p class="text-sm text-gray-600">Unconfirmed Transactions created at: ${createdAt}</p>
-                `;
+                        <p class="text-sm text-gray-600">Unconfirmed Transactions created at: ${createdAt}</p>
+                    `;
                         notificationList.appendChild(notificationItem);
                     });
                 }
@@ -88,14 +124,14 @@
                     const approvalsLink = document.createElement('div');
                     approvalsLink.className = 'border-b border-gray-300 py-2';
                     approvalsLink.innerHTML = `
-                <p class="text-sm text-purple-600" onclick="openApprovalsModal(event)">See Approvals</p>
-            `;
+                    <p class="text-sm text-purple-600 cursor-pointer" onclick="openApprovalsModal(event)">See Approvals</p>
+                `;
                     notificationList.appendChild(approvalsLink);
                 }
 
                 // Show fallback message if no notifications and unconfirmed approvals
-                if ((!unconfirmedData.created_at || unconfirmedData.created_at.length === 0) && unconfirmedData
-                    .unconfirmed_count === 0) {
+                if ((!unconfirmedData.created_at || unconfirmedData.created_at.length === 0) &&
+                    unconfirmedData.unconfirmed_count === 0) {
                     notificationList.innerHTML = '<p class="text-sm text-gray-600">No new notifications.</p>';
                 }
             })
@@ -116,7 +152,7 @@
     }
 
     // Close dropdown when clicking outside
-    window.onclick = function(event) {
+    window.addEventListener('click', function(event) {
         const dropdown = document.getElementById('notification-dropdown');
         const button = document.getElementById('notification-button');
 
@@ -124,33 +160,8 @@
             dropdown.classList.add('hidden');
             resetNotificationBadge();
         }
-    };
+    });
 
     // Poll for notifications every 10 seconds
     setInterval(fetchNotifications, 10000);
 </script>
-
-
-<style>
-    @keyframes ping {
-        0% {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        75% {
-
-            transform: scale(1.2);
-            opacity: 0.75;
-        }
-
-        100% {
-            transform: scale(1);
-            opacity: 0;
-        }
-    }
-
-    .ping {
-        animation: ping 1s infinite;
-    }
-</style>

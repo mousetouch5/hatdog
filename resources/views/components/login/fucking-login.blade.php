@@ -10,28 +10,19 @@
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your email" required>
         </div>
-
-        <!--
-        <div class="flex flex-col">
-            <label for="password" class="block text-sm font-semibold text-left">Password</label>
-            <input type="password" id="password" name="password"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your password" required>
-        </div>  -->
-
         <div class="flex flex-col relative">
             <label for="password" class="block text-sm font-semibold text-left">Password</label>
             <input type="password" id="password" name="password"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your password" required>
-            
-                <!-- Show Password Checkbox -->
+
+            <!-- Show Password Checkbox -->
             <div class=" ml-2 mt-2 flex items-center">
                 <input type="checkbox" id="showPassword" class="mr-2" onclick="togglePassword()" />
                 <label for="showPassword" class="text-sm text-gray-600">Show Password</label>
             </div>
         </div>
-        
+
 
         <button type="submit"
             class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition mt-4 w-full">Login</button>
@@ -100,17 +91,11 @@
                 });
         });
     });
-
-
-
-                
 </script>
-        <script>
-         function togglePassword() {
-                const passwordInput = document.getElementById("password");
-                const showPasswordCheckbox = document.getElementById("showPassword");
-                passwordInput.type = showPasswordCheckbox.checked ? "text" : "password";
-            }
-
-
-        </script>
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const showPasswordCheckbox = document.getElementById("showPassword");
+        passwordInput.type = showPasswordCheckbox.checked ? "text" : "password";
+    }
+</script>

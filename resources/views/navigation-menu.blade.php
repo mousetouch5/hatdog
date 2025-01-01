@@ -111,7 +111,9 @@
                     });
                 });
             </script>
-
+            @if (auth()->user() && auth()->user()->user_type != 'resident')
+                <x-notification-dropdown-admin />
+            @endif
 
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">

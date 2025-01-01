@@ -57,11 +57,16 @@ public function search(Request $request)
         return response()->json([]);
     }
 
-    $transactions = Transaction::where('authorize_official', 'LIKE', "%$query%")
-        ->orWhere('description', 'LIKE', "%$query%")
-        ->orWhere('recieve_by', 'LIKE', "%$query%")
-        ->get();
-
+ $transactions = Transaction::with(['recieveBy', 'authorizeOfficial'])
+    ->where('authorize_official', 'LIKE', "%$query%")
+    ->orWhere('description', 'LIKE', "%$query%")
+    ->orWhereHas('recieveBy', function ($queryBuilder) use ($query) {
+        $queryBuilder->where('name', 'LIKE', "%$query%");
+    })
+    ->orWhereHas('authorizeOfficial', function ($queryBuilder) use ($query) {
+        $queryBuilder->where('name', 'LIKE', "%$query%");
+    })
+    ->get();
     return response()->json($transactions);
 }
 
