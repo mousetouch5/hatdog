@@ -16,6 +16,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OfficialActivityLogController;
 
 use App\Http\Controllers\BudgetPlanningController;
+use App\Http\Controllers\CalendarActivitiesController;
+
+
+
+
 use App\Http\Controllers\BudgetPreparationController;
 
 //use App\Http\Controllers\CustomLoginController;
@@ -172,8 +177,11 @@ Route::delete('/transactions/{id}/reject', [DashboardController::class, 'reject'
 
 
 
-
+/// waay nani 
 Route::get('official/BudgetPreparation', [BudgetPreparationController::class, 'index'])->name('Official.BudgetPreparation.index');
+// nevermind na kno boss ang budget preperation 
+
 Route::get('official/BudgetPlanning', [BudgetPlanningController::class, 'index'])->name('Official.BudgetPlanning.index');
 
+Route::get('official/BudgetPlanning/CalendarActivities', [CalendarActivitiesController::class, 'index'])->name('Official.CalendarActivities.index');
 });
