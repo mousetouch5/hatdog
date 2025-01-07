@@ -115,6 +115,91 @@ public function updateStatus(Request $request, $id)
 
 
 
+public function storeEvents(Request $request)
+{
+    // Log the incoming request data
+    Log::info('Storing a new event', ['data' => $request->all()]);
+
+    // Validate the incoming request data
+    $validated = $request->validate([
+        'eventName' => 'required|string|max:255',
+        'eventDescription' => 'required|string',
+        'eventStartDate' => 'required|date',
+        'eventEndDate' => 'required|date|after_or_equal:eventStartDate',
+        'eventImage' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'budget' => 'required|numeric',
+        'organizer' => 'nullable|string|max:255',
+        'eventLocation' => 'nullable|string|max:255',
+        'eventTime' => 'required|date_format:H:i',
+        'eventSpent' => 'required|numeric',
+        'type' => 'required|string',
+        'eventType' => 'required|in:Workshop,Conference,Seminar,Community Outreach',
+    ]);
+
+    // Log the validated data
+    Log::info('Validated event data', ['validated_data' => $validated]);
+
+    // Determine the event status based on the event end date
+    $eventStatus = now()->startOfDay()->greaterThan(Carbon::parse($validated['eventEndDate'])->startOfDay()) 
+        ? 'done' 
+        : 'ongoing';
+
+    // Handle the image upload if there is one
+    $imagePath = null;
+    if ($request->hasFile('eventImage')) {
+        $file = $request->file('eventImage');
+        $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+        $file->move(public_path('storage/event_images'), $filename);
+        $imagePath = 'event_images/' . $filename;
+        Log::info('Event image uploaded', ['image_path' => $imagePath]);
+    } else {
+        Log::info('No event image uploaded.');
+    }
+
+    // Create the new event in the database
+    $event = Event::create([
+        'eventName' => $validated['eventName'],
+        'eventDescription' => $validated['eventDescription'],
+        'eventStartDate' => $validated['eventStartDate'],
+        'eventEndDate' => $validated['eventEndDate'],
+        'eventImage' => $imagePath,
+        'budget' => $validated['budget'],
+        'organizer' => $validated['organizer'],
+        'eventLocation' => $validated['eventLocation'],
+        'eventType' => $validated['eventType'],
+        'eventSpent' => $validated['eventSpent'],
+        'eventTime' => $validated['eventTime'],
+        'eventStatus' => $eventStatus,
+        'type' => $validated['type'],
+    ]);
+
+    // Process expenses if provided
+    $expenses = $request->input('expenses', []);
+    $expenseAmounts = $request->input('expense_amount', []);
+    $expenseDates = $request->input('expense_date', []);
+    $expenseTimes = $request->input('expense_time', []);
+    $quantity = $request->input('quantity_amount', []);
+
+    foreach ($expenses as $index => $description) {
+        if ($description && isset($expenseAmounts[$index]) && isset($expenseDates[$index]) && isset($expenseTimes[$index])) {
+            Expense::create([
+                'event_id' => $event->id,
+                'expense_description' => $description,
+                'expense_amount' => $expenseAmounts[$index],
+                'expense_date' => $expenseDates[$index],
+                'expense_time' => $expenseTimes[$index],
+                'quantity_amount' => $quantity[$index],
+
+            ]);
+        }
+    }
+
+    // Log the successful creation of the event
+    Log::info('Event created successfully', ['event_id' => $event->id]);
+
+    // Redirect back with a success message
+    return redirect()->route('Official.OfficialDashboard.index')->with('success', 'Event created successfully!');
+}
 
 
 
@@ -122,7 +207,19 @@ public function updateStatus(Request $request, $id)
 
 
 
-    public function storeEvents(Request $request)
+
+
+
+
+
+
+
+
+
+
+/*
+
+public function storeEvents(Request $request)
 {
     // Log the incoming request data
     Log::info('Storing a new event', ['data' => $request->all()]);
@@ -217,5 +314,5 @@ public function updateStatus(Request $request, $id)
 
 
 
-
+*/
 }

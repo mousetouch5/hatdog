@@ -101,8 +101,10 @@
                         <!-- Budget Given -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mt-2">Budget Given</label>
-                            <input type="number" name="budget" min="0" required
-                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <input type="text" name="budget" min="0" required
+                                oninput="formatExpenseAmount(this)"
+                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="₱0.00">
                         </div>
                         <input type="hidden" name="money_spent" value="123">
                         <!-- Money Spent -->
@@ -159,6 +161,44 @@
             </div>
         </div>
 
+
+
+        <script>
+            function formatExpenseAmount(input) {
+                // Remove all non-digit characters except for the period
+                let value = input.value.replace(/[^0-9.]/g, '');
+
+                // Prevent more than one period in the value
+                const parts = value.split('.');
+                if (parts.length > 2) {
+                    value = parts[0] + '.' + parts[1]; // Keep only the first two parts
+                }
+
+                // Split the value into integer and decimal parts
+                const [integerPart, decimalPart] = value.split('.');
+
+                // Format the integer part with commas
+                const formattedInteger = integerPart ? parseInt(integerPart, 10).toLocaleString() : '';
+
+                // Combine integer and decimal parts
+                let formattedValue = decimalPart !== undefined ?
+                    `${formattedInteger}.${decimalPart.slice(0, 2)}` // Limit decimals to two places
+                    :
+                    formattedInteger;
+
+                // Prepend the peso sign and update the input field
+                input.value = formattedValue ? `₱${formattedValue}` : '';
+            }
+
+            // Remove formatting before submission
+            document.getElementById('addTransactionForm').addEventListener('submit', function(e) {
+                const budgetInput = document.querySelector('input[name="budget"]');
+                if (budgetInput) {
+                    // Remove peso sign and commas
+                    budgetInput.value = budgetInput.value.replace(/[₱,]/g, '');
+                }
+            });
+        </script>
 
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

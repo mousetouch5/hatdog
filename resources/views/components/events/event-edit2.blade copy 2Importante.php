@@ -115,33 +115,42 @@
             <div id="expense-container" class="mt-4">
                 <h4 class="text-md font-semibold text-gray-700">Expenses:</h4>
                 <h4 class="text-md font-semibold text-gray-700">Added expense value:</h4>
-                <div id="total-expenses" class="text-md font-bold text-green-700 mt-2">
-                    Total: ₱0
-                </div>
                 <div class="expense-item flex justify-between mt-2">
                     <input type="text" name="expenses[]" placeholder="Expense Description"
                         class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 mr-2">
                     <input type="text" name="expense_amount[]" placeholder="Price"
                         oninput="formatExpenseAmount(this)"
-                        class="expense-amount mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
                     <select name="expense_date[]"
                         class="expense-date-dropdown mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 mr-2"></select>
                     <input type="time" name="expense_time[]"
                         class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
-                    <input type="text" name="quantity_amount[]" placeholder="Quantity"
-                        class="expense-amount mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
-                    <button class="btn btn-circle" onclick="nothing(event)" style="visibility: hidden;">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-
-
-
                 </div>
             </div>
+
+            <script>
+                function formatExpenseAmount(input) {
+                    // Remove any non-digit characters except for the period and retain the peso sign
+                    let value = input.value.replace(/[^0-9.]/g, '');
+
+                    // Split the input into integer and decimal parts
+                    const [integerPart, decimalPart] = value.split('.');
+
+                    // Format the integer part with commas
+                    const formattedInteger = parseInt(integerPart || 0).toLocaleString();
+
+                    // Combine the integer part and the decimal part, if any
+                    const formattedValue = decimalPart !== undefined ? `${formattedInteger}.${decimalPart}` : formattedInteger;
+
+                    // Prepend the peso sign and update the input field
+                    input.value = `₱${formattedValue}`;
+                }
+            </script>
+
+
+
+
+
 
             <button type="button" id="add-expense-button"
                 onclick="addExpense(document.getElementById('event_start_date').value, document.getElementById('event_end_date').value)"
@@ -149,15 +158,55 @@
                 Add More
             </button>
             <script>
-                function nothing(event) {
-                    console.log("nothing");
-                    event.preventDefault();
-                }
                 // Initialize dateOptions outside the DOMContentLoaded listener so it's accessible
-                // Function to add a new expense input field with a dropdown
+                let dateOptions = [];
 
+                document.addEventListener('DOMContentLoaded', function() {
+                    const startDateInput = document.getElementById('event_start_date');
+                    const endDateInput = document.getElementById('event_end_date');
+
+                    function populateDateDropdowns() {
+                        const startDate = new Date(startDateInput.value);
+                        const endDate = new Date(endDateInput.value);
+
+                        // Exit if dates are invalid or the start date is after the end date
+                        if (isNaN(startDate) || isNaN(endDate) || startDate > endDate) {
+                            return;
+                        }
+
+                        dateOptions = []; // Reset dateOptions array
+                        let currentDate = new Date(startDate);
+
+                        // Generate all dates between startDate and endDate
+                        while (currentDate <= endDate) {
+                            dateOptions.push(currentDate.toISOString().split('T')[0]); // Format date as YYYY-MM-DD
+                            currentDate.setDate(currentDate.getDate() + 1); // Increment the date by one day
+                        }
+
+                        // Populate the dropdowns with the generated date options
+                        document.querySelectorAll('.expense-date-dropdown').forEach(dropdown => {
+                            populateDropdown(dropdown, dateOptions);
+                        });
+                    }
+
+                    // Populate dropdown with date options
+                    function populateDropdown(dropdown, options) {
+                        dropdown.innerHTML = ''; // Clear existing options
+                        options.forEach(date => {
+                            const option = document.createElement('option');
+                            option.value = date;
+                            option.textContent = date;
+                            dropdown.appendChild(option);
+                        });
+                    }
+
+                    // Event listeners for changes in the start or end date input fields
+                    startDateInput.addEventListener('change', populateDateDropdowns);
+                    endDateInput.addEventListener('change', populateDateDropdowns);
+                });
+
+                // Function to add a new expense input field with a dropdown
                 function addExpense(startDate, endDate) {
-                    updateTotalExpenses();
                     const expenseContainer = document.getElementById('expense-container');
                     const newExpenseItem = document.createElement('div');
                     newExpenseItem.className = 'expense-item flex justify-between mt-2';
@@ -166,31 +215,12 @@
         <input type='text' name='expenses[]' placeholder='Expense Description'
             class='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 mr-2'>
         <input type='text' name='expense_amount[]' placeholder='Price'
-            class='expense-amount mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2'
+            class='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2'
             oninput="formatExpenseAmount(this)">
         <select name="expense_date[]"
             class="expense-date-dropdown mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 mr-2"></select>
         <input type='time' name='expense_time[]'
             class='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2'>
-             <input type="text" name="quantity_amount" placeholder="Quantity"
-                        class="expense-amount mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
-                       
-
-
-            <button class="btn btn-circle" onclick="removeExpense(this)">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    class="h-6 w-6"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor">
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      d="M6 18L18 6M6 6l12 12" />
-  </svg>
-</button>
     `;
 
                     expenseContainer.appendChild(newExpenseItem);
@@ -201,16 +231,39 @@
                     populateDropdown(newDropdown, dateOptions);
                 }
 
-                // Function to remove an expense item
-                function removeExpense(button) {
-                    const expenseItem = button.parentElement; // Get the parent div of the clicked button
-                    expenseItem.remove(); // Remove the expense item
-                    updateTotalExpenses(); // Recalculate the total expenses
+                // Helper function to generate date options based on the range
+                function generateDateOptions(startDate, endDate) {
+                    const options = [];
+                    const start = new Date(startDate);
+                    const end = new Date(endDate);
+
+                    if (isNaN(start) || isNaN(end) || start > end) {
+                        return options; // Return empty array if dates are invalid
+                    }
+
+                    let currentDate = new Date(start);
+                    while (currentDate <= end) {
+                        options.push(currentDate.toISOString().split('T')[0]); // Format as YYYY-MM-DD
+                        currentDate.setDate(currentDate.getDate() + 1); // Increment by one day
+                    }
+
+                    return options;
                 }
 
-
-                // Helper function to generate date options based on the range
+                // Helper function to populate a dropdown with options
+                function populateDropdown(dropdown, options) {
+                    dropdown.innerHTML = ''; // Clear existing options
+                    options.forEach(date => {
+                        const option = document.createElement('option');
+                        option.value = date;
+                        option.textContent = date;
+                        dropdown.appendChild(option);
+                    });
+                }
             </script>
+
+
+
 
             <!-- Submit Button -->
             <div class="flex justify-center mt-8">
@@ -223,88 +276,6 @@
 
 
 <script>
-    let dateOptions = [];
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const startDateInput = document.getElementById('event_start_date');
-        const endDateInput = document.getElementById('event_end_date');
-
-        function populateDateDropdowns() {
-            const startDate = new Date(startDateInput.value);
-            const endDate = new Date(endDateInput.value);
-
-            // Exit if dates are invalid or the start date is after the end date
-            if (isNaN(startDate) || isNaN(endDate) || startDate > endDate) {
-                return;
-            }
-
-            dateOptions = []; // Reset dateOptions array
-            let currentDate = new Date(startDate);
-
-            // Generate all dates between startDate and endDate
-            while (currentDate <= endDate) {
-                dateOptions.push(currentDate.toISOString().split('T')[0]); // Format date as YYYY-MM-DD
-                currentDate.setDate(currentDate.getDate() + 1); // Increment the date by one day
-            }
-
-            // Populate the dropdowns with the generated date options
-            document.querySelectorAll('.expense-date-dropdown').forEach(dropdown => {
-                populateDropdown(dropdown, dateOptions);
-            });
-        }
-
-        // Populate dropdown with date options
-        function populateDropdown(dropdown, options) {
-            dropdown.innerHTML = ''; // Clear existing options
-            options.forEach(date => {
-                const option = document.createElement('option');
-                option.value = date;
-                option.textContent = date;
-                dropdown.appendChild(option);
-            });
-        }
-
-        // Event listeners for changes in the start or end date input fields
-        startDateInput.addEventListener('change', populateDateDropdowns);
-        endDateInput.addEventListener('change', populateDateDropdowns);
-    });
-
-
-
-    function generateDateOptions(startDate, endDate) {
-        const options = [];
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-
-        if (isNaN(start) || isNaN(end) || start > end) {
-            return options; // Return empty array if dates are invalid
-        }
-
-        let currentDate = new Date(start);
-        while (currentDate <= end) {
-            options.push(currentDate.toISOString().split('T')[0]); // Format as YYYY-MM-DD
-            currentDate.setDate(currentDate.getDate() + 1); // Increment by one day
-        }
-
-        return options;
-    }
-
-    // Helper function to populate a dropdown with options
-    function populateDropdown(dropdown, options) {
-        dropdown.innerHTML = ''; // Clear existing options
-        options.forEach(date => {
-            const option = document.createElement('option');
-            option.value = date;
-            option.textContent = date;
-            dropdown.appendChild(option);
-        });
-    }
-</script>
-
-
-<script>
-    //auto populate
-
     document.getElementById('transaction').addEventListener('change', function() {
         const selectedOption = this.options[this.selectedIndex];
         const eventName = selectedOption.getAttribute('data-item');
@@ -335,46 +306,4 @@
             document.getElementById('event_start_date').value = '';
         }
     });
-</script>
-
-
-
-
-
-<script>
-    //formatiing fuck vanila JS
-    function formatExpenseAmount(input) {
-        // Remove any non-digit characters except for the period and retain the peso sign
-        let value = input.value.replace(/[^0-9.]/g, '');
-
-        // Split the input into integer and decimal parts
-        const [integerPart, decimalPart] = value.split('.');
-
-        // Format the integer part with commas
-        const formattedInteger = parseInt(integerPart || 0).toLocaleString();
-
-        // Combine the integer part and the decimal part, if any
-        const formattedValue = decimalPart !== undefined ? `${formattedInteger}.${decimalPart}` : formattedInteger;
-
-        // Prepend the peso sign and update the input field
-        input.value = `₱${formattedValue}`;
-    }
-
-    function updateTotalExpenses() {
-        // Get all expense amount inputs and quantities
-        const expenseAmounts = document.querySelectorAll('.expense-amount');
-        const quantities = document.querySelectorAll('.quantity_amount');
-        let total = 0;
-
-        // Calculate the total sum
-        expenseAmounts.forEach((input, index) => {
-            const value = parseFloat(input.value.replace(/[^0-9.]/g, '')) || 0; // Parse expense amount
-            const quantity = parseInt(quantities[index].value) || 0; // Parse quantity (default to 0)
-            total += value * quantity; // Multiply and add to total
-        });
-
-        // Update the total display
-        const totalDisplay = document.getElementById('total-expenses');
-        totalDisplay.textContent = `Total: ₱${total.toLocaleString()}`;
-    }
 </script>

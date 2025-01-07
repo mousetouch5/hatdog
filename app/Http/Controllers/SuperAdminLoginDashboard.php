@@ -86,8 +86,8 @@ public function updates(Request $request, $id)
 
 
 
-    public function update(Request $request, Event $event)
-    {
+public function update(Request $request, Event $event)
+{
         Log::info('Storing a new event', ['data' => $request->all()]);
         $request->validate([
             'event_name' => 'required|string|max:255',

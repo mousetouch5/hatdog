@@ -279,7 +279,32 @@
 
             }
         </script>
+    </div>
+
 
 </body>
 
 </html>
+<style>
+    .content {
+        margin-left: 240px;
+        /* Adjust for sidebar */
+        padding: 20px;
+        height: calc(100vh - 80px);
+        /* Adjust for the header height */
+        overflow-y: auto;
+        /* Enable vertical scrolling */
+        overflow-x: hidden;
+        /* Prevent horizontal scrolling */
+    }
+
+    aside {
+        overflow-y: auto;
+        /* Add scrollbar for the sidebar if content overflows */
+    }
+
+    body {
+        overflow: hidden;
+        /* Prevent scrolling on the entire body */
+    }
+</style>

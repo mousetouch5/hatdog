@@ -1,6 +1,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
-<div class="relative mt-5 ml-1">
+<div class="relative mt-5">
     <button class="relative" id="notification-button" onclick="toggleNotificationDropdown()">
         <span class="material-symbols-outlined">notifications</span>
         <!-- Badge for unread notifications -->

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('expense_amount', 10, 2);  // Amount of the expense
             $table->date('expense_date');  // Date of the expense
             $table->time('expense_time');  // Time of the expense
+            $table->decimal('quantity_amount',10, 2);
             $table->timestamps();  // Created and updated timestamps
         });
     }
