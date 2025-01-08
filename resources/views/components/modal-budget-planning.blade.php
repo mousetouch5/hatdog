@@ -5,43 +5,44 @@
   
   <!-- Modal -->
   <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
-    <div class="modal-box">
+    <div class="modal-box w-11/12 max-w-5xl">
+
       <h3 class="text-lg font-bold py-4">Budget Planning</h3>
   
       <form id="event-form" method="dialog" class="space-y-4">
         <!-- Title -->
         <div>
           <label for="title" class="block font-medium">Title</label>
-          <input type="text" id="title" name="title" class="w-full border rounded px-3 py-2" placeholder="Enter event title" required>
+          <input type="text" id="title" name="title" class="w-80 border rounded px-3 py-2" placeholder="Enter event title" required>
         </div>
   
         <!-- Date -->
         <div>
           <label for="date" class="block font-medium">Date</label>
-          <input type="date" id="date" name="date" class="w-full border rounded px-3 py-2" required>
+          <input type="date" id="date" name="date" class="w-80 border rounded px-3 py-2" required>
         </div>
   
         <!-- Type -->
         <div>
           <label for="type" class="block font-medium">Type</label>
-          <select id="type" name="type" class="w-full border rounded px-3 py-2" required>
+          <select id="type" name="type" class="w-80 border rounded px-3 py-2" required>
             <option value="" disabled selected>Select type</option>
             <option value="event">Event</option>
             <option value="project">Project</option>
           </select>
         </div>
   
-        <!-- Expected Budget -->
+        <!-- Expected Budget
         <div>
           <label for="budget" class="block font-medium">Expected Budget</label>
           <input type="number" id="budget" name="budget" class="w-full border rounded px-3 py-2" placeholder="Enter budget" required>
         </div>
-  
+        -->
 
         <!-- Possible Expenses -->
         <div class="space-y-4">
           <label class="block font-medium mb-2">Possible Expenses</label>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <!-- Category Selection -->
               <div class="flex flex-col">
                   <label for="category" class="block text-sm font-medium">Category</label>
@@ -106,7 +107,7 @@
         <!-- Total Expenses -->
         <div>
           <label for="total-expenses" class="block font-medium">Total Expenses</label>
-          <input type="text" id="total-expenses" name="total-expenses" class="w-full border rounded px-3 py-2" readonly>
+          <input type="text" id="total-expenses" name="total-expenses" class="w-80 border rounded px-3 py-2" readonly>
         </div>
   
         <!-- Modal Actions -->
