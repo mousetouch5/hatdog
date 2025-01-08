@@ -38,7 +38,7 @@
                     </div>
                 </div>
 
-                <!-- Allocated Budget Section -->
+                            <!-- Allocated Budget Section -->
                 <h3 class="text-lg font-semibold mb-6">Allocated Budget</h3>
                 <div class="space-y-4">
                     <!-- Repeatable Rows for Committees -->
@@ -48,59 +48,68 @@
                             <input 
                                 type="number" 
                                 name="committee_infrastructure_finance"
-                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                readonly>
                         </div>
                         <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
                             <span class="text-gray-700">Committee Chair on Barangay Affairs & Environment</span>
                             <input 
                                 type="number" 
                                 name="committee_barangay_affairs"
-                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                readonly>
                         </div>
                         <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
                             <span class="text-gray-700">Committee Chair on Education</span>
                             <input 
                                 type="number" 
                                 name="committee_education"
-                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                readonly>
                         </div>
                         <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
                             <span class="text-gray-700">Committee Chair Peace & Order</span>
                             <input 
                                 type="number" 
                                 name="committee_peace_order"
-                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                readonly>
                         </div>
                         <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
                             <span class="text-gray-700">Committee Chair on Laws & Good Governance</span>
                             <input 
                                 type="number" 
                                 name="committee_laws_governance"
-                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                readonly>
                         </div>
                         <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
                             <span class="text-gray-700">Committee Chair on Elderly, PWD/VAWC</span>
                             <input 
                                 type="number" 
                                 name="committee_elderly_pwd"
-                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                readonly>
                         </div>
                         <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
                             <span class="text-gray-700">Committee Chair on Health & Sanitation/ Nutrition</span>
                             <input 
                                 type="number" 
                                 name="committee_health_sanitation"
-                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                readonly>
                         </div>
                         <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
                             <span class="text-gray-700">Committee Chair on Livelihood</span>
                             <input 
                                 type="number" 
                                 name="committee_livelihood"
-                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                class="w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                readonly>
                         </div>
                     </div>
                 </div>
+
 
                 <div class="mt-5">
                     <button 

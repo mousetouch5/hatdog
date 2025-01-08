@@ -37,13 +37,15 @@
 
 
                     <!-- Add Button -->
-                    <div class="flex justify-end p-4">
+                    <div class="flex justify-end p-4 ">
                         <button onclick="toggleModal()"
                             class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
                             Add
                         </button>
+
+
                         <button onclick="toggleModal2()"
-                            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-5">
                             History
                         </button>
                     </div>
