@@ -240,7 +240,7 @@
                                         document.getElementById('eventDate').value = formattedDate;
 
                                         document.getElementById('eventTime').value = eventTime;
-                                        document.getElementById('eventType').value = eventType;
+                                        //  document.getElementById('eventType').value = eventType;
                                         document.getElementById('eventDescription').value = eventDescription;
                                         document.getElementById('eventLocation').value = eventLocation;
                                         document.getElementById('eventOrganizer').value = eventOrganizer;
@@ -267,22 +267,31 @@
                                         expenses.forEach((expense) => {
                                             const amount = parseFloat(expense.expense_amount) || 0;
                                             const description = expense.expense_description || 'No Description';
-
+                                            const quantity = parseFloat(expense.quantity_amount) || 1;
                                             const row = document.createElement('tr');
-                                            row.innerHTML = `<td>${description}</td><td>${amount.toFixed(2)}</td>`;
+
+                                            let sum = amount * quantity;
+                                            row.innerHTML =
+                                                `<td>${description}</td>
+                                           <td>₱${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                                            <td>${quantity.toFixed(2)}</td>
+                                            <td>₱${sum.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>`;
                                             expenseTableBody.appendChild(row);
 
                                             // Add to the total expense
-                                            totalExpense += amount;
+                                            totalExpense += amount * quantity;
                                         });
 
                                         // Populate budget summary data
                                         document.getElementById('eventName').value = eventData.eventName;
-                                        document.getElementById('totalBudget').value = eventData.eventBudget; // Total budget
+                                        document.getElementById('totalBudget').value =
+                                            `₱${parseFloat(eventData.eventBudget).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`; // Total budget
                                         //  document.getElementById('additionalExpenses').value = 0; // Placeholder for additional expenses
-                                        document.getElementById('totalSpent').value = totalExpense.toFixed(2); // Example calculation
+                                        document.getElementById('totalSpent').value =
+                                            `₱${totalExpense.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`; // Example calculation
                                         const remainingBudget = parseFloat(eventData.eventBudget) - totalExpense;
-                                        document.getElementById('remainingBudget').value = remainingBudget.toFixed(2);
+                                        document.getElementById('remainingBudget').value =
+                                            `₱${remainingBudget.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
                                         // Open Modal 2
                                         document.getElementById('budgetModal').showModal();
                                     }
@@ -351,19 +360,25 @@
                                     // Shuffle the events array to ensure a random order and pick the first one
                                     $randomEvent = $events->shuffle()->first();
                                 @endphp
-
-                                <div class="hero min-h-screen mt-3"
-                                    style="background-image: url('{{ asset('storage/' . $randomEvent->eventImage) }}');">
-                                    <div class="hero-overlay bg-opacity-60"></div>
-                                    <div class="hero-content text-neutral-content text-center">
-                                        <div class="max-w-md">
-                                            <h1 class="mb-5 text-5xl font-bold">{{ $randomEvent->eventName }}</h1>
-                                            <p class="mb-5">
-                                                {{ $randomEvent->eventDescription }}
-                                            </p>
+                                @if ($randomEvent)
+                                    <div class="hero min-h-screen mt-3"
+                                        style="background-image: url('{{ $randomEvent->eventImage ? asset('storage/' . $randomEvent->eventImage) : '' }}');">
+                                        <div class="hero-overlay bg-opacity-60"></div>
+                                        <div class="hero-content text-neutral-content text-center">
+                                            <div class="max-w-md">
+                                                <h1 class="mb-5 text-5xl font-bold">{{ $randomEvent->eventName }}</h1>
+                                                <p class="mb-5">
+                                                    {{ $randomEvent->eventDescription }}
+                                                </p>
+                                                @if (!$randomEvent->eventImage)
+                                                    <p class="text-xl font-semibold">Events</p>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @else
+                                    <p>No events found.</p>
+                                @endif
 
 
 

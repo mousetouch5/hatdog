@@ -83,7 +83,7 @@
                                             $category = 'recent';
                                         } elseif ($event->eventStatus === 'ongoing') {
                                             $category = 'ongoing';
-                                        } elseif ($event->eventStatus === 'ongoing') {
+                                        } elseif ($event->eventStatus === 'upcoming') {
                                             $category = 'upcoming';
                                         } else {
                                             $category = 'other'; // Catch-all for unexpected statuses
@@ -168,7 +168,7 @@
                                         document.getElementById('eventDate').value = formattedDate;
 
                                         document.getElementById('eventTime').value = eventTime;
-                                        document.getElementById('eventType').value = eventType;
+                                        // document.getElementById('eventType').value = eventType;
                                         document.getElementById('eventDescription').value = eventDescription;
                                         document.getElementById('eventLocation').value = eventLocation;
                                         document.getElementById('eventOrganizer').value = eventOrganizer;

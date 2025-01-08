@@ -132,7 +132,7 @@ public function store(Request $request)
         'authorize_official' => auth()->user()->id, // Authenticated user ID
         'date' => $request->input('date'),
         'description' => $request->input('description'),
-        'reciept' => $imagePath,
+        'reciept' => "sample",
     ]);
 
     Log::info('Transaction created successfully', [

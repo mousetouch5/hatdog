@@ -13,10 +13,6 @@
                  <input type="time" id="eventTime" class="input input-bordered w-full" readonly>
              </div>
              <div>
-                 <label for="eventType" class="block text-sm font-medium text-gray-700">Type</label>
-                 <input type="text" id="eventType" class="input input-bordered w-full" readonly>
-             </div>
-             <div>
                  <label for="eventDescription" class="block text-sm font-medium text-gray-700">Description</label>
                  <textarea id="eventDescription" class="textarea textarea-bordered w-full" readonly></textarea>
              </div>

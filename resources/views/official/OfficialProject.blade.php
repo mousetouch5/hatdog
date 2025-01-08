@@ -56,7 +56,7 @@
                                     $category = 'recent';
                                 } elseif ($event->eventStatus === 'ongoing') {
                                     $category = 'ongoing';
-                                } elseif ($event->eventStatus === 'ongoing') {
+                                } elseif ($event->eventStatus === 'upcoming') {
                                     $category = 'upcoming';
                                 } else {
                                     $category = 'other'; // Catch-all for unexpected statuses
@@ -140,7 +140,7 @@
                                 document.getElementById('eventDate').value = formattedDate;
 
                                 document.getElementById('eventTime').value = eventTime;
-                                document.getElementById('eventType').value = eventType;
+                                // document.getElementById('eventType').value = eventType;
                                 document.getElementById('eventDescription').value = eventDescription;
                                 document.getElementById('eventLocation').value = eventLocation;
                                 document.getElementById('eventOrganizer').value = eventOrganizer;
@@ -170,14 +170,21 @@
                                 expenses.forEach((expense) => {
                                     const amount = parseFloat(expense.expense_amount) || 0;
                                     const description = expense.expense_description || 'No Description';
-
+                                    const quantity = parseFloat(expense.quantity_amount) || 1;
                                     const row = document.createElement('tr');
-                                    row.innerHTML = `<td>${description}</td><td>${amount.toFixed(2)}</td>`;
+
+                                    let sum = amount * quantity;
+                                    row.innerHTML =
+                                        `<td>${description}</td>
+                                    <td>₱${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                                   <td>${quantity.toFixed(2)}</td>
+                                     <td>₱${sum.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>`;
                                     expenseTableBody.appendChild(row);
 
                                     // Add to the total expense
-                                    totalExpense += amount;
+                                    totalExpense += amount * quantity;
                                 });
+
 
                                 const markAsDoneBtn = document.getElementById('markAsDoneBtn');
                                 const updateButton = document.getElementById('bts');
@@ -192,11 +199,16 @@
 
                                 // Populate budget summary data
                                 document.getElementById('eventName').value = eventData.eventName;
-                                document.getElementById('totalBudget').value = eventData.eventBudget; // Total budget
-                                //  document.getElementById('additionalExpenses').value = 0; // Placeholder for additional expenses
-                                document.getElementById('totalSpent').value = totalExpense.toFixed(2); // Example calculation
+                                document.getElementById('totalBudget').value =
+                                    `₱${parseFloat(eventData.eventBudget).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`; // Total budget
+                                // document.getElementById('additionalExpenses').value = 0; // Placeholder for additional expenses
+                                document.getElementById('totalSpent').value =
+                                    `₱${totalExpense.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`; // Example calculation
+
                                 const remainingBudget = parseFloat(eventData.eventBudget) - totalExpense;
-                                document.getElementById('remainingBudget').value = remainingBudget.toFixed(2);
+                                document.getElementById('remainingBudget').value =
+                                    `₱${remainingBudget.toLocaleString('en-PH', { minimumFractionDigits: 2 })}`;
+
                                 // Open Modal 2
                                 document.getElementById('budgetModal').showModal();
                             }

@@ -21,8 +21,8 @@
             <!-- Event Name -->
             <div class="mb-4">
                 <label for="event_name" class="block text-sm font-semibold text-gray-700">Project Name:</label>
-                <input type="text" id="event_name" placeholder="Event Name" name="eventName"
-                    class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md" readonly>
+                <input type="text" id="event_name" placeholder="Project Name" name="eventName"
+                    class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md">
             </div>
 
 
@@ -99,9 +99,15 @@
                     <div class="mb-4">
                         <label for="event_budget" class="block text-sm font-semibold text-gray-700">Project
                             Budget:</label>
-                        <input type="text" id="event_budget" placeholder="Event Budget" name="budget"
+
+                        <!-- Read-only formatted budget for display -->
+                        <input type="text" id="event_budget" placeholder="Event Budget" name="formatted_budget"
                             class="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md" readonly>
+
+                        <!-- Hidden numeric input for raw budget value -->
+                        <input type="hidden" id="raw_event_budget" name="budget">
                     </div>
+
 
                     <div class="w-full ml-2">
                         <input type="hidden" id="event_spent" name="eventSpent" value="3000"
@@ -114,7 +120,6 @@
             <!-- Event Image -->
             <div id="expense-container" class="mt-4">
                 <h4 class="text-md font-semibold text-gray-700">Expenses:</h4>
-                <h4 class="text-md font-semibold text-gray-700">Added expense value:</h4>
                 <div id="total-expenses" class="text-md font-bold text-green-700 mt-2">
                     Total: ₱0
                 </div>
@@ -122,14 +127,15 @@
                     <input type="text" name="expenses[]" placeholder="Expense Description"
                         class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 mr-2">
                     <input type="text" name="expense_amount[]" placeholder="Price"
-                        oninput="formatExpenseAmount(this)"
+                        oninput="formatExpenseAmount(this); updateTotalExpenses();"
                         class="expense-amount mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
-                    <select name="expense_date[]"
-                        class="expense-date-dropdown mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 mr-2"></select>
+                    <input type="date" name="expense_date[]"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
                     <input type="time" name="expense_time[]"
                         class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
-                    <input type="text" name="quantity_amount[]" placeholder="Quantity"
-                        class="expense-amount mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
+                    <input type="number" name="quantity_amount[]" placeholder="Quantity" value="1"
+                        min="1" oninput="updateTotalExpenses()"
+                        class="quantity-amount mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
                     <button class="btn btn-circle" onclick="nothing(event)" style="visibility: hidden;">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -137,244 +143,327 @@
                                 d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
-
-
-
                 </div>
             </div>
 
-            <button type="button" id="add-expense-button"
-                onclick="addExpense(document.getElementById('event_start_date').value, document.getElementById('event_end_date').value)"
+            <button type="button" id="add-expense-button" onclick="addExpense()"
                 class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
                 Add More
             </button>
+
+            <div class="flex justify-center mt-8">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full">
+                    Save Event
+                </button>
+            </div>
+
             <script>
                 function nothing(event) {
-                    console.log("nothing");
                     event.preventDefault();
                 }
-                // Initialize dateOptions outside the DOMContentLoaded listener so it's accessible
-                // Function to add a new expense input field with a dropdown
 
-                function addExpense(startDate, endDate) {
-                    updateTotalExpenses();
+                function updateTotalExpenses() {
+                    const expenseRows = document.querySelectorAll('.expense-item');
+                    let total = 0;
+
+                    expenseRows.forEach(row => {
+                        const hiddenInput = row.querySelector('input[name="expense_amount_raw[]"]');
+                        const quantityInput = row.querySelector('.quantity-amount');
+
+                        const amount = parseFloat(hiddenInput?.value || '0');
+                        const quantity = parseInt(quantityInput.value) || 1;
+
+                        total += amount * quantity;
+                    });
+
+                    const totalDisplay = document.getElementById('total-expenses');
+                    totalDisplay.textContent = new Intl.NumberFormat('en-PH', {
+                        style: 'currency',
+                        currency: 'PHP'
+                    }).format(total);
+                }
+
+
+
+
+
+                function getNumericValue(input) {
+                    // Remove currency symbol and commas, then parse as float
+                    return parseFloat(input.value.replace(/[^0-9.]/g, '')) || 0;
+                }
+
+                function formatExpenseAmount(input) {
+                    // Remove any non-digit characters except for the period
+                    let value = input.value.replace(/[^0-9.]/g, '');
+
+                    // Ensure only one decimal point
+                    const parts = value.split('.');
+                    if (parts.length > 2) {
+                        value = parts[0] + '.' + parts.slice(1).join('');
+                    }
+
+                    // Limit decimal places to 2
+                    if (parts.length === 2) {
+                        value = parts[0] + '.' + parts[1].slice(0, 2);
+                    }
+
+                    // Convert to number and format display value
+                    const number = parseFloat(value) || 0;
+                    const formattedValue = number.toLocaleString('en-PH', {
+                        style: 'currency',
+                        currency: 'PHP',
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+
+                    // Create or update the hidden input for raw value
+                    let hiddenInput = input.parentElement.querySelector('input[name="expense_amount_raw[]"]');
+                    if (!hiddenInput) {
+                        hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'expense_amount_raw[]';
+                        input.parentElement.appendChild(hiddenInput);
+                    }
+                    hiddenInput.value = number.toFixed(2);
+
+                    // Update display value
+                    input.value = formattedValue;
+                }
+
+                // Add hidden fields for raw values before form submission
+                document.querySelector('form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const expenseRows = document.querySelectorAll('.expense-item');
+
+                    expenseRows.forEach((row, index) => {
+                        const amountInput = row.querySelector('.expense-amount');
+                        const rawAmount = getNumericValue(amountInput);
+
+                        // Create hidden input for raw amount
+                        const hiddenAmount = document.createElement('input');
+                        hiddenAmount.type = 'hidden';
+                        hiddenAmount.name = `expense_amount_raw[]`;
+                        hiddenAmount.value = rawAmount.toFixed(2);
+                        row.appendChild(hiddenAmount);
+
+                        // Validate required fields
+                        const description = row.querySelector('input[name="expenses[]"]').value.trim();
+                        const date = row.querySelector('input[name="expense_date[]"]').value;
+                        const time = row.querySelector('input[name="expense_time[]"]').value;
+
+                        if (!description || !date || !time || rawAmount <= 0) {
+                            e.preventDefault();
+                            alert('Please fill in all required fields for expense item ' + (index + 1));
+                            return;
+                        }
+                    });
+
+                    // If validation passes, submit the form
+                    this.submit();
+                });
+
+
+
+
+
+
+
+
+
+                function addExpense() {
                     const expenseContainer = document.getElementById('expense-container');
                     const newExpenseItem = document.createElement('div');
                     newExpenseItem.className = 'expense-item flex justify-between mt-2';
 
                     newExpenseItem.innerHTML = `
-        <input type='text' name='expenses[]' placeholder='Expense Description'
-            class='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 mr-2'>
-        <input type='text' name='expense_amount[]' placeholder='Price'
-            class='expense-amount mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2'
-            oninput="formatExpenseAmount(this)">
-        <select name="expense_date[]"
-            class="expense-date-dropdown mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 mr-2"></select>
-        <input type='time' name='expense_time[]'
-            class='mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2'>
-             <input type="text" name="quantity_amount" placeholder="Quantity"
-                        class="expense-amount mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
-                       
-
-
-            <button class="btn btn-circle" onclick="removeExpense(this)">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    class="h-6 w-6"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor">
-    <path
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      d="M6 18L18 6M6 6l12 12" />
-  </svg>
-</button>
+        <input type="text" name="expenses[]" required placeholder="Expense Description"
+            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 mr-2">
+        <input type="text" name="expense_amount[]" required placeholder="Price"
+            oninput="formatExpenseAmount(this); updateTotalExpenses();"
+            class="expense-amount mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
+        <input type="date" name="expense_date[]" required
+            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <input type="time" name="expense_time[]" required
+            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
+        <input type="number" name="quantity_amount[]" placeholder="Quantity" value="1" min="1"
+            oninput="updateTotalExpenses()" required
+            class="quantity-amount mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ml-2">
+        <button type="button" class="btn btn-circle" onclick="removeExpense(this)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
     `;
 
                     expenseContainer.appendChild(newExpenseItem);
-
-                    // Populate the newly added dropdown with dates
-                    const newDropdown = newExpenseItem.querySelector('.expense-date-dropdown');
-                    const dateOptions = generateDateOptions(startDate, endDate); // Generate date options
-                    populateDropdown(newDropdown, dateOptions);
                 }
 
-                // Function to remove an expense item
+
+
+
+
+
+
                 function removeExpense(button) {
-                    const expenseItem = button.parentElement; // Get the parent div of the clicked button
-                    expenseItem.remove(); // Remove the expense item
-                    updateTotalExpenses(); // Recalculate the total expenses
+                    button.closest('.expense-item').remove();
+                    updateTotalExpenses();
                 }
-
-
-                // Helper function to generate date options based on the range
             </script>
 
-            <!-- Submit Button -->
-            <div class="flex justify-center mt-8">
-                <button type="submit"
-                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full">Save Event</button>
-            </div>
-        </form>
-    </div>
-</section>
-
-
-<script>
-    let dateOptions = [];
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const startDateInput = document.getElementById('event_start_date');
-        const endDateInput = document.getElementById('event_end_date');
-
-        function populateDateDropdowns() {
-            const startDate = new Date(startDateInput.value);
-            const endDate = new Date(endDateInput.value);
-
-            // Exit if dates are invalid or the start date is after the end date
-            if (isNaN(startDate) || isNaN(endDate) || startDate > endDate) {
-                return;
-            }
-
-            dateOptions = []; // Reset dateOptions array
-            let currentDate = new Date(startDate);
-
-            // Generate all dates between startDate and endDate
-            while (currentDate <= endDate) {
-                dateOptions.push(currentDate.toISOString().split('T')[0]); // Format date as YYYY-MM-DD
-                currentDate.setDate(currentDate.getDate() + 1); // Increment the date by one day
-            }
-
-            // Populate the dropdowns with the generated date options
-            document.querySelectorAll('.expense-date-dropdown').forEach(dropdown => {
-                populateDropdown(dropdown, dateOptions);
-            });
-        }
-
-        // Populate dropdown with date options
-        function populateDropdown(dropdown, options) {
-            dropdown.innerHTML = ''; // Clear existing options
-            options.forEach(date => {
-                const option = document.createElement('option');
-                option.value = date;
-                option.textContent = date;
-                dropdown.appendChild(option);
-            });
-        }
-
-        // Event listeners for changes in the start or end date input fields
-        startDateInput.addEventListener('change', populateDateDropdowns);
-        endDateInput.addEventListener('change', populateDateDropdowns);
-    });
-
-
-
-    function generateDateOptions(startDate, endDate) {
-        const options = [];
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-
-        if (isNaN(start) || isNaN(end) || start > end) {
-            return options; // Return empty array if dates are invalid
-        }
-
-        let currentDate = new Date(start);
-        while (currentDate <= end) {
-            options.push(currentDate.toISOString().split('T')[0]); // Format as YYYY-MM-DD
-            currentDate.setDate(currentDate.getDate() + 1); // Increment by one day
-        }
-
-        return options;
-    }
-
-    // Helper function to populate a dropdown with options
-    function populateDropdown(dropdown, options) {
-        dropdown.innerHTML = ''; // Clear existing options
-        options.forEach(date => {
-            const option = document.createElement('option');
-            option.value = date;
-            option.textContent = date;
-            dropdown.appendChild(option);
-        });
-    }
-</script>
-
-
-<script>
-    //auto populate
-
-    document.getElementById('transaction').addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        const eventName = selectedOption.getAttribute('data-item');
-        const eventBudget = selectedOption.getAttribute('data-budget');
-        const eventStartDate = selectedOption.getAttribute('data-date');
-
-        // Populate the Event Name field
-        document.getElementById('event_name').value = eventName || '';
-
-        if (eventBudget) {
-            // Format the budget with commas and peso sign
-            const formattedBudget = new Intl.NumberFormat('en-PH', {
-                style: 'currency',
-                currency: 'PHP',
-                minimumFractionDigits: 2,
-            }).format(eventBudget);
-
-            document.getElementById('event_budget').value = formattedBudget;
-        } else {
-            document.getElementById('event_budget').value = '';
-        }
-
-        if (eventStartDate) {
-            // Convert the date to the correct format if needed
-            const formattedDate = new Date(eventStartDate).toISOString().split('T')[0]; // yyyy-MM-dd format
-            document.getElementById('event_start_date').value = formattedDate;
-        } else {
-            document.getElementById('event_start_date').value = '';
-        }
-    });
-</script>
 
 
 
 
+            <script>
+                // Add this function to prepare form data before submission
+                function prepareFormData(formElement) {
+                    const formData = new FormData(formElement);
+                    const expenses = [];
+                    const expenseRows = document.querySelectorAll('.expense-item');
 
-<script>
-    //formatiing fuck vanila JS
-    function formatExpenseAmount(input) {
-        // Remove any non-digit characters except for the period and retain the peso sign
-        let value = input.value.replace(/[^0-9.]/g, '');
+                    expenseRows.forEach((row, index) => {
+                        const description = row.querySelector('[name="expenses[]"]').value;
+                        const amountInput = row.querySelector('[name="expense_amount[]"]');
+                        const date = row.querySelector('[name="expense_date[]"]').value;
+                        const time = row.querySelector('[name="expense_time[]"]').value;
+                        const quantity = row.querySelector('[name="quantity_amount[]"]').value;
 
-        // Split the input into integer and decimal parts
-        const [integerPart, decimalPart] = value.split('.');
+                        // Get clean numeric value without currency formatting
+                        const rawAmount = getNumericValue(amountInput);
 
-        // Format the integer part with commas
-        const formattedInteger = parseInt(integerPart || 0).toLocaleString();
+                        // Create expense object
+                        expenses.push({
+                            description: description,
+                            amount: rawAmount.toFixed(2), // Clean numeric value for database
+                            date: date,
+                            time: time,
+                            quantity: quantity
+                        });
+                    });
 
-        // Combine the integer part and the decimal part, if any
-        const formattedValue = decimalPart !== undefined ? `${formattedInteger}.${decimalPart}` : formattedInteger;
+                    // Add expenses array to form data
+                    formData.append('expenses_data', JSON.stringify(expenses));
 
-        // Prepend the peso sign and update the input field
-        input.value = `₱${formattedValue}`;
-    }
+                    // Clean up budget value
+                    const budgetInput = document.getElementById('event_budget');
+                    if (budgetInput) {
+                        const rawBudget = getNumericValue(budgetInput);
+                        formData.set('budget', rawBudget.toFixed(2));
+                    }
 
-    function updateTotalExpenses() {
-        // Get all expense amount inputs and quantities
-        const expenseAmounts = document.querySelectorAll('.expense-amount');
-        const quantities = document.querySelectorAll('.quantity_amount');
-        let total = 0;
+                    return formData;
+                }
 
-        // Calculate the total sum
-        expenseAmounts.forEach((input, index) => {
-            const value = parseFloat(input.value.replace(/[^0-9.]/g, '')) || 0; // Parse expense amount
-            const quantity = parseInt(quantities[index].value) || 0; // Parse quantity (default to 0)
-            total += value * quantity; // Multiply and add to total
-        });
+                // Modify form submission
+                document.querySelector('form').addEventListener('submit', function(e) {
+                    const expenseRows = document.querySelectorAll('.expense-item');
+                    let isValid = true;
 
-        // Update the total display
-        const totalDisplay = document.getElementById('total-expenses');
-        totalDisplay.textContent = `Total: ₱${total.toLocaleString()}`;
-    }
-</script>
+                    expenseRows.forEach((row, index) => {
+                        const description = row.querySelector('[name="expenses[]"]').value.trim();
+                        const amount = row.querySelector('[name="expense_amount_raw[]"]')?.value;
+                        const date = row.querySelector('[name="expense_date[]"]').value;
+                        const time = row.querySelector('[name="expense_time[]"]').value;
+                        const quantity = row.querySelector('[name="quantity_amount[]"]').value;
+
+                        if (!description || !amount || !date || !time || !quantity) {
+                            isValid = false;
+                            alert(`Please fill in all required fields for expense item ${index + 1}`);
+                        }
+                    });
+
+                    if (!isValid) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+
+                // Add validation function
+                function validateForm(form) {
+                    let isValid = true;
+                    const expenseRows = form.querySelectorAll('.expense-item');
+
+                    expenseRows.forEach((row, index) => {
+                        const description = row.querySelector('[name="expenses[]"]').value.trim();
+                        const amount = getNumericValue(row.querySelector('[name="expense_amount[]"]'));
+                        const date = row.querySelector('[name="expense_date[]"]').value;
+                        const time = row.querySelector('[name="expense_time[]"]').value;
+                        const quantity = parseInt(row.querySelector('[name="quantity_amount[]"]').value);
+
+                        if (!description || amount <= 0 || !date || !time || quantity < 1) {
+                            alert(`Please fill in all required fields for expense item ${index + 1}`);
+                            isValid = false;
+                        }
+                    });
+
+                    return isValid;
+                }
+
+                // Function to handle form submission
+                function submitForm(formData) {
+                    // You can use fetch or axios here to submit the form
+                    // Example using fetch:
+                    fetch(formElement.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                window.location.href = data.redirect || '/success';
+                            } else {
+                                alert(data.message || 'Error submitting form');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error submitting form');
+                        });
+                }
+            </script>
+
+
+            <script>
+                //auto populate
+
+                document.getElementById('transaction').addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const eventName = selectedOption.getAttribute('data-item');
+                    const eventBudget = selectedOption.getAttribute('data-budget');
+                    const eventStartDate = selectedOption.getAttribute('data-date');
+
+                    // Populate the Event Name field
+                    document.getElementById('event_name').value = eventName || '';
+
+                    if (eventBudget) {
+                        // Format the budget with commas and peso sign for display
+                        const formattedBudget = new Intl.NumberFormat('en-PH', {
+                            style: 'currency',
+                            currency: 'PHP',
+                            minimumFractionDigits: 2,
+                        }).format(eventBudget);
+
+                        document.getElementById('event_budget').value = formattedBudget;
+
+                        // Set the raw numeric value for submission
+                        document.getElementById('raw_event_budget').value = eventBudget;
+                    } else {
+                        document.getElementById('event_budget').value = '';
+                        document.getElementById('raw_event_budget').value = '';
+                    }
+
+                    if (eventStartDate) {
+                        // Convert the date to the correct format if needed
+                        const formattedDate = new Date(eventStartDate).toISOString().split('T')[0]; // yyyy-MM-dd format
+                        document.getElementById('event_start_date').value = formattedDate;
+                    } else {
+                        document.getElementById('event_start_date').value = '';
+                    }
+                });
+
+                // No need to remove formatting on submission since the raw value is in the hidden field
+            </script>

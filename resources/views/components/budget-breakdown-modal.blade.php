@@ -16,6 +16,8 @@
                             <tr>
                                 <th>Description</th>
                                 <th>Amount</th>
+                                <th>Quantity</th>
+                                <th>Value</th>
                             </tr>
                         </thead>
                         <tbody id="expenseTableBody">

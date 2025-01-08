@@ -109,15 +109,6 @@
                         <input type="hidden" name="money_spent" value="123">
                         <!-- Money Spent -->
                         <!-- Received By -->
-                        <div class="mb-4">
-                            <label for="reciept" class="block text-sm font-semibold text-gray-700">Reciept
-                                Image:</label>
-                            <input type="file" id="event_image" name="reciept"
-                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                            @error('eventImage')
-                                <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                            @enderror
-                        </div>
 
 
                         <div>

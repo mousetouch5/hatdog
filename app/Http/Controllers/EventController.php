@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log; // Import Log facade
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+
 
 class EventController extends Controller
 {
@@ -69,42 +71,158 @@ public function updateStatus(Request $request, $id)
 
 
 
+/*
 
 
+public function updateExpense(Request $request)
+{
+    // Validate the request data
+    $validator = Validator::make($request->all(), [
+        'event_id' => 'required|integer',
+        'expenses' => 'required|array',
+        'expenses.*' => 'required|string|max:255',
+        'expense_amount_raw' => 'required|array',
+        'expense_amount_raw.*' => 'required|numeric|min:0',
+        'expense_date' => 'required|array',
+        'expense_date.*' => 'required|date',
+        'expense_time' => 'required|array',
+        'expense_time.*' => 'required|date_format:H:i',
+        'quantity_amount' => 'required|array',
+        'quantity_amount.*' => 'required|integer|min:1',
+    ]);
 
+    // Log the request data for debugging
+    \Log::info('Incoming request data:', $request->all());
 
-    public function updateExpense(Request $request)
-    {
-        // Validate the incoming request
-        $request->validate([
-            'expenses.*' => 'required|string',
-            'expense_amount.*' => 'required|numeric',
-            'expense_date.*' => 'required|date',
-            'expense_time.*' => 'required|date_format:H:i',
-            'event_id' => 'required|integer'
-        ]);
-
-        // Process the expenses
-        try {
-            foreach ($request->expenses as $index => $expenseDescription) {
-                Expense::create([
-                    'event_id' => $request->event_id,
-                    'expense_description' => $expenseDescription,
-                    'expense_amount' => $request->expense_amount[$index],
-                    'expense_date' => $request->expense_date[$index],
-                    'expense_time' => $request->expense_time[$index],
-                ]);
-            }
-
-            return response()->json(['message' => 'Expenses updated successfully.']);
-        } catch (\Exception $e) {
-            // Log the error for debugging
-            \Log::error('Error updating expenses: ' . $e->getMessage());
-
-            return response()->json(['error' => 'There was an error updating the expenses.'], 500);
-        }
+    // Check if validation fails
+    if ($validator->fails()) {
+        \Log::error('Validation failed:', $validator->errors()->toArray());
+        return response()->json(['errors' => $validator->errors()], 422);
     }
 
+    // Extract validated data
+    $expenses = $request->input('expenses', []);
+    $expenseAmounts = $request->input('expense_amount_raw', []);
+    $expenseDates = $request->input('expense_date', []);
+    $expenseTimes = $request->input('expense_time', []);
+    $quantities = $request->input('quantity_amount', []);
+
+    // Log the extracted data
+    \Log::info('Validated data extracted:', [
+        'expenses' => $expenses,
+        'expenseAmounts' => $expenseAmounts,
+        'expenseDates' => $expenseDates,
+        'expenseTimes' => $expenseTimes,
+        'quantities' => $quantities,
+    ]);
+
+    try {
+        // Iterate through the expenses and save them to the database
+        foreach ($expenses as $index => $description) {
+            // Log each expense before creating
+            \Log::info('Creating expense entry:', [
+                'event_id' => $request->event_id,
+                'expense_description' => $description,
+                'expense_amount' => $expenseAmounts[$index],
+                'expense_date' => $expenseDates[$index],
+                'expense_time' => $expenseTimes[$index],
+                'quantity_amount' => $quantities[$index],
+            ]);
+
+            // Create the expense entry in the database
+            Expense::create([
+                'event_id' => $request->event_id,
+                'expense_description' => $description,
+                'expense_amount' => $expenseAmounts[$index],
+                'expense_date' => $expenseDates[$index],
+                'expense_time' => $expenseTimes[$index],
+                'quantity_amount' => $quantities[$index],
+            ]);
+        }
+
+        // Log success message
+        \Log::info('Expenses updated successfully.');
+
+        return response()->json(['message' => 'Expenses updated successfully.']);
+        
+    } catch (\Exception $e) {
+        // Log the error for debugging
+        \Log::error('Error updating expenses: ' . $e->getMessage());
+
+        return response()->json(['error' => 'There was an error updating the expenses.'], 500);
+    }
+}
+
+
+*/
+public function updateExpense(Request $request)
+{
+    // Validate the incoming request data
+    $validator = Validator::make($request->all(), [
+        'event_id' => 'required|integer|exists:events,id', // Ensure event exists
+        'expenses' => 'required|array',
+        'expenses.*' => 'required|string|max:255', // Each expense description must be a string
+        'expense_amount_raw' => 'required|array',
+        'expense_amount_raw.*' => 'required|numeric|min:0', // Each amount must be numeric and >= 0
+        'expense_date' => 'required|array',
+        'expense_date.*' => 'required|date', // Each date must be a valid date
+        'expense_time' => 'required|array',
+        'expense_time.*' => 'required|date_format:H:i', // Each time must follow HH:mm format
+        'quantity_amount' => 'required|array',
+        'quantity_amount.*' => 'required|integer|min:1', // Each quantity must be an integer >= 1
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+
+    // Extract validated data
+    $validated = $validator->validated();
+    $eventId = $validated['event_id'];
+    $expenses = $validated['expenses'];
+    $expenseAmounts = $validated['expense_amount_raw'];
+    $expenseDates = $validated['expense_date'];
+    $expenseTimes = $validated['expense_time'];
+    $quantities = $validated['quantity_amount'];
+
+    try {
+        // Start a database transaction
+        \DB::beginTransaction();
+
+        // Delete existing expenses for this event (if updating all expenses)
+        //Expense::where('event_id', $eventId)->delete();
+
+        // Iterate through the expenses and save them to the database
+        foreach ($expenses as $index => $description) {
+            Expense::create([
+                'event_id' => $eventId,
+                'expense_description' => $description,
+                'expense_amount' => $expenseAmounts[$index],
+                'expense_date' => $expenseDates[$index],
+                'expense_time' => $expenseTimes[$index],
+                'quantity_amount' => $quantities[$index],
+            ]);
+        }
+
+        // Commit the transaction
+        \DB::commit();
+
+        return response()->json(['message' => 'Expenses updated successfully.'], 200);
+
+    } catch (\Exception $e) {
+        // Rollback the transaction on error
+        \DB::rollBack();
+
+        // Log the error for debugging
+        \Log::error('Error updating expenses:', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+            'request_data' => $request->all(),
+        ]);
+
+        return response()->json(['error' => 'There was an error updating the expenses.'], 500);
+    }
+}
 
 
 
@@ -141,8 +259,11 @@ public function storeEvents(Request $request)
 
     // Determine the event status based on the event end date
     $eventStatus = now()->startOfDay()->greaterThan(Carbon::parse($validated['eventEndDate'])->startOfDay()) 
-        ? 'done' 
-        : 'ongoing';
+    ? 'done' 
+        : (now()->startOfDay()->lessThan(Carbon::parse($validated['eventStartDate'])->startOfDay()) 
+        ? 'upcoming' 
+        : 'ongoing');
+
 
     // Handle the image upload if there is one
     $imagePath = null;
@@ -174,25 +295,24 @@ public function storeEvents(Request $request)
     ]);
 
     // Process expenses if provided
-    $expenses = $request->input('expenses', []);
-    $expenseAmounts = $request->input('expense_amount', []);
-    $expenseDates = $request->input('expense_date', []);
-    $expenseTimes = $request->input('expense_time', []);
-    $quantity = $request->input('quantity_amount', []);
+$expenses = $request->input('expenses', []);
+$expenseAmounts = $request->input('expense_amount_raw', []);
+$expenseDates = $request->input('expense_date', []);
+$expenseTimes = $request->input('expense_time', []);
+$quantity = $request->input('quantity_amount', []);
 
-    foreach ($expenses as $index => $description) {
-        if ($description && isset($expenseAmounts[$index]) && isset($expenseDates[$index]) && isset($expenseTimes[$index])) {
-            Expense::create([
-                'event_id' => $event->id,
-                'expense_description' => $description,
-                'expense_amount' => $expenseAmounts[$index],
-                'expense_date' => $expenseDates[$index],
-                'expense_time' => $expenseTimes[$index],
-                'quantity_amount' => $quantity[$index],
-
-            ]);
-        }
+foreach ($expenses as $index => $description) {
+    if ($description && isset($expenseAmounts[$index]) && isset($expenseDates[$index]) && isset($expenseTimes[$index])) {
+        Expense::create([
+            'event_id' => $event->id,
+            'expense_description' => $description,
+            'expense_amount' => $expenseAmounts[$index],
+            'expense_date' => $expenseDates[$index],
+            'expense_time' => $expenseTimes[$index],
+            'quantity_amount' => $quantity[$index] ?? 1, // Default to 1 if not provided
+        ]);
     }
+}
 
     // Log the successful creation of the event
     Log::info('Event created successfully', ['event_id' => $event->id]);
