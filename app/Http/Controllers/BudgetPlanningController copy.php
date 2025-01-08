@@ -9,7 +9,8 @@ use Carbon\Carbon; // Make sure to include Carbon for date manipulation
 //use App\Models\Budget;
 class BudgetPlanningController extends Controller
 {
-public function index() {
+public function index() 
+{
     $currentYear = Carbon::now()->year;
 
     // List of committee names
@@ -24,8 +25,10 @@ public function index() {
         'Committee Chair on Livelihood'
     ];
 
-    // List of models that correspond to the committees
-    $Models = [
+    // Initialize an array to store committee data
+    $committeesData = [];
+
+    $Model = [
         'CommitteeBarangayAffairsEnvironment',
         'CommitteeEducation',
         'CommitteePeaceOrder',
@@ -36,9 +39,9 @@ public function index() {
         'CommitteeInfrastructureFinance',
     ];
 
-    $committeesData = [];
 
-    foreach ($Models as $index => $committee) {
+    // Loop through each committee
+    foreach ($Model as $committee) {
         // Dynamically create the committee model class
         $committeeClass = "App\Models\\" . str_replace(' ', '', str_replace('&', 'And', $committee));  // Normalize committee names for class names
 
@@ -52,22 +55,23 @@ public function index() {
             // If a record exists, get its budget and remaining_budget
             if ($committeeRecord) {
                 $committeesData[] = [
-                    'committee_name' => $committees[$index], // Store the original committee name
+                    'committee' => $committee,
                     'budget' => $committeeRecord->budget,
                     'remaining_budget' => $committeeRecord->remaining_budget
                 ];
             } else {
                 // If no record exists, add default values
                 $committeesData[] = [
-                    'committee_name' => $committees[$index], // Store the original committee name
+                    'committee' => $committee,
                     'budget' => 0,
                     'remaining_budget' => 0
                 ];
             }
         }
     }
+    dd($committeesData);
 
-    // Return the view with committee names and data
+    // Return the view with committee data
     return view('Official.BudgetPlanning', compact('committeesData'));
 }
 

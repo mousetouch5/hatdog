@@ -67,6 +67,34 @@
             </main>
         </div>
 
+
+
+        <aside class="lg:w-1/3 w-full mt-5 lg:mt-0" data-aos="fade-left" data-aos-duration="2000">
+            <div class="bg-white shadow-lg rounded-lg p-6 relative">
+                <div class="bg-white shadow-md rounded-lg w-80 p-4">
+                    <!-- Community Outreach Budget -->
+                    <div class="bg-cyan-500 text-white rounded-lg p-4 text-center mb-4">
+                        <!--calendar-->
+                        <button id="openModal"
+                            class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none absolute left-12 top-11">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M0 18.125C0 19.1602 0.959821 20 2.14286 20H17.8571C19.0402 20 20 19.1602 20 18.125V7.5H0V18.125ZM14.2857 10.4688C14.2857 10.2109 14.5268 10 14.8214 10H16.6071C16.9018 10 17.1429 10.2109 17.1429 10.4688V12.0312C17.1429 12.2891 16.9018 12.5 16.6071 12.5H14.8214C14.5268 12.5 14.2857 12.2891 14.2857 12.0312V10.4688ZM14.2857 15.4688C14.2857 15.2109 14.5268 15 14.8214 15H16.6071C16.9018 15 17.1429 15.2109 17.1429 15.4688V17.0312C17.1429 17.2891 16.9018 17.5 16.6071 17.5H14.8214C14.5268 17.5 14.2857 17.2891 14.2857 17.0312V15.4688ZM8.57143 10.4688C8.57143 10.2109 8.8125 10 9.10714 10H10.8929C11.1875 10 11.4286 10.2109 11.4286 10.4688V12.0312C11.4286 12.2891 11.1875 12.5 10.8929 12.5H9.10714C8.8125 12.5 8.57143 12.2891 8.57143 12.0312V10.4688ZM8.57143 15.4688C8.57143 15.2109 8.8125 15 9.10714 15H10.8929C11.1875 15 11.4286 15.2109 11.4286 15.4688V17.0312C11.4286 17.2891 11.1875 17.5 10.8929 17.5H9.10714C8.8125 17.5 8.57143 17.2891 8.57143 17.0312V15.4688ZM2.85714 10.4688C2.85714 10.2109 3.09821 10 3.39286 10H5.17857C5.47321 10 5.71429 10.2109 5.71429 10.4688V12.0312C5.71429 12.2891 5.47321 12.5 5.17857 12.5H3.39286C3.09821 12.5 2.85714 12.2891 2.85714 12.0312V10.4688ZM2.85714 15.4688C2.85714 15.2109 3.09821 15 3.39286 15H5.17857C5.47321 15 5.71429 15.2109 5.71429 15.4688V17.0312C5.71429 17.2891 5.47321 17.5 5.17857 17.5H3.39286C3.09821 17.5 2.85714 17.2891 2.85714 17.0312V15.4688ZM17.8571 2.5H15.7143V0.625C15.7143 0.28125 15.3929 0 15 0H13.5714C13.1786 0 12.8571 0.28125 12.8571 0.625V2.5H7.14286V0.625C7.14286 0.28125 6.82143 0 6.42857 0H5C4.60714 0 4.28571 0.28125 4.28571 0.625V2.5H2.14286C0.959821 2.5 0 3.33984 0 4.375V6.25H20V4.375C20 3.33984 19.0402 2.5 17.8571 2.5Z"
+                                    fill="#FDFDFD" />
+                            </svg>
+                        </button>
+                        <h2 class="text-sm font-semibold">Community Outreach</h2>
+                        <p class="text-xs">Total Budget</p>
+                        <p class="text-2xl font-bold">₱22,000.00</p>
+                        <p class="text-xs">Total Budget Used</p>
+                        <p class="text-2xl font-bold">${{ number_format($totalBudget, 2) }}</p>
+                        <p class="text-xs">Total Remaining Budget</p>
+                        <p class="text-2xl font-bold">₱22,000.00</p>
+                    </div>
+                </div>
+        </aside>
+
         <x-Officials.transactions-table2 />
         <!-- Modal -->
         <div id="addModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">

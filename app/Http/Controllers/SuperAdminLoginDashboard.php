@@ -174,6 +174,7 @@ public function CreateBullShit(Request $request)
     // Validate the incoming request data
     $request->validate([
         'position' => 'required|string|max:255',
+        'comittee' => 'required|string|max:255',
         'first_name' => 'required|string|max:255',
         'middle_name' => 'nullable|string|max:255',
         'last_name' => 'required|string|max:255',
@@ -195,6 +196,7 @@ public function CreateBullShit(Request $request)
         'middle_name' =>$request['middle_name'],
         'last_name' => $request['last_name'],
         'position' => $request['position'],
+        'comittee' => $request['comittee'],
         'user_type' => 'official', // Setting user type to 'official'
         'is_approved' => true, // Automatically approve the user
     ]);

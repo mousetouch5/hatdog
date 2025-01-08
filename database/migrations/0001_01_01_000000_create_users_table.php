@@ -39,6 +39,7 @@ return new class extends Migration
             $table->string('city')->default('Bacolod');
             $table->string('brgy_city_zipcode')->default('1');
             $table->string('position')->nullable();
+            $table->string('comittee')->nullable();
             $table->boolean('is_approved')->default(false); // Approved by superadmin or not
         });
 
