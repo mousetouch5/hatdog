@@ -4,13 +4,13 @@
     <h3 id="accountRoleHeading" class="text-5xl font-bold mb-6">Login</h3>
     <form id="loginFormAction" action="{{ route('login') }}" method="POST" class="space-y-4">
         @csrf
-        <div class="flex flex-col">
+        <div class="flex flex-col px-3">
             <label for="email" class="block text-sm font-semibold text-left">Email</label>
             <input type="text" id="email" name="email"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter your email" required>
         </div>
-        <div class="flex flex-col relative">
+        <div class="flex flex-col relative px-3">
             <label for="password" class="block text-sm font-semibold text-left">Password</label>
             <input type="password" id="password" name="password"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -23,10 +23,11 @@
             </div>
         </div>
 
-
+        <div class="px-3">
         <button type="submit"
             class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition mt-4 w-full">Login</button>
-    </form>
+        </div>
+        </form>
 </div>
 
 

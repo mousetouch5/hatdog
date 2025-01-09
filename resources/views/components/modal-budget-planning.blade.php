@@ -22,6 +22,12 @@
           <input type="date" id="date" name="date" class="w-80 border rounded px-3 py-2" required>
         </div>
   
+        <!-- Organizer -->
+        <div>
+          <label for="title" class="block font-medium">Organizer</label>
+          <input type="text" id="organizer" name="organizer" class="w-80 border rounded px-3 py-2" placeholder="Enter organizer" required>
+        </div>
+  
         <!-- Type -->
         <div>
           <label for="type" class="block font-medium">Type</label>
