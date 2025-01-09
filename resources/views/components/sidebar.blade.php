@@ -219,7 +219,7 @@
 
 
     
-    <a href="{{ route('Official.BudgetPlanning.index') }}"
+    <a href="{{ route('Official.InputSectionAllocatedBudget.index') }}"
         class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100">
         <svg width="31" height="27" viewBox="0 0 31 27" fill="none" xmlns="http://www.w3.org/2000/svg">
            <mask id="mask0_407_157" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="31" height="27">

@@ -9,14 +9,51 @@
                 <!-- Title -->
                 <h1 class="text-2xl font-bold mb-8 text-center">Budget Planning</h1>
 
-              
-                            <!-- Allocated Budget Section -->
-                            <!-- Ma display nadi boss ang data halin sa inputsection allocated budget-->
-                            <x-allocated-budget-section/>
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            <!-- Allocated Budget input Section -->
+                            <!-- input section-->
+                            <x-input-section-allocated-budget/>
 
              
                            
               
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             <!-- Modal -->
             <dialog id="my_modal_2" class="modal">
@@ -27,8 +64,15 @@
                         <!-- Cancel Button -->
                         <button class="btn" onclick="my_modal_2.close()">No</button>
 
+
+
+                        <!-- temporary route , waaay pa function gin route ko lng para ma demo ko kay jossa ang flow ka UI -->
                         <!-- Confirm Button -->
-                        <button type="submit" class="btn btn-primary bg-gray-700">Yes</button>
+                        <button type="button" 
+                        onclick="window.location.href='{{ route('Official.BudgetPlanning.index') }}'" 
+                         class="btn btn-primary bg-gray-700">Yes</button>
+
+
                     </div>
                 </div>
                 <form method="dialog" class="modal-backdrop">

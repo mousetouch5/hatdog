@@ -59,6 +59,9 @@
 
                 </div>
             </div>
+            @if (auth()->user() && auth()->user()->user_type != 'resident')
+            <x-notification-dropdown-admin />
+        @endif
 
             <dialog id="my_modal_4" class="modal">
                 <div class="modal-box w-11/12 max-w-5xl">
@@ -111,10 +114,7 @@
                     });
                 });
             </script>
-            @if (auth()->user() && auth()->user()->user_type != 'resident')
-                <x-notification-dropdown-admin />
-            @endif
-
+         
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <!-- Teams Dropdown -->
