@@ -11,15 +11,17 @@ class AllocatedBudgetSection extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    // Declare the property
+    public $committeesData;
+
+    // Constructor to accept data
+    public function __construct($committeesData)
     {
-        //
+        $this->committeesData = $committeesData;
     }
 
-    /**
-     * Get the view / contents that represent the component.
-     */
-    public function render(): View|Closure|string
+    // Render the component view
+    public function render()
     {
         return view('components.allocated-budget-section');
     }

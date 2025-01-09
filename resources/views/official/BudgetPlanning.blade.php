@@ -9,14 +9,20 @@
                 <!-- Title -->
                 <h1 class="text-2xl font-bold mb-8 text-center">Budget Planning</h1>
 
-              
-                            <!-- Allocated Budget Section -->
-                            <!-- Ma display nadi boss ang data halin sa inputsection allocated budget-->
-                            <x-allocated-budget-section/>
 
-             
-                           
-              
+                <!-- Allocated Budget Section -->
+                <!-- Ma display nadi boss ang data halin sa inputsection allocated budget-->
+                <x-allocated-budget-section :committeesData="$committeesData" />
+
+
+                <div class="mt-8 text-right">
+                    <a href="{{ route('Official.BudgetPlanningEdit.index') }}">
+                        <button type="button"
+                            class="px-6 py-2 bg-gray-700 text-white rounded-md shadow hover:bg-gray-500 focus:ring-2 focus:ring-indigo-500">
+                            Add
+                        </button>
+                    </a>
+                </div>
 
             </div>
         </div>

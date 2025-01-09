@@ -1,194 +1,178 @@
 <x-app-layout>
-
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
     </script>
 
-
-    <div class="flex h-screen items-center justify-center bg-gray-50">
+    <div class="flex h-full min-h-screen">
+        <!-- Sidebar -->
         <x-sidebar class="custom-sidebar-class" />
-        </aside>
+        <!-- End Sidebar -->
 
-        <!-- Main Content -->
-        <div class="w-3/4 bg-white shadow-lg h-[90vh] flex flex-col">
-            <!-- Title -->
-            <div class="p-4 bg-gray-50">
-                <h2 class="text-xl font-semibold text-gray-700">Survey!</h2>
-            </div>
+        <!-- Main content section -->
+        <div class="flex flex-col w-full">
+            <!-- Content Section -->
+            <main class="flex-1 px-8 py-6 space-y-6 bg-gray-50">
+                <!-- Survey Responses Section -->
+                <section>
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-semibold">Survey Responses</h2>
+                        </div>
 
-
-            <div class="container mx-auto mt-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-semibold text-gray-800 ml-4">Survey Responses</h2>
-                </div>
-                <div class="mb-4 p-4 border rounded-lg shadow-sm bg-white">
-                    <h2 class="text-xl font-semibold">Total Responses</h2>
-                    <p class="text-lg">{{ $totalResponses }} responses received</p>
-                </div>
-                <!-- Table displaying users with buttons -->
-                <div class="overflow-x-auto bg-white shadow-md rounded-lg ml-3">
-                    <div class="mb-6 p-4 border rounded-lg shadow-sm bg-white">
-                        <h2 class="text-xl font-semibold mb-2">Participation Levels</h2>
-                        @if ($participationCounts->isEmpty())
-                            <p>No participation data available.</p>
-                        @else
-                            <ul class="space-y-2">
-                                @foreach ($participationCounts as $participation)
-                                    <li class="flex justify-between">
-                                        <span class="text-lg">{{ $participation->participation }}</span>
-                                        <span class="text-lg text-blue-600">{{ $participation->count }} responses</span>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </div>
-                </div>
-                <div class="mb-6 p-4 border rounded-lg shadow-sm bg-white">
-                    <h2 class="text-xl font-semibold mb-2">Event Types</h2>
-                    @if ($eventTypeCounts->isEmpty())
-                        <p>No event type data available.</p>
-                    @else
-                        <ul class="space-y-2">
-                            @foreach ($eventTypeCounts as $eventType)
-                                <li class="flex justify-between">
-                                    <span class="text-lg">{{ $eventType->event_type }}</span>
-                                    <span class="text-lg text-blue-600">{{ $eventType->count }} responses</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </div>
-                <!-- Chart Section -->
-                <div class="mb-6 p-4 border rounded-lg shadow-sm bg-white">
-                    <h2 class="text-xl font-semibold mb-2">Survey Data Overview</h2>
-                    <p class="text-lg mb-4">A visual representation of survey participation levels and event types.</p>
-                    <div id="chart-container">
-                        <!-- Chart.js -->
-                        <canvas id="surveyChart"></canvas>
-                    </div>
-                </div>
-
-
-
-                <div class="mt-6 p-4 border rounded-lg shadow-sm bg-white">
-                    <h2 class="text-xl font-semibold mb-2">Conclusions</h2>
-                    <p class="text-lg">
-                        Based on the survey data, the most popular participation level is
-                        {{ $mostLikedEvent->like_count }} likes,
-                        while event or project "{{ $mostLikedEventName }}" was the most liked activity type.
-                    </p>
-                </div>
-
-                <!-- Survey Responses -->
-                <div class="p-4 border rounded-lg shadow-sm bg-white">
-                    <h2 class="text-xl font-semibold mb-2">All Responses</h2>
-                    @if ($surveyResponses->isEmpty())
-                        <p>No survey responses available.</p>
-                    @else
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full table-auto border-collapse">
-                                <thead>
-                                    <tr>
-                                        <th class="px-4 py-2 border text-left">User</th>
-                                        <th class="px-4 py-2 border text-left">Participation</th>
-                                        <th class="px-4 py-2 border text-left">Event Types</th>
-                                        <th class="px-4 py-2 border text-left">Response</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <div class="max-h-60 overflow-y-auto">
-                                <table class="min-w-full table-auto border-collapse">
-                                    <tbody>
-                                        @foreach ($surveyResponses as $response)
-                                            <tr>
-                                                <td class="px-4 py-2 border">{{ $response->user->name }}</td>
-                                                <td class="px-4 py-2 border">{{ $response->participation }}</td>
-                                                <td class="px-4 py-2 border">
-                                                    @if (is_array($response->event_types))
-                                                        @foreach ($response->event_types as $event)
-                                                            <span class="block">{{ $event }}</span>
-                                                        @endforeach
-                                                    @else
-                                                        @foreach (json_decode($response->event_types) as $event)
-                                                            <span class="block">{{ $event }}</span>
-                                                        @endforeach
-                                                    @endif
-                                                </td>
-                                                <td class="px-4 py-2 border">{{ $response->response }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                        <div class="stats shadow mb-4">
+                            <div class="stat">
+                                <div class="stat-title">Total Responses</div>
+                                <div class="stat-value">{{ $totalResponses }}</div>
                             </div>
                         </div>
-                    @endif
-                </div>
+
+                        <!-- Grid of Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <!-- Participation Levels Card -->
+                            <div class="card bg-base-100 shadow-xl">
+                                <div class="card-body">
+                                    <h2 class="card-title">Participation Levels</h2>
+                                    @if ($participationCounts->isEmpty())
+                                        <p>No participation data available.</p>
+                                    @else
+                                        <ul class="space-y-2">
+                                            @foreach ($participationCounts as $participation)
+                                                <li class="flex justify-between">
+                                                    <span>{{ $participation->participation }}</span>
+                                                    <span class="badge badge-primary">{{ $participation->count }}
+                                                        responses</span>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Event Types Card -->
+                            <div class="card bg-base-100 shadow-xl">
+                                <div class="card-body">
+                                    <h2 class="card-title">Event Types</h2>
+                                    @if ($eventTypeCounts->isEmpty())
+                                        <p>No event type data available.</p>
+                                    @else
+                                        <ul class="space-y-2">
+                                            @foreach ($eventTypeCounts as $eventType)
+                                                <li class="flex justify-between">
+                                                    <span>{{ $eventType->event_type }}</span>
+                                                    <span class="badge badge-secondary">{{ $eventType->count }}
+                                                        responses</span>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
 
 
 
 
+                        <!-- Survey Data Overview Card -->
+                        <div class="card bg-base-100 shadow-xl mb-6">
+                            <div class="card-body">
+                                <h2 class="card-title">Survey Data Overview</h2>
+                                <p>A visual representation of survey participation levels and event types.</p>
+                                <div id="chart-container">
+                                    <canvas id="surveyChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
 
+                        <!-- Conclusions Card -->
+                        <div class="card bg-base-100 shadow-xl mb-6">
+                            <div class="card-body">
+                                <h2 class="card-title">Conclusions</h2>
+                                <p>
+                                    Based on the survey data, the most popular participation level is
+                                    {{ $mostLikedEvent->like_count }} likes,
+                                    while event or project "{{ $mostLikedEventName }}" was the most liked activity type.
+                                </p>
+                            </div>
+                        </div>
 
-
-
-
-            </div>
-
-            <!-- Scripts for print and download -->
-            <script>
-                function printUserResponse(id) {
-                    // Open a new window with the print-friendly view
-                    window.open('/print-survey/' + id, '_blank');
-                }
-
-                function downloadUserResponse(id) {
-                    // Handle the download functionality for a specific user response
-                    window.location.href = '/download-survey/' + id;
-                }
-            </script>
-
-
-
+                        <!-- All Responses Card -->
+                        <div class="card bg-base-100 shadow-xl">
+                            <div class="card-body">
+                                <h2 class="card-title">All Responses</h2>
+                                @if ($surveyResponses->isEmpty())
+                                    <p>No survey responses available.</p>
+                                @else
+                                    <div class="overflow-x-auto">
+                                        <table class="table table-zebra">
+                                            <thead>
+                                                <tr>
+                                                    <th>User</th>
+                                                    <th>Participation</th>
+                                                    <th>Event Types</th>
+                                                    <th>Response</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($surveyResponses as $response)
+                                                    <tr>
+                                                        <td>{{ $response->user->name }}</td>
+                                                        <td>{{ $response->participation }}</td>
+                                                        <td>
+                                                            @if (is_array($response->event_types))
+                                                                @foreach ($response->event_types as $event)
+                                                                    <span
+                                                                        class="badge badge-outline mr-1">{{ $event }}</span>
+                                                                @endforeach
+                                                            @else
+                                                                @foreach (json_decode($response->event_types) as $event)
+                                                                    <span
+                                                                        class="badge badge-outline mr-1">{{ $event }}</span>
+                                                                @endforeach
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ $response->response }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
         </div>
-        <!-- Scripts -->
-
-
-
-        <!-- Chart Section -->
-        <canvas id="surveyChart" width="400" height="200"></canvas>
-
-        <!-- Script to initialize chart (using Chart.js for example) -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            var ctx = document.getElementById('surveyChart').getContext('2d');
-            var surveyChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: @json($eventNames->values()), // Event names (not event IDs)
-                    datasets: [{
-                        label: 'Number of Responses',
-                        data: @json($eventCounts->pluck('total_responses')), // Total responses for each event
-                        backgroundColor: ['#4CAF50', '#FF9800',
-                            '#2196F3'
-                        ], // Use dynamic colors or change as needed
-                        borderColor: ['#388E3C', '#F57C00', '#1976D2'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        </script>
 
     </div>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('surveyChart').getContext('2d');
+        var surveyChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @json($eventNames->values()),
+                datasets: [{
+                    label: 'Number of Responses',
+                    data: @json($eventCounts->pluck('total_responses')),
+                    backgroundColor: ['#4CAF50', '#FF9800', '#2196F3'],
+                    borderColor: ['#388E3C', '#F57C00', '#1976D2'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 
 </x-app-layout>

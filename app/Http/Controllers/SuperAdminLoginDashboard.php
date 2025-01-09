@@ -174,7 +174,7 @@ public function CreateBullShit(Request $request)
     // Validate the incoming request data
     $request->validate([
         'position' => 'required|string|max:255',
-        'comittee' => 'required|string|max:255',
+        'committee' => 'required|string|max:255',
         'first_name' => 'required|string|max:255',
         'middle_name' => 'nullable|string|max:255',
         'last_name' => 'required|string|max:255',
@@ -196,14 +196,16 @@ public function CreateBullShit(Request $request)
         'middle_name' =>$request['middle_name'],
         'last_name' => $request['last_name'],
         'position' => $request['position'],
-        'comittee' => $request['comittee'],
+        'comittee' => $request['committee'],
         'user_type' => 'official', // Setting user type to 'official'
         'is_approved' => true, // Automatically approve the user
     ]);
 
     // Return a JSON response with success message
-    return response()->json(['message' => 'User created successfully!'], 201)
-                 ->withHeaders(['Location' => route('superadmin.dashboard')]); // Optional: Add the location of the redirected page
+    return response()->json(['message' => 'User created successfully!'], 201);
+    
+  
+    // Optional: Add the location of the redirected page
 
 }
 

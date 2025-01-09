@@ -20,7 +20,7 @@ public function index()
    $transactions = Transaction::with('authorizeOfficial')->get();
 
    // $officials = User::select('name', 'position','id')->get();
-    $officials = User::whereIn('position', ['Barangay Captain', 'Barangay Secretary', 'Barangay Treasurer'])
+    $officials = User::whereIn('position', ['Barangay Captain', 'Barangay Secretary', 'Barangay Treasurer','Assitant'])
         ->where('is_approved', 1)
         ->get();
     // Calculate the sum of te 'eventbudget' column
@@ -29,10 +29,85 @@ public function index()
     $bb = Expense::sum('expense_amount');
 
     $horse_shit =  $totalBudget - $bb;
+
+
+    
     //dd($transactions);
     // Pass both the events and totalBudget to the view
     return view('official.OfficialTransaction', compact('transactions','horse_shit','events','bb', 'totalBudget','officials'));
 }
+
+
+
+public function getBudgetData()
+{
+    // Get the authenticated user ID
+    $userId = auth()->id();
+
+    // Define committees and their corresponding models
+    $committees = [
+        'Committee Chair Infrastructure & Finance',
+        'Committee Chair on Barangay Affairs & Environment',
+        'Committee Chair on Education',
+        'Committee Chair Peace & Order',
+        'Committee Chair on Laws & Good Governance',
+        'Committee Chair on Elderly, PWD/VAWC',
+        'Committee Chair on Health & Sanitation/ Nutrition',
+        'Committee Chair on Livelihood'
+    ];
+
+    $models = [
+        'CommitteeInfrastructureFinance',
+        'CommitteeBarangayAffairsEnvironment',
+        'CommitteeEducation',
+        'CommitteePeaceOrder',
+        'CommitteeLawsGoodGovernance',
+        'CommitteeElderlyPwdVawc',
+        'CommitteeHealthSanitationNutrition',
+        'CommitteeLivelihood',
+    ];
+
+    // Fetch the user's assigned committee from your database
+    $userCommittee = User::where('id', $userId)->value('comittee'); // Assuming `committee` column exists in the user table
+
+    if (!$userCommittee) {
+        return response()->json(['error' => 'User has no assigned committee.'], 404);
+    }
+
+    // Check if the user's committee exists in the predefined list
+    $committeeIndex = array_search($userCommittee, $committees);
+
+    if ($committeeIndex === false) {
+        return response()->json(['error' => 'Invalid committee assigned to user.'], 400);
+    }
+
+    // Get the corresponding model
+    $modelClass = "App\\Models\\" . $models[$committeeIndex];
+
+    if (!class_exists($modelClass)) {
+        return response()->json(['error' => "Model {$models[$committeeIndex]} does not exist."], 500);
+    }
+
+    // Fetch only the latest budget and remaining budget from the model
+    $budgetRecord = (new $modelClass)
+        ->select('budget', 'remaining_budget') // Select only required fields
+        ->latest('updated_at') // Get the most recent record
+        ->first();
+
+    if ($budgetRecord) {
+        return response()->json([
+            'totalBudget' => $budgetRecord->budget,
+            'remainingBudget' => $budgetRecord->remaining_budget,
+        ]);
+    } else {
+        return response()->json([
+            'totalBudget' => 0,
+            'remainingBudget' => 0,
+        ]);
+    }
+}
+
+
 
 
 

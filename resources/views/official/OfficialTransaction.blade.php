@@ -84,15 +84,57 @@
                                     fill="#FDFDFD" />
                             </svg>
                         </button>
-                        <h2 class="text-sm font-semibold">Community Outreach</h2>
-                        <p class="text-xs">Total Budget</p>
-                        <p class="text-2xl font-bold">₱22,000.00</p>
-                        <p class="text-xs">Total Budget Used</p>
-                        <p class="text-2xl font-bold">${{ number_format($totalBudget, 2) }}</p>
-                        <p class="text-xs">Total Remaining Budget</p>
-                        <p class="text-2xl font-bold">₱22,000.00</p>
+                        <div id="budget-data">
+                            <h2 class="text-sm font-semibold">Community Outreach</h2>
+                            <p class="text-xs">Total Budget</p>
+                            <p id="total-budget" class="text-2xl font-bold">₱0.00</p>
+                            <p class="text-xs">Total Budget Used</p>
+                            <p id="total-budget-used" class="text-2xl font-bold">₱0.00</p>
+                            <p class="text-xs">Total Remaining Budget</p>
+                            <p id="remaining-budget" class="text-2xl font-bold">₱0.00</p>
+                        </div>
                     </div>
                 </div>
+
+                <script>
+                    // Function to fetch and update budget data
+                    function fetchBudgetData() {
+                        fetch('{{ route('budget.data') }}', {
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest', // Ensures it's recognized as an AJAX request
+                                },
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                // Update the HTML with the fetched data
+                                document.getElementById('total-budget').textContent =
+                                    `₱${Number(data.totalBudget).toLocaleString()}.00`;
+                                const usedBudget = Number(data.totalBudget) - Number(data.remainingBudget);
+                                document.getElementById('total-budget-used').textContent = `₱${usedBudget.toLocaleString()}.00`;
+                                document.getElementById('remaining-budget').textContent =
+                                    `₱${Number(data.remainingBudget).toLocaleString()}.00`;
+                            })
+                            .catch(error => {
+                                console.error('Error fetching budget data:', error);
+                                // Optionally show an error message to the user
+                            });
+                    }
+                    // Fetch data on page load
+                    document.addEventListener('DOMContentLoaded', fetchBudgetData);
+
+
+                    // Poll for updates every 5 seconds (5000 milliseconds)
+                    setInterval(fetchBudgetData, 5000);
+                </script>
+
+
+
+
         </aside>
 
         <x-Officials.transactions-table2 />

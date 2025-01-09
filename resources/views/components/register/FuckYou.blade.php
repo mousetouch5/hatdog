@@ -50,6 +50,9 @@
 
 
 
+
+
+
                 <!-- First Name Field -->
                 <div class="form-control">
                     <label for="first_name" class="label">First Name</label>
@@ -127,3 +130,61 @@
         </form>
     </div>
 </dialog>
+<script>
+    document.getElementById("submit_form").addEventListener("click", async () => {
+        const form = document.getElementById("signup_form");
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch("{{ route('user.create') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value,
+                },
+                body: formData,
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Success
+                document.getElementById("modal_response").innerHTML =
+                    `<p class="text-green-500">User created successfully!</p>`;
+                form.reset(); // Reset the form
+            } else {
+                // Error
+                let errorMessages = Object.values(result.errors || {}).map(err =>
+                    `<p class="text-red-500">${err}</p>`).join("");
+                document.g etElementById("modal_response").innerHTML = errorMessages ||
+                    `<p class="text-red-500">${result.message || "An error occurred"}</p>`;
+            }
+        } catch (error) {
+            // Network error or unexpected issue
+            document.getElementById("modal_response").innerHTML =
+                `<p class="text-red-500">An unexpected error occurred. Please try again.</p>`;
+        }
+    });
+</script>
+
+<script>
+    /* debugging purposes
+    document.getElementById("signup_form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent form submission to inspect data
+
+        // Create a FormData object from the form
+        const formData = new FormData(event.target);
+
+        // Convert FormData to a key-value pair object for easy inspection
+        const dataObject = {};
+        formData.forEach((value, key) => {
+            dataObject[key] = value;
+        });
+
+        // Log the form data to the console
+        console.log("Form Data:", dataObject);
+
+        // If ready to submit, you can manually trigger form submission
+        // event.target.submit();
+    });
+    */
+</script>

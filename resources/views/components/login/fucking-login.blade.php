@@ -24,10 +24,10 @@
         </div>
 
         <div class="px-3">
-        <button type="submit"
-            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition mt-4 w-full">Login</button>
+            <button type="submit"
+                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition mt-4 w-full">Login</button>
         </div>
-        </form>
+    </form>
 </div>
 
 

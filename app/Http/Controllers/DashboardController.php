@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Event;
 use App\Models\User;
+use App\Models\Budget;
 use App\Models\Transaction;
 
 class DashboardController extends Controller
@@ -101,12 +102,99 @@ public function unconfirmed()
 // In your TransactionController.php
 public function approve($id)
 {
-    $transaction = Transaction::findOrFail($id);
-    $transaction->is_approved = 1;
-    $transaction->save();
+    try {
+        // Find the transaction by ID
+        $transaction = Transaction::findOrFail($id);
+        Log::info('Transaction found: ' . $transaction);
 
-    return response()->json(['success' => true, 'message' => 'Transaction approved']);
+        // Mark the transaction as approved
+        $transaction->is_approved = 1;
+        $transaction->save();
+        Log::info('Transaction approved: ' . $transaction->id);
+
+        // Define the committees and corresponding model classes
+        $committees = [
+            'Committee Chair Infrastructure & Finance',
+            'Committee Chair on Barangay Affairs & Environment',
+            'Committee Chair on Education',
+            'Committee Chair Peace & Order',
+            'Committee Chair on Laws & Good Governance',
+            'Committee Chair on Elderly, PWD/VAWC',
+            'Committee Chair on Health & Sanitation/ Nutrition',
+            'Committee Chair on Livelihood'
+        ];
+
+        $models = [
+            'CommitteeInfrastructureFinance',
+            'CommitteeBarangayAffairsEnvironment',
+            'CommitteeEducation',
+            'CommitteePeaceOrder',
+            'CommitteeLawsGoodGovernance',
+            'CommitteeElderlyPwdVawc',
+            'CommitteeHealthSanitationNutrition',
+            'CommitteeLivelihood',
+        ];
+
+        // Get the 'received_by' user from the transaction
+        $userId = $transaction->recieve_by; // Assuming 'received_by' is the user ID
+        Log::info('Received by user ID: ' . $userId);
+
+        // Fetch the committee assigned to the user
+        $userCommittee = User::where('id', $userId)->value('comittee');
+        Log::info('User committee: ' . $userCommittee);
+
+        // Find the committee's index
+        $committeeIndex = array_search($userCommittee, $committees);
+
+        if ($committeeIndex === false) {
+            Log::error('Committee not found for user: ' . $userId);
+            return response()->json(['success' => false, 'message' => 'Committee not found'], 404);
+        }
+
+        // Dynamically get the model class corresponding to the user's committee
+        $modelClass = "App\\Models\\" . $models[$committeeIndex];
+        Log::info('Model class: ' . $modelClass);
+
+        // Get the budget from the model for the committee
+        $budgetRecord = (new $modelClass)->latest('updated_at')->first();
+        Log::info('Budget record found: ' . ($budgetRecord ? 'Yes' : 'No'));
+
+        if (!$budgetRecord) {
+            Log::error('Budget record not found for user ID: ' . $userId);
+            return response()->json(['success' => false, 'message' => 'Budget record not found'], 404);
+        }
+
+        // Get the current budget and remaining budget
+        $constBudget = $budgetRecord->budget;
+        $budget = $budgetRecord->remaining_budget;
+        $remainingBudget = $budgetRecord->remaining_budget;
+
+        // Get the amount from the transaction
+        $amount = $transaction->budget;
+        Log::info('Transaction amount: ' . $amount);
+
+        // Calculate the new remaining budget
+        $newRemainingBudget = $remainingBudget - $amount;
+        Log::info('New remaining budget: ' . $newRemainingBudget);
+
+        // Update the committee's budget record
+        $newBudgetRecord = $modelClass::create([
+            'budget' => $constBudget,
+            'remaining_budget' => $newRemainingBudget,
+            'expenses' => $amount,
+            'user_id' => $userId,
+            'year' => date('Y'), // Get the current year
+        ]);
+        Log::info('Budget record updated for user ID: ' . $userId);
+
+        // Return a success response
+        return response()->json(['success' => true, 'message' => 'Transaction approved and budget updated']);
+    } catch (\Exception $e) {
+        Log::error('Error in approving transaction: ' . $e->getMessage());
+        return response()->json(['success' => false, 'message' => 'An error occurred'], 500);
+    }
 }
+
 
 public function reject($id)
 {

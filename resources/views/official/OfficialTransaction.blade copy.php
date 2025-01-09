@@ -15,14 +15,7 @@
         <!-- Sidebar -->
         <x-sidebar class="custom-sidebar-class" />
         </aside>
-        <!-- end si >
-
-
-
-
-
-
-        <!-- Grid event section -->
+        
         <div class="flex flex-col lg:flex-row lg:space-x-6 w-full">
             <!-- Content Section -->
             <main class="flex-1 px-8 py-6 space-y-6 bg-gray-50">

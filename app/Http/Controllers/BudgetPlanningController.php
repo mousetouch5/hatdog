@@ -66,7 +66,6 @@ public function index() {
             }
         }
     }
-
     // Return the view with committee names and data
     return view('Official.BudgetPlanning', compact('committeesData'));
 }
@@ -74,7 +73,6 @@ public function index() {
 
 
     public function edits() {
-      
         return view('Official.BudgetPlanningEdit');
     }
 

@@ -113,6 +113,10 @@ Route::get('/transactions/{transaction}/download', [OfficialTransactionControlle
 Route::get('/liquidation-report', [OfficialReportController::class, 'showLiquidationReport'])->name('liquidation-report.liquidation.report');
 
 
+
+Route::post('/fakeevents', [FakeController::class, 'storeEvents'])->name('fakeevents.store');
+
+
 Route::post('/events', [EventController::class, 'storeEvents'])->name('events.store');
 
 // In routes/web.php
@@ -186,6 +190,7 @@ Route::get('official/BudgetPreparation', [BudgetPreparationController::class, 'i
 
 Route::get('official/BudgetPlanning/', [BudgetPlanningController::class, 'index'])->name('Official.BudgetPlanning.index');
 
+Route::get('/budget-data', [OfficialTransactionController::class, 'getBudgetData'])->name('budget.data');
 
 Route::get('official/BudgetPlanning/InputSectionAllocatedBudget', [InputSectionAllocatedBudgetController::class, 'index'])->name('Official.InputSectionAllocatedBudget.index');
 

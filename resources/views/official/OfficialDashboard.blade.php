@@ -29,8 +29,8 @@
                                     $category = 'recent';
                                 } elseif ($event->eventStatus === 'ongoing') {
                                     $category = 'ongoing';
-                                } elseif ($event->eventStatus === 'ongoing') {
-                                    $category = 'ongoing';
+                                } elseif ($event->eventStatus === 'upcoming') {
+                                    $category = 'upcoming';
                                 } else {
                                     $category = 'other'; // Catch-all for unexpected statuses
                                 }

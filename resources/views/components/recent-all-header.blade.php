@@ -6,6 +6,9 @@
                                 style="background: rgba(205, 243, 255, 1);" id="recent-btn">Recent Activity</button>
                             <button onclick="showEvents('ongoing')" class="px-4 py-2 bg-gray-200 rounded-lg filter-btn"
                                 id="ongoing-btn">Ongoing Activity</button>
+                            <button onclick="showEvents('upcoming')" class="px-4 py-2 bg-gray-200 rounded-lg filter-btn"
+                                id="upcoming-btn">Upcomming
+                                Activity</button>
 
                         </div>
                     </div>
