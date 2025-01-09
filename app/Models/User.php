@@ -44,7 +44,8 @@ class User extends Authenticatable
         'brgy_city_zipcode',
         'is_approved',
         'id_picture_path',
-        'position'
+        'position',
+        'comittee',
 
     ];
 

@@ -177,6 +177,8 @@ Route::patch('/transactions/{id}/approve', [DashboardController::class, 'approve
 Route::delete('/transactions/{id}/reject', [DashboardController::class, 'reject']);
 
 
+Route::get('official/BudgetPlanningEdit', [BudgetPlanningController::class, 'edits'])->name('Official.BudgetPlanningEdit.index');
+Route::post('/budget/store', [BudgetPlanningController::class, 'store'])->name('budget.store');
 
 /// waay nani 
 Route::get('official/BudgetPreparation', [BudgetPreparationController::class, 'index'])->name('Official.BudgetPreparation.index');

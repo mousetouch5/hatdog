@@ -18,24 +18,6 @@
                            
               
 
-            <!-- Modal -->
-            <dialog id="my_modal_2" class="modal">
-                <div class="modal-box">
-                    <h3 class="text-lg font-bold">Confirmation</h3>
-                    <p class="py-4">Please review the following information carefully. Do you want to save these changes?</p>
-                    <div class="modal-action">
-                        <!-- Cancel Button -->
-                        <button class="btn" onclick="my_modal_2.close()">No</button>
-
-                        <!-- Confirm Button -->
-                        <button type="submit" class="btn btn-primary bg-gray-700">Yes</button>
-                    </div>
-                </div>
-                <form method="dialog" class="modal-backdrop">
-                    <button class="">Close</button>
-                </form>
-            </dialog>
-
             </div>
         </div>
     </div>
