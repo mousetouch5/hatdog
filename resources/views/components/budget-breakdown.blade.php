@@ -114,11 +114,22 @@
     <dialog id="updateExpenseModal" class="modal">
         <div class="modal-box">
             <h3 class="text-lg font-bold">Update Expense</h3>
-            <form id="updateExpenseForm" method="POST">
+            <form id="updateExpenseForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 <!-- Expense Description -->
                 <div class="space-y-4">
                     <div id="expense-container" class="mt-4">
+
+                        <div class="mb-4">
+                            <label for="reciept" class="block text-sm font-semibold text-gray-700">Reciept
+                                Image:</label>
+                            <input type="file" id="reciept" name="reciept"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            @error('reciept')
+                                <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <h4 class="text-md font-semibold text-gray-700">Expenses:</h4>
                         <div id="total-expenses" class="text-md font-bold text-green-700 mt-2">
                             Total: ₱0

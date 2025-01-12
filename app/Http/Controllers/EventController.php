@@ -160,6 +160,7 @@ public function updateExpense(Request $request)
     // Validate the incoming request data
     $validator = Validator::make($request->all(), [
         'event_id' => 'required|integer|exists:events,id', // Ensure event exists
+        'reciept' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,doc,docx,pdf,txt|max:2048',
         'expenses' => 'required|array',
         'expenses.*' => 'required|string|max:255', // Each expense description must be a string
         'expense_amount_raw' => 'required|array',
@@ -188,6 +189,17 @@ public function updateExpense(Request $request)
     try {
         // Start a database transaction
         \DB::beginTransaction();
+
+        $receiptPath = null;
+        if ($request->hasFile('reciept')) {
+            $file = $request->file('reciept');
+            $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+            $file->move(public_path('storage/receipts'), $filename);
+            $receiptPath = 'receipts/' . $filename;
+
+            // Update the event record with the receipt path
+            Event::where('id', $eventId)->update(['reciept' => $receiptPath]);
+        }
 
         // Delete existing expenses for this event (if updating all expenses)
         //Expense::where('event_id', $eventId)->delete();
@@ -245,6 +257,7 @@ public function storeEvents(Request $request)
         'eventStartDate' => 'required|date',
         'eventEndDate' => 'required|date|after_or_equal:eventStartDate',
         'eventImage' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'reciept' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,doc,docx,pdf,txt|max:2048',
         'budget' => 'required|numeric',
         'organizer' => 'nullable|string|max:255',
         'eventLocation' => 'nullable|string|max:255',
@@ -277,6 +290,18 @@ public function storeEvents(Request $request)
         Log::info('No event image uploaded.');
     }
 
+$receiptPath = null;
+if ($request->hasFile('reciept')) {
+    $file = $request->file('reciept');
+    $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+    $file->move(public_path('storage/reciept'), $filename);
+    $receiptPath = 'reciept/' . $filename;
+    Log::info('Event receipt uploaded', ['reciept_path' => $receiptPath]);
+} else {
+    Log::info('No event receipt uploaded.');
+}
+
+
     // Create the new event in the database
     $event = Event::create([
         'eventName' => $validated['eventName'],
@@ -284,6 +309,7 @@ public function storeEvents(Request $request)
         'eventStartDate' => $validated['eventStartDate'],
         'eventEndDate' => $validated['eventEndDate'],
         'eventImage' => $imagePath,
+        'reciept' => $receiptPath,
         'budget' => $validated['budget'],
         'organizer' => $validated['organizer'],
         'eventLocation' => $validated['eventLocation'],

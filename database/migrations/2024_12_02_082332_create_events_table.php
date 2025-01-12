@@ -20,6 +20,7 @@ return new class extends Migration
             $table->time('eventTime');
             $table->string('eventImage')->nullable(); // Event Image (nullable if not provided)
             $table->decimal('budget', 10, 2);
+            $table->string('reciept')->nullable();
             $table->enum('eventStatus', ['ongoing','done','upcoming']);
             $table->decimal('eventSpent', 10, 2)->nullable();  // Event Budget (nullable, with 2 decimal places)
             $table->string('organizer')->nullable(); // Event Organizer (nullable if not provided)

@@ -114,6 +114,16 @@
                 </div>
             </div>
 
+
+            <div class="mb-4">
+                <label for="reciept" class="block text-sm font-semibold text-gray-700">Reciept Image:</label>
+                <input type="file" id="reciept" name="reciept"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                @error('reciept')
+                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
             <!-- Event Image -->
             <div id="expense-container" class="mt-4">
                 <h4 class="text-md font-semibold text-gray-700">Expenses:</h4>

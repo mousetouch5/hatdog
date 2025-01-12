@@ -15,10 +15,6 @@
                  <input type="time" id="eventTime" class="input input-bordered w-full" readonly>
              </div>
              <div>
-                 <label for="eventType" class="block text-sm font-medium text-gray-700">Type</label>
-                 <input type="text" id="eventType" class="input input-bordered w-full" readonly>
-             </div>
-             <div>
                  <label for="eventDescription" class="block text-sm font-medium text-gray-700">Description</label>
                  <textarea id="eventDescription" class="textarea textarea-bordered w-full" readonly></textarea>
              </div>
@@ -32,10 +28,23 @@
              </div>
              <button type="button" class="btn btn-primary w-full mt-4" onclick="openBudgetModal()">Budget
                  Breakdown</button>
+
+
+
              <!-- Image -->
              <div>
                  <img id="eventImage" src="" alt="Event Image" class="rounded-lg w-full h-40 object-cover">
              </div>
+
+
+
+             <div id="receiptContainer" class="mt-4">
+                 <a id="receiptDownloadLink" href="#" style="display: none;"
+                     class="inline-block px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
+                     Download Receipt
+                 </a>
+             </div>
+
              <!-- Inside the form -->
              <form id="likeUnlikeForm">
                  <h1 class="text-xl font-semibold mt-4">Like or Unlike</h1>

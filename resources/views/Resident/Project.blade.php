@@ -105,6 +105,7 @@
                                         '{{ $event->organizer }}', 
                                         '{{ asset('storage/' . $event->eventImage) }}',
                                         '{{ $event->budget }}', 
+                                        '{{ asset('storage/' . $event->reciept) }}',
                                         {{ $event->expenses->isNotEmpty() ? json_encode($event->expenses) : 'null' }},)">
                                         <img src="{{ asset('storage/' . $event->eventImage) }}" alt="Event"
                                             class="rounded-lg w-full h-48 object-cover">
@@ -138,7 +139,7 @@
                                     function openEventModal(eventName, userId, eventId, eventDate, eventTime, eventType, eventDescription,
                                         eventLocation,
                                         eventOrganizer,
-                                        eventImage, eventBudget, expenseAmount, expenseDescription) {
+                                        eventImage, eventBudget, receiptPath, expenseAmount, expenseDescription) {
                                         // Store the event data in the global object
                                         currentEventData = {
                                             userId,
@@ -155,7 +156,17 @@
                                             eventLocation: eventLocation,
                                             eventOrganizer: eventOrganizer,
                                             eventImage: eventImage,
+                                            receiptPath: receiptPath,
                                         };
+                                        const receiptContainer = document.getElementById('receiptContainer');
+                                        const receiptLink = document.getElementById('receiptDownloadLink');
+                                        if (receiptPath) {
+                                            receiptLink.href = receiptPath; // Set the link to the file
+                                            receiptLink.setAttribute('download', 'receipt'); // Force download with a suggested filename
+                                            receiptLink.style.display = 'inline'; // Show the link
+                                        } else {
+                                            receiptContainer.style.display = 'none'; // Hide if no receipt
+                                        }
                                         console.log(eventId);
                                         console.log("User: " + userId);
                                         console.log("Current Event Data:", currentEventData);

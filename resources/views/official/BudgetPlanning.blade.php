@@ -12,7 +12,7 @@
 
                 <!-- Allocated Budget Section -->
                 <!-- Ma display nadi boss ang data halin sa inputsection allocated budget-->
-                <x-allocated-budget-section :committeesData="$committeesData" />
+                <x-allocated-budget-section :committeesData="$committeesData" :currentYear="$currentYear" :totalBudget="$totalBudget" />
 
 
                 <div class="mt-8 text-right">

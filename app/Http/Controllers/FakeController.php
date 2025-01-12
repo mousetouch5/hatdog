@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\FakeExpense;
+use App\Models\FakeEvents;
+//use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log; // Import Log facade
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class FakeController extends Controller
 {
     
-
-
 
 public function storeEvents(Request $request)
 {
@@ -30,7 +35,7 @@ public function storeEvents(Request $request)
     Log::info('Validated event data', ['validated_data' => $validated]);
 
     // Create the new event in the database
-    $event = Event::create([
+    $event = FakeEvents::create([
         'eventName' => $validated['eventName'],
         'eventDescription' => $validated['eventDescription'],
         'eventStartDate' => $validated['eventStartDate'],
@@ -44,7 +49,7 @@ public function storeEvents(Request $request)
 $expenses = $request->input('expenses', []);
 $expenseAmounts = $request->input('expense_amount_raw', []);
 $quantity = $request->input('quantity_amount', []);
-$category = $request->input('category', []);
+$category = $request->input('expense_category', []);
 
 
 foreach ($expenses as $index => $description) {

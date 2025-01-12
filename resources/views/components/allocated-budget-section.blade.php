@@ -4,22 +4,19 @@
     <div>
         <label for="year" class="block text-sm font-medium text-gray-700 mb-1">Year:</label>
         <select id="year" name="year"
-            class="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-            <option value="" disabled selected>Select Year</option>
-            @for ($i = now()->year; $i >= 2000; $i--)
-                <option value="{{ $i }}">{{ $i }}</option>
-            @endfor
+            class="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" readonly>
+            <option value="{{ $currentYear }}" selected>{{ $currentYear }}</option>
         </select>
     </div>
-
 
     <!-- Yearly Budget Input -->
     <div>
         <label for="yearly_budget" class="block text-sm font-medium text-gray-700 mb-1">Yearly Budget:</label>
-        <input type="number" id="yearly_budget" name="yearly_budget"
+        <input type="text" id="yearly_budget" name="yearly_budget"
             class="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            placeholder="Enter Budget" readonly>
+            value="₱{{ number_format($totalBudget->amount, 2) }}" readonly>
     </div>
+
 </div>
 
 

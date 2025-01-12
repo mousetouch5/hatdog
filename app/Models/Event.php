@@ -25,6 +25,7 @@ class Event extends Model
         'eventType',
         'eventStatus',
         'type',
+        'reciept',
     ];
 
     protected $casts = [

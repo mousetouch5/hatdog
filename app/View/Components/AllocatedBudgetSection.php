@@ -12,13 +12,18 @@ class AllocatedBudgetSection extends Component
      * Create a new component instance.
      */
     // Declare the property
-    public $committeesData;
+public $committeesData;
+public $totalBudget;
+public $currentYear;
 
-    // Constructor to accept data
-    public function __construct($committeesData)
-    {
-        $this->committeesData = $committeesData;
-    }
+// Constructor to accept data
+public function __construct($committeesData, $currentYear, $totalBudget)
+{
+    $this->committeesData = $committeesData;
+    $this->currentYear = $currentYear;
+    $this->totalBudget = $totalBudget;
+}
+
 
     // Render the component view
     public function render()

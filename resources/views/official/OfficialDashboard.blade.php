@@ -41,25 +41,28 @@
                                 data-aos-duration="3000"
                                 onclick="openEventModal('{{ $event->eventName }}',
                                 '{{ $event->id }}',
-                               '{{ $event->eventDate }}', 
+                               '{{ $event->eventStartDate }}',
+                               '{{ $event->eventEndDate }}',
+                               '{{ $event->eventStatus }}', 
                                 '{{ $event->eventTime }}', 
                                 '{{ $event->eventType }}', 
                                  '{{ $event->eventDescription }}', 
                                   '{{ $event->eventLocation }}', 
                                   '{{ $event->organizer }}', 
-                                         '{{ asset('storage/' . $event->eventImage) }}',
-                                             '{{ $event->budget }}', 
+                                    '{{ asset('storage/' . $event->eventImage) }}',
+                                    '{{ $event->budget }}', 
+                                    '{{ asset('storage/' . $event->reciept) }}',
                                      {{ $event->expenses->isNotEmpty() ? json_encode($event->expenses) : 'null' }},
 
             
-                                    )">
+        )">
 
                                 <img src="{{ asset('storage/' . $event->eventImage) }}" alt="Event"
                                     class="rounded-lg w-full h-48 object-cover">
                                 <div>
                                     <h3 class="text-md font-semibold text-left">{{ $event->eventName }}</h3>
                                     <p class="text-sm text-gray-500 text-left">
-                                        {{ \Carbon\Carbon::parse($event->eventDate)->format('d M Y') }},
+                                        {{ \Carbon\Carbon::parse($event->eventStartDate)->format('d M Y') }},
                                         {{ \Carbon\Carbon::parse($event->eventTime)->format('h:i A') }},
                                     </p>
 
@@ -79,30 +82,46 @@
                             let currentEventData = {};
 
                             // Function to open Event Modal and populate data
-                            function openEventModal(eventName, eventId, eventDate, eventTime, eventType, eventDescription, eventLocation,
-                                eventOrganizer,
-                                eventImage, eventBudget, expenseAmount, expenseDescription) {
+                            function openEventModal(eventName, eventId, eventStartDate, eventEndDate, eventStatus, eventTime, eventType,
+                                eventDescription, eventLocation, eventOrganizer, eventImage, eventBudget, receiptPath, expenseAmount,
+                                expenseDescription) {
+
                                 // Store the event data in the global object
                                 currentEventData = {
+                                    eventStartDate,
+                                    eventEndDate,
+                                    eventStatus,
                                     eventId,
-                                    eventBudget,
                                     eventBudget,
                                     eventName: eventName,
                                     expenseAmount: expenseAmount,
                                     expenseDescription: expenseDescription,
-                                    eventDate: eventDate,
                                     eventTime: eventTime,
                                     eventType: eventType,
                                     eventDescription: eventDescription,
                                     eventLocation: eventLocation,
                                     eventOrganizer: eventOrganizer,
                                     eventImage: eventImage,
+                                    receiptPath: receiptPath,
                                 };
+
+
+                                // Update receipt download link
+                                const receiptContainer = document.getElementById('receiptContainer');
+                                const receiptLink = document.getElementById('receiptDownloadLink');
+                                if (receiptPath) {
+                                    receiptLink.href = receiptPath; // Set the link to the file
+                                    receiptLink.setAttribute('download', 'receipt'); // Force download with a suggested filename
+                                    receiptLink.style.display = 'inline'; // Show the link
+                                } else {
+                                    receiptContainer.style.display = 'none'; // Hide if no receipt
+                                }
 
                                 console.log("Current Event Data:", currentEventData);
 
                                 // Populate Modal 1 fields with event data
                                 // Format the eventDate to match the input field format (YYYY-MM-DD)
+                                const eventDate = eventStartDate;
                                 const formattedDate = eventDate.split(" ")[0];
 
                                 // Set the formatted date into the input field

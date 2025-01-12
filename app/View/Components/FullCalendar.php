@@ -11,10 +11,16 @@ class FullCalendar extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
+
+
+        public $events;
+
+    // Constructor to accept data
+    public function __construct($events)
     {
-        //
+        $this->events = $events;
     }
+
 
     /**
      * Get the view / contents that represent the component.

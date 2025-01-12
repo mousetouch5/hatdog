@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Log; 
 use App\Models\Transaction;
 use Barryvdh\DomPDF\Facade\PDF; 
+use Carbon\Carbon;
+
 class OfficialTransactionController extends Controller
 
 {
@@ -88,9 +90,12 @@ public function getBudgetData()
         return response()->json(['error' => "Model {$models[$committeeIndex]} does not exist."], 500);
     }
 
+
+    $currentYear = Carbon::now()->year; 
     // Fetch only the latest budget and remaining budget from the model
     $budgetRecord = (new $modelClass)
-        ->select('budget', 'remaining_budget') // Select only required fields
+        ->select('budget', 'remaining_budget','year') 
+        ->where('year', $currentYear) // Filter by the current year// Select only required fields
         ->latest('updated_at') // Get the most recent record
         ->first();
 

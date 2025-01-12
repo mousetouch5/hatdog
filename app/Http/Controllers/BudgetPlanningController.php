@@ -7,8 +7,11 @@ use Illuminate\Http\Request;
 use App\Models\Budget;
 use Carbon\Carbon; // Make sure to include Carbon for date manipulation
 //use App\Models\Budget;
+
+
+
 class BudgetPlanningController extends Controller
-{
+{   
 public function index() {
     $currentYear = Carbon::now()->year;
 
@@ -38,6 +41,9 @@ public function index() {
 
     $committeesData = [];
 
+     $totalBudget = Budget::where('year', $currentYear)->first();
+    //tech debt  
+    // it works pero daw 
     foreach ($Models as $index => $committee) {
         // Dynamically create the committee model class
         $committeeClass = "App\Models\\" . str_replace(' ', '', str_replace('&', 'And', $committee));  // Normalize committee names for class names
@@ -66,8 +72,11 @@ public function index() {
             }
         }
     }
+
+     
+
     // Return the view with committee names and data
-    return view('Official.BudgetPlanning', compact('committeesData'));
+    return view('Official.BudgetPlanning', compact('committeesData', 'currentYear', 'totalBudget'));
 }
 
 

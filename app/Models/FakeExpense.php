@@ -10,6 +10,9 @@ class FakeExpense extends Model
 {
     use HasFactory;
     
+
+    protected $table = 'fake_expense';
+
     protected $fillable = [
         'event_id', 
         'expense_description', 
