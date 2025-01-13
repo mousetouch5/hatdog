@@ -14,7 +14,9 @@
              </div>
              <div>
                  <label for="eventDescription" class="block text-sm font-medium text-gray-700">Description</label>
-                 <textarea id="eventDescription" class="textarea textarea-bordered w-full" readonly></textarea>
+                 <textarea id="eventDescription" class="textarea w-full focus:outline-none focus:ring-0 focus:border-transparent"
+                     readonly></textarea>
+
              </div>
              <div>
                  <label for="eventLocation" class="block text-sm font-medium text-gray-700">Location</label>
