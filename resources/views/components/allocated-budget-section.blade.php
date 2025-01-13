@@ -14,7 +14,7 @@
         <label for="yearly_budget" class="block text-sm font-medium text-gray-700 mb-1">Yearly Budget:</label>
         <input type="text" id="yearly_budget" name="yearly_budget"
             class="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-            value="₱{{ number_format($totalBudget->amount, 2) }}" readonly>
+            value="₱{{ number_format($totalBudget->amount ?? 0, 2) }}" readonly>
     </div>
 
 </div>
