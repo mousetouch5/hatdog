@@ -19,6 +19,7 @@
                         <th class="px-4 py-2">Name</th>
                         <th class="px-4 py-2">Email</th>
                         <th class="px-4 py-2">ID Photo</th>
+                        <th class="px-4 py-2">Comittee</th>
                         <th class="px-4 py-2">Actions</th>
                     </tr>
                 </thead>
@@ -155,6 +156,7 @@ function loadPendingUsers(page = 1) {
                               ? `<img src="${user.id_picture_path}" alt="ID Photo" class="id-photo rounded-full" style="width: 50px; height: 50px; object-fit: cover;" onclick="zoomImage('${user.id_picture_path}')">`
                               : 'No ID Photo'}
                         </td>
+                    <td class="px-4 py-2">${user.comittee}</td>
                     <td class="px-4 py-2">
                         <button onclick="openChangePasswordModal(${user.id})" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Change Password</button>
                         <button onclick="deleteUser(${user.id})" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Delete User</button>
