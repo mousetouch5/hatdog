@@ -7,7 +7,7 @@
                             <button onclick="showEvents('ongoing')" class="px-4 py-2 bg-gray-200 rounded-lg filter-btn"
                                 id="ongoing-btn">Ongoing Projects</button>
                             <button onclick="showEvents('upcoming')" class="px-4 py-2 bg-gray-200 rounded-lg filter-btn"
-                                id="upcoming-btn">Upcomming Projects</button>
+                                id="upcoming-btn">Upcoming Projects</button>
                             <x-events.event-edit-button2 />
                         </div>
                     </div>

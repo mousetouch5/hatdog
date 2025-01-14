@@ -41,7 +41,10 @@ class EventController extends Controller
 public function print(Event $event) {
     // Initialize variables for summary calculations
     $total_event_budget = $event->budget;
-    $total_expense = $event->expenses->sum('expense_amount');
+   $total_expense = $event->expenses->sum(function ($expense) {
+    return $expense->expense_amount * $expense->quantity_amount;
+    });
+
     $total_refunded = max(0, $total_expense - $total_event_budget);
     $total_to_be_reimbursed = max(0, $total_event_budget - $total_expense);
 
@@ -155,22 +158,23 @@ public function updateExpense(Request $request)
 
 
 */
+
 public function updateExpense(Request $request)
 {
     // Validate the incoming request data
     $validator = Validator::make($request->all(), [
         'event_id' => 'required|integer|exists:events,id', // Ensure event exists
         'reciept' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,doc,docx,pdf,txt|max:2048',
-        'expenses' => 'required|array',
-        'expenses.*' => 'required|string|max:255', // Each expense description must be a string
-        'expense_amount_raw' => 'required|array',
-        'expense_amount_raw.*' => 'required|numeric|min:0', // Each amount must be numeric and >= 0
-        'expense_date' => 'required|array',
-        'expense_date.*' => 'required|date', // Each date must be a valid date
-        'expense_time' => 'required|array',
-        'expense_time.*' => 'required|date_format:H:i', // Each time must follow HH:mm format
-        'quantity_amount' => 'required|array',
-        'quantity_amount.*' => 'required|integer|min:1', // Each quantity must be an integer >= 1
+        'expenses' => 'nullable|array',
+        'expenses.*' => 'nullable|string|max:255', // Each expense description must be a string
+        'expense_amount_raw' => 'nullable|array',
+        'expense_amount_raw.*' => 'nullable|numeric|min:0', // Each amount must be numeric and >= 0
+        'expense_date' => 'nullable|array',
+        'expense_date.*' => 'nullable|date', // Each date must be a valid date
+        'expense_time' => 'nullable|array',
+        'expense_time.*' => 'nullable|date_format:H:i', // Each time must follow HH:mm format
+        'quantity_amount' => 'nullable|array',
+        'quantity_amount.*' => 'nullable|integer|min:1', // Each quantity must be an integer >= 1
     ]);
 
     if ($validator->fails()) {
@@ -180,18 +184,28 @@ public function updateExpense(Request $request)
     // Extract validated data
     $validated = $validator->validated();
     $eventId = $validated['event_id'];
-    $expenses = $validated['expenses'];
-    $expenseAmounts = $validated['expense_amount_raw'];
-    $expenseDates = $validated['expense_date'];
-    $expenseTimes = $validated['expense_time'];
-    $quantities = $validated['quantity_amount'];
+    $expenses = $validated['expenses'] ?? [];
+    $expenseAmounts = $validated['expense_amount_raw'] ?? [];
+    $expenseDates = $validated['expense_date'] ?? [];
+    $expenseTimes = $validated['expense_time'] ?? [];
+    $quantities = $validated['quantity_amount'] ?? [];
+
+    // Check if expenses are null or empty (based on expense_description)
+    $isExpensesNull = empty(array_filter($expenses, fn($description) => !is_null($description)));
+
+    // Check if receipt is provided
+    $hasReceipt = $request->hasFile('reciept');
+
+    // Handle the four scenarios
+    if (!$hasReceipt && $isExpensesNull) {
+        return response()->json(['error' => 'Both receipt and expenses are missing.'], 422);
+    }
 
     try {
-        // Start a database transaction
         \DB::beginTransaction();
 
-        $receiptPath = null;
-        if ($request->hasFile('reciept')) {
+        // Process receipt only if provided
+        if ($hasReceipt) {
             $file = $request->file('reciept');
             $filename = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
             $file->move(public_path('storage/receipts'), $filename);
@@ -201,31 +215,27 @@ public function updateExpense(Request $request)
             Event::where('id', $eventId)->update(['reciept' => $receiptPath]);
         }
 
-        // Delete existing expenses for this event (if updating all expenses)
-        //Expense::where('event_id', $eventId)->delete();
-
-        // Iterate through the expenses and save them to the database
-        foreach ($expenses as $index => $description) {
-            Expense::create([
-                'event_id' => $eventId,
-                'expense_description' => $description,
-                'expense_amount' => $expenseAmounts[$index],
-                'expense_date' => $expenseDates[$index],
-                'expense_time' => $expenseTimes[$index],
-                'quantity_amount' => $quantities[$index],
-            ]);
+        // Process expenses only if they are provided and not null
+        if (!$isExpensesNull) {
+            foreach ($expenses as $index => $description) {
+                Expense::create([
+                    'event_id' => $eventId,
+                    'expense_description' => $description,
+                    'expense_amount' => $expenseAmounts[$index] ?? 0,
+                    'expense_date' => $expenseDates[$index] ?? now()->toDateString(),
+                    'expense_time' => $expenseTimes[$index] ?? now()->format('H:i'),
+                    'quantity_amount' => $quantities[$index] ?? 1,
+                ]);
+            }
         }
 
-        // Commit the transaction
         \DB::commit();
 
         return response()->json(['message' => 'Expenses updated successfully.'], 200);
 
     } catch (\Exception $e) {
-        // Rollback the transaction on error
         \DB::rollBack();
 
-        // Log the error for debugging
         \Log::error('Error updating expenses:', [
             'message' => $e->getMessage(),
             'trace' => $e->getTraceAsString(),
@@ -235,7 +245,6 @@ public function updateExpense(Request $request)
         return response()->json(['error' => 'There was an error updating the expenses.'], 500);
     }
 }
-
 
 
 

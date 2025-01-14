@@ -54,7 +54,8 @@
                     @foreach ($event->expenses as $expense)
                         <li>
                             <strong>{{ $expense->expense_description }}:</strong>
-                            {{ number_format($expense->expense_amount, 2) }}
+                            <span class="expense-amount">{{ number_format($expense->expense_amount, 2) }}</span>
+                            <span class="quantity-amount">{{ number_format($expense->quantity_amount, 0) }}</span>
                         </li>
                     @endforeach
                 </ul>
