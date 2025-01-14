@@ -71,7 +71,13 @@
                                     <td class="px-4 py-2 text-green-500">₱{{ number_format($event->budget, 2) }}</td>
                                     <!-- Expenses -->
                                     <td class="px-4 py-2 text-red-500">
-                                        ₱{{ number_format($event->expenses->sum('expense_amount'), 2) }}
+                                        @php
+                                            // Calculate the total expense by multiplying 'expense_amount' and 'quantity_amount' for each expense
+                                            $totalExpense = $event->expenses->sum(function ($expense) {
+                                                return $expense->expense_amount * $expense->quantity_amount;
+                                            });
+                                        @endphp
+                                        {{ number_format($totalExpense, 2) }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -134,7 +140,13 @@
                                 <tr class="hover:bg-gray-100">
                                     <td class="px-4 py-2">{{ $event->eventName }}</td>
                                     <td class="px-4 py-2 text-red-500">
-                                        ₱{{ number_format($event->expenses->sum('expense_amount'), 2) }}
+                                        @php
+                                            // Calculate the total expense by multiplying 'expense_amount' and 'quantity_amount' for each expense
+                                            $totalExpense = $event->expenses->sum(function ($expense) {
+                                                return $expense->expense_amount * $expense->quantity_amount;
+                                            });
+                                        @endphp
+                                        {{ number_format($totalExpense, 2) }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -157,7 +169,13 @@
                                 <tr class="hover:bg-gray-100">
                                     <td class="px-4 py-2">{{ $event->eventName }}</td>
                                     <td class="px-4 py-2 text-green-500">
-                                        ₱{{ number_format($event->budget - $event->expenses->sum('expense_amount'), 2) }}
+                                        ₱{{ number_format(
+                                            $event->budget -
+                                                $event->expenses->sum(function ($expense) {
+                                                    return $expense->expense_amount * $expense->quantity_amount;
+                                                }),
+                                            2,
+                                        ) }}
                                     </td>
                                 </tr>
                             @endforeach
