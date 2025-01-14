@@ -44,7 +44,7 @@
                         <button class="py-2 px-4 font-medium text-gray-700 hover:border-b-2 hover:border-gray-300"
                             id="expensesButton">Expenses</button>
                         <button class="py-2 px-4 font-medium text-gray-700 hover:border-b-2 hover:border-gray-300"
-                            id="actualBudgetButton">Actual Budget Used</button>
+                            id="actualBudgetButton">Remaining Budget</button>
                     </div>
                 </div>
 
@@ -161,7 +161,7 @@
                         <thead class="bg-gray-200">
                             <tr>
                                 <th class="px-4 py-2 text-left">Event Name</th>
-                                <th class="px-4 py-2 text-left">Actual Budget Used</th>
+                                <th class="px-4 py-2 text-left">Remaining Budget Amount</th>
                             </tr>
                         </thead>
                         <tbody>
