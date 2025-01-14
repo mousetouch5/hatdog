@@ -5,15 +5,18 @@ namespace App\View\Components;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-
+use Illuminate\Support\Facades\Auth;
 class ModalBudgetPlanning extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public $user;
+
+    public function __construct($user = null)
     {
-        //
+        // Automatically fetch the authenticated user if not provided
+        $this->user = $user ?? Auth::user();
     }
 
     /**

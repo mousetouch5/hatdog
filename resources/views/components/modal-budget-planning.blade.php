@@ -35,9 +35,9 @@
                 </div>
 
                 <div>
-                    <label for="title" class="block font-medium">Organizer</label>
+                    <label for="organizer" class="block font-medium">Organizer</label>
                     <input type="text" id="organizer" name="organizer" class="w-80 border rounded px-3 py-2"
-                        placeholder="Enter organizer" required>
+                        placeholder="Enter organizer" value="{{ $user->name }}" required>
                 </div>
 
                 <!-- Type -->
@@ -54,9 +54,7 @@
             <!-- Possible Expenses -->
             <div class="space-y-5" id="expense-container">
                 <label class="block font-medium mb-2">Possible Expenses</label>
-                <div id="total-expenses" class="text-md font-bold text-green-700 mt-2">
-                    Total: ₱0
-                </div>
+
                 <div class="expense-item grid grid-cols-1 sm:grid-cols-5 gap-4 ">
                     <!-- Category Selection -->
                     <div class="flex flex-col">

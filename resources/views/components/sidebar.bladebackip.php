@@ -153,10 +153,8 @@
      <nav class="mt-4">
          <div class="relative">
              <button id="dashboardButton" onclick="handleDashboardClick()"
-                 class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100 w-full text-left
-                 
-                 {{ request()->routeIs('Official.OfficialDashboard.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}
-                 ">
+                 class="flex items-center px-6 py-3 text-gray-600 w-full text-left {{ request()->routeIs('Official.OfficialDashboard.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}"
+                 style="background: rgba(205, 243, 255, 1);">
                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                      xmlns="http://www.w3.org/2000/svg">
                      <path
@@ -179,9 +177,7 @@
                  <!-- Projects Link with SVG -->
                  <li>
                      <a href="{{ route('Official.OfficialProject.index') }}"
-                         class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11
-                         {{ request()->routeIs('Official.OfficialProject.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }} pl-11
-                         ">
+                         class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11">
                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                              xmlns="http://www.w3.org/2000/svg" class="mr-4">
                              <mask id="mask0_2256_1225" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0"
@@ -201,9 +197,7 @@
                  <!-- Events Link with SVG -->
                  <li>
                      <a href="{{ route('Official.OfficialEvent.index') }}"
-                         class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11
-                         {{ request()->routeIs('Official.OfficialEvent.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }} pl-11
-                         ">
+                         class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11">
                          <svg width="20" height="21" viewBox="0 0 20 21" fill="none"
                              xmlns="http://www.w3.org/2000/svg" class="mr-4">
                              <path
@@ -233,9 +227,7 @@
 
 
      <a href="{{ route('Official.BudgetPlanning.index') }}"
-         class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100
-         {{ request()->routeIs('Official.BudgetPlanning.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}
-         ">
+         class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100">
          <svg width="31" height="27" viewBox="0 0 31 27" fill="none" xmlns="http://www.w3.org/2000/svg">
              <mask id="mask0_407_157" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="31"
                  height="27">
@@ -255,9 +247,7 @@
 
 
      <a href="{{ route('Official.OfficialTransaction.index') }}"
-         class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100
-         {{ request()->routeIs('Official.OfficialTransaction.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}
-         ">
+         class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100">
          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
              <path
                  d="M24 1.33333V12C24.0005 12.2632 23.951 12.5208 23.8576 12.7403C23.7641 12.9598 23.6311 13.1313 23.4751 13.2333C23.3694 13.2986 23.2568 13.3326 23.143 13.3333C22.9155 13.3318 22.6969 13.1946 22.5324 12.95L19.7151 8.55L13.47 18.2833C13.3075 18.5337 13.0881 18.6742 12.8594 18.6742C12.6307 18.6742 12.4113 18.5337 12.2488 18.2833L8.57453 12.55L1.47238 23.6167C1.30788 23.8613 1.08935 23.9985 0.861791 24C0.634653 23.9952 0.416871 23.8585 0.2512 23.6167C0.0902763 23.3639 0 23.0225 0 22.6667C0 22.3109 0.0902763 21.9695 0.2512 21.7167L7.96393 9.71667C8.12641 9.46629 8.34585 9.32583 8.57453 9.32583C8.80321 9.32583 9.02264 9.46629 9.18512 9.71667L12.8594 15.45L18.5047 6.66667L15.6767 2.28333C15.5604 2.09055 15.4816 1.8505 15.4494 1.59095C15.4172 1.33139 15.4328 1.06295 15.4946 0.816667C15.5613 0.575287 15.6718 0.369444 15.8126 0.22438C15.9534 0.0793153 16.1184 0.00133475 16.2873 0H23.143C23.3703 0 23.5883 0.140476 23.749 0.390525C23.9097 0.640573 24 0.979711 24 1.33333Z"
@@ -265,9 +255,8 @@
          </svg>
          <span class="ml-4">Transactions</span>
      </a>
-     <a href="{{ route('Official.OfficialReport.index') }}"class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100
-          {{ request()->routeIs('Official.OfficialReport.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}
-         ">
+     <a
+         href="{{ route('Official.OfficialReport.index') }}"class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100">
          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
              <mask id="mask0_2256_1225" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
                  width="24" height="24">
@@ -283,16 +272,14 @@
      </a>
 
 
-     <a href="{{ route('Official.OfficialAuditTrail.index') }}"class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100
-          {{ request()->routeIs('Official.OfficialAuditTrail.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}" ">
+     <a
+         href="{{ route('Official.OfficialAuditTrail.index') }}"class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100">
          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
              <path
-                 d=" M12 13.5C15.7266 13.5 18.75 10.4766 18.75 6.75C18.75 3.02344 15.7266 0 12 0C8.27344 0 5.25 3.02344
-         5.25 6.75C5.25 10.4766 8.27344 13.5 12 13.5ZM18 15H15.4172C14.3766 15.4781 13.2188 15.75 12 15.75C10.7812 15.75
-         9.62813 15.4781 8.58281 15H6C2.68594 15 0 17.6859 0 21V21.75C0 22.9922 1.00781 24 2.25 24H21.75C22.9922 24 24
-         22.9922 24 21.75V21C24 17.6859 21.3141 15 18 15Z" fill="black" />
-     </svg>
-     <span class="ml-4">Audit Trail</span>
+                 d="M12 13.5C15.7266 13.5 18.75 10.4766 18.75 6.75C18.75 3.02344 15.7266 0 12 0C8.27344 0 5.25 3.02344 5.25 6.75C5.25 10.4766 8.27344 13.5 12 13.5ZM18 15H15.4172C14.3766 15.4781 13.2188 15.75 12 15.75C10.7812 15.75 9.62813 15.4781 8.58281 15H6C2.68594 15 0 17.6859 0 21V21.75C0 22.9922 1.00781 24 2.25 24H21.75C22.9922 24 24 22.9922 24 21.75V21C24 17.6859 21.3141 15 18 15Z"
+                 fill="black" />
+         </svg>
+         <span class="ml-4">Audit Trail</span>
      </a>
 
 

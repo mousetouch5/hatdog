@@ -145,18 +145,15 @@
 
          }
      }
- </script>
-
- <!-- Sidebar -->
+ </script><!-- Sidebar -->
  <aside class="w-1/4 bg-gray-100 shadow-lg h-[100vh]">
 
      <nav class="mt-4">
          <div class="relative">
+             <!-- Dashboard Button -->
              <button id="dashboardButton" onclick="handleDashboardClick()"
-                 class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100 w-full text-left
-                 
-                 {{ request()->routeIs('Official.OfficialDashboard.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}
-                 ">
+                 class="flex items-center px-6 py-3 w-full text-left 
+                    {{ request()->routeIs('Official.OfficialDashboard.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}">
                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                      xmlns="http://www.w3.org/2000/svg">
                      <path
@@ -164,52 +161,23 @@
                          fill="#7166F9" />
                  </svg>
                  <span class="ml-4">Dashboard</span>
-                 <!-- Add dropdown indicator (down arrow) -->
-                 <svg class="w-6 h-6 ml-auto" fill="currentColor" viewBox="0 0 20 20"
-                     xmlns="http://www.w3.org/2000/svg">
-                     <path fill-rule="evenodd"
-                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                         clip-rule="evenodd"></path>
-                 </svg>
+
              </button>
 
-
-             <!-- Dropdown Menu (Initially Hidden) -->
+             <!-- Dropdown Menu -->
              <ul id="dropdownMenu" class="hidden py-2 space-y-2">
-                 <!-- Projects Link with SVG -->
                  <li>
                      <a href="{{ route('Official.OfficialProject.index') }}"
-                         class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11
-                         {{ request()->routeIs('Official.OfficialProject.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }} pl-11
-                         ">
-                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                             xmlns="http://www.w3.org/2000/svg" class="mr-4">
-                             <mask id="mask0_2256_1225" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0"
-                                 y="0" width="24" height="24">
-                                 <rect width="24" height="24" fill="#D9D9D9" />
-                             </mask>
-                             <g mask="url(#mask0_2256_1225)">
-                                 <path
-                                     d="M2 21V9L10 3L15.375 7.05C14.9583 7.1 14.5667 7.19583 14.2 7.3375C13.8333 7.47917 13.4833 7.66667 13.15 7.9L10 5.5L4 10V19H8V21H2ZM10 21V19.1C10 18.75 10.0875 18.4208 10.2625 18.1125C10.4375 17.8042 10.675 17.5583 10.975 17.375C11.7417 16.925 12.5458 16.5833 13.3875 16.35C14.2292 16.1167 15.1 16 16 16C16.9 16 17.7708 16.1167 18.6125 16.35C19.4542 16.5833 20.2583 16.925 21.025 17.375C21.325 17.5583 21.5625 17.8042 21.7375 18.1125C21.9125 18.4208 22 18.75 22 19.1V21H10ZM12.15 19H19.85C19.2667 18.6667 18.65 18.4167 18 18.25C17.35 18.0833 16.6833 18 16 18C15.3167 18 14.65 18.0833 14 18.25C13.35 18.4167 12.7333 18.6667 12.15 19ZM16 15C15.1667 15 14.4583 14.7083 13.875 14.125C13.2917 13.5417 13 12.8333 13 12C13 11.1667 13.2917 10.4583 13.875 9.875C14.4583 9.29167 15.1667 9 16 9C16.8333 9 17.5417 9.29167 18.125 9.875C18.7083 10.4583 19 11.1667 19 12C19 12.8333 18.7083 13.5417 18.125 14.125C17.5417 14.7083 16.8333 15 16 15ZM16 13C16.2833 13 16.5208 12.9042 16.7125 12.7125C16.9042 12.5208 17 12.2833 17 12C17 11.7167 16.9042 11.4792 16.7125 11.2875C16.5208 11.0958 16.2833 11 16 11C15.7167 11 15.4792 11.0958 15.2875 11.2875C15.0958 11.4792 15 11.7167 15 12C15 12.2833 15.0958 12.5208 15.2875 12.7125C15.4792 12.9042 15.7167 13 16 13Z"
-                                     fill="black" />
-                             </g>
-                         </svg>
+                         class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg group
+                        {{ request()->routeIs('Official.OfficialProject.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }} pl-11">
                          Projects
                      </a>
                  </li>
 
-                 <!-- Events Link with SVG -->
                  <li>
                      <a href="{{ route('Official.OfficialEvent.index') }}"
-                         class="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11
-                         {{ request()->routeIs('Official.OfficialEvent.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }} pl-11
-                         ">
-                         <svg width="20" height="21" viewBox="0 0 20 21" fill="none"
-                             xmlns="http://www.w3.org/2000/svg" class="mr-4">
-                             <path
-                                 d="M2 6H16V4H2V6ZM2 20C1.45 20 0.979167 19.8042 0.5875 19.4125C0.195833 19.0208 0 18.55 0 18V4C0 3.45 0.195833 2.97917 0.5875 2.5875C0.979167 2.19583 1.45 2 2 2H3V0H5V2H13V0H15V2H16C16.55 2 17.0208 2.19583 17.4125 2.5875C17.8042 2.97917 18 3.45 18 4V9.675C17.6833 9.525 17.3583 9.4 17.025 9.3C16.6917 9.2 16.35 9.125 16 9.075V8H2V18H8.3C8.41667 18.3667 8.55417 18.7167 8.7125 19.05C8.87083 19.3833 9.05833 19.7 9.275 20H2ZM15 21C13.6167 21 12.4375 20.5125 11.4625 19.5375C10.4875 18.5625 10 17.3833 10 16C10 14.6167 10.4875 13.4375 11.4625 12.4625C12.4375 11.4875 13.6167 11 15 11C16.3833 11 17.5625 11.4875 18.5375 12.4625C19.5125 13.4375 20 14.6167 20 16C20 17.3833 19.5125 18.5625 18.5375 19.5375C17.5625 20.5125 16.3833 21 15 21ZM16.675 18.375L17.375 17.675L15.5 15.8V13H14.5V16.2L16.675 18.375Z"
-                                 fill="black" />
-                         </svg>
+                         class="flex items-center w-full p-2 text-base font-normal transition duration-75 rounded-lg group
+                        {{ request()->routeIs('Official.OfficialEvent.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }} pl-11">
                          Events
                      </a>
                  </li>
@@ -217,86 +185,41 @@
          </div>
      </nav>
 
-     <script>
-         // JavaScript to toggle the dropdown visibilityaa
-         document.getElementById('dashboardButton').addEventListener('click', function() {
-             var dropdownMenu = document.getElementById('dropdownMenu');
-             // Toggle visibility
-             dropdownMenu.classList.toggle('hidden');
-         });
-     </script>
-     </a>
-
-
-
-
-
+     <!-- Budget Planning -->
 
      <a href="{{ route('Official.BudgetPlanning.index') }}"
-         class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100
-         {{ request()->routeIs('Official.BudgetPlanning.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}
-         ">
-         <svg width="31" height="27" viewBox="0 0 31 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-             <mask id="mask0_407_157" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="31"
-                 height="27">
-                 <rect width="31" height="27" fill="#D9D9D9" />
-             </mask>
-             <g mask="url(#mask0_407_157)">
-                 <path
-                     d="M6.45833 23.625C5.74792 23.625 5.13976 23.4047 4.63385 22.9641C4.12795 22.5234 3.875 21.9937 3.875 21.375V5.625C3.875 5.00625 4.12795 4.47656 4.63385 4.03594C5.13976 3.59531 5.74792 3.375 6.45833 3.375H11.8833C12.1632 2.7 12.6314 2.15625 13.288 1.74375C13.9446 1.33125 14.6819 1.125 15.5 1.125C16.3181 1.125 17.0554 1.33125 17.712 1.74375C18.3686 2.15625 18.8368 2.7 19.1167 3.375H24.5417C25.2521 3.375 25.8602 3.59531 26.3661 4.03594C26.8721 4.47656 27.125 5.00625 27.125 5.625V13.1625C26.716 12.9937 26.2962 12.8484 25.8656 12.7266C25.4351 12.6047 24.9938 12.5156 24.5417 12.4594V5.625H6.45833V21.375H14.2729C14.3375 21.7875 14.4398 22.1813 14.5797 22.5563C14.7196 22.9313 14.8865 23.2875 15.0802 23.625H6.45833ZM6.45833 21.375V5.625V12.4594V12.375V21.375ZM9.04167 19.125H14.3052C14.3698 18.7313 14.472 18.3469 14.612 17.9719C14.7519 17.5969 14.908 17.2313 15.0802 16.875H9.04167V19.125ZM9.04167 14.625H16.9208C17.6097 14.0625 18.3793 13.5938 19.2297 13.2188C20.08 12.8438 20.9896 12.5906 21.9583 12.4594V12.375H9.04167V14.625ZM9.04167 10.125H21.9583V7.875H9.04167V10.125ZM15.5 4.78125C15.7799 4.78125 16.0113 4.70156 16.1943 4.54219C16.3773 4.38281 16.4688 4.18125 16.4688 3.9375C16.4688 3.69375 16.3773 3.49219 16.1943 3.33281C16.0113 3.17344 15.7799 3.09375 15.5 3.09375C15.2201 3.09375 14.9887 3.17344 14.8057 3.33281C14.6227 3.49219 14.5313 3.69375 14.5313 3.9375C14.5313 4.18125 14.6227 4.38281 14.8057 4.54219C14.9887 4.70156 15.2201 4.78125 15.5 4.78125ZM23.25 25.875C21.4632 25.875 19.9401 25.3266 18.6807 24.2297C17.4214 23.1328 16.7917 21.8062 16.7917 20.25C16.7917 18.6938 17.4214 17.3672 18.6807 16.2703C19.9401 15.1734 21.4632 14.625 23.25 14.625C25.0368 14.625 26.5599 15.1734 27.8193 16.2703C29.0786 17.3672 29.7083 18.6938 29.7083 20.25C29.7083 21.8062 29.0786 23.1328 27.8193 24.2297C26.5599 25.3266 25.0368 25.875 23.25 25.875ZM22.6042 23.625H23.8958V20.8125H27.125V19.6875H23.8958V16.875H22.6042V19.6875H19.375V20.8125H22.6042V23.625Z"
-                     fill="#1C1B1F" />
-             </g>
-         </svg>
-
-
+         class="flex items-center px-6 py-3 
+       {{ request()->routeIs('Official.BudgetPlanning.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}">
          <span class="ml-4">Budget Planning</span>
      </a>
 
-
-
+     <!-- Transactions -->
      <a href="{{ route('Official.OfficialTransaction.index') }}"
-         class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100
-         {{ request()->routeIs('Official.OfficialTransaction.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}
-         ">
-         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-             <path
-                 d="M24 1.33333V12C24.0005 12.2632 23.951 12.5208 23.8576 12.7403C23.7641 12.9598 23.6311 13.1313 23.4751 13.2333C23.3694 13.2986 23.2568 13.3326 23.143 13.3333C22.9155 13.3318 22.6969 13.1946 22.5324 12.95L19.7151 8.55L13.47 18.2833C13.3075 18.5337 13.0881 18.6742 12.8594 18.6742C12.6307 18.6742 12.4113 18.5337 12.2488 18.2833L8.57453 12.55L1.47238 23.6167C1.30788 23.8613 1.08935 23.9985 0.861791 24C0.634653 23.9952 0.416871 23.8585 0.2512 23.6167C0.0902763 23.3639 0 23.0225 0 22.6667C0 22.3109 0.0902763 21.9695 0.2512 21.7167L7.96393 9.71667C8.12641 9.46629 8.34585 9.32583 8.57453 9.32583C8.80321 9.32583 9.02264 9.46629 9.18512 9.71667L12.8594 15.45L18.5047 6.66667L15.6767 2.28333C15.5604 2.09055 15.4816 1.8505 15.4494 1.59095C15.4172 1.33139 15.4328 1.06295 15.4946 0.816667C15.5613 0.575287 15.6718 0.369444 15.8126 0.22438C15.9534 0.0793153 16.1184 0.00133475 16.2873 0H23.143C23.3703 0 23.5883 0.140476 23.749 0.390525C23.9097 0.640573 24 0.979711 24 1.33333Z"
-                 fill="black" />
-         </svg>
+         class="flex items-center px-6 py-3 
+       {{ request()->routeIs('Official.OfficialTransaction.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}">
          <span class="ml-4">Transactions</span>
      </a>
-     <a href="{{ route('Official.OfficialReport.index') }}"class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100
-          {{ request()->routeIs('Official.OfficialReport.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}
-         ">
-         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-             <mask id="mask0_2256_1225" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
-                 width="24" height="24">
-                 <rect width="24" height="24" fill="#D9D9D9" />
-             </mask>
-             <g mask="url(#mask0_2256_1225)">
-                 <path
-                     d="M2 21V9L10 3L15.375 7.05C14.9583 7.1 14.5667 7.19583 14.2 7.3375C13.8333 7.47917 13.4833 7.66667 13.15 7.9L10 5.5L4 10V19H8V21H2ZM10 21V19.1C10 18.75 10.0875 18.4208 10.2625 18.1125C10.4375 17.8042 10.675 17.5583 10.975 17.375C11.7417 16.925 12.5458 16.5833 13.3875 16.35C14.2292 16.1167 15.1 16 16 16C16.9 16 17.7708 16.1167 18.6125 16.35C19.4542 16.5833 20.2583 16.925 21.025 17.375C21.325 17.5583 21.5625 17.8042 21.7375 18.1125C21.9125 18.4208 22 18.75 22 19.1V21H10ZM12.15 19H19.85C19.2667 18.6667 18.65 18.4167 18 18.25C17.35 18.0833 16.6833 18 16 18C15.3167 18 14.65 18.0833 14 18.25C13.35 18.4167 12.7333 18.6667 12.15 19ZM16 15C15.1667 15 14.4583 14.7083 13.875 14.125C13.2917 13.5417 13 12.8333 13 12C13 11.1667 13.2917 10.4583 13.875 9.875C14.4583 9.29167 15.1667 9 16 9C16.8333 9 17.5417 9.29167 18.125 9.875C18.7083 10.4583 19 11.1667 19 12C19 12.8333 18.7083 13.5417 18.125 14.125C17.5417 14.7083 16.8333 15 16 15ZM16 13C16.2833 13 16.5208 12.9042 16.7125 12.7125C16.9042 12.5208 17 12.2833 17 12C17 11.7167 16.9042 11.4792 16.7125 11.2875C16.5208 11.0958 16.2833 11 16 11C15.7167 11 15.4792 11.0958 15.2875 11.2875C15.0958 11.4792 15 11.7167 15 12C15 12.2833 15.0958 12.5208 15.2875 12.7125C15.4792 12.9042 15.7167 13 16 13Z"
-                     fill="black" />
-             </g>
-         </svg>
+
+     <!-- Reports -->
+     <a href="{{ route('Official.OfficialReport.index') }}"
+         class="flex items-center px-6 py-3 
+       {{ request()->routeIs('Official.OfficialReport.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}">
          <span class="ml-4">Reports</span>
      </a>
 
-
-     <a href="{{ route('Official.OfficialAuditTrail.index') }}"class="flex items-center px-6 py-3 text-gray-600 hover:bg-blue-100
-          {{ request()->routeIs('Official.OfficialAuditTrail.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}" ">
-         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-             <path
-                 d=" M12 13.5C15.7266 13.5 18.75 10.4766 18.75 6.75C18.75 3.02344 15.7266 0 12 0C8.27344 0 5.25 3.02344
-         5.25 6.75C5.25 10.4766 8.27344 13.5 12 13.5ZM18 15H15.4172C14.3766 15.4781 13.2188 15.75 12 15.75C10.7812 15.75
-         9.62813 15.4781 8.58281 15H6C2.68594 15 0 17.6859 0 21V21.75C0 22.9922 1.00781 24 2.25 24H21.75C22.9922 24 24
-         22.9922 24 21.75V21C24 17.6859 21.3141 15 18 15Z" fill="black" />
-     </svg>
-     <span class="ml-4">Audit Trail</span>
+     <!-- Audit Trail -->
+     <a href="{{ route('Official.OfficialAuditTrail.index') }}"
+         class="flex items-center px-6 py-3 
+       {{ request()->routeIs('Official.OfficialAuditTrail.index') ? 'bg-blue-300 text-gray-900' : 'text-gray-600 hover:bg-blue-100' }}">
+         <span class="ml-4">Audit Trail</span>
      </a>
-
-
-
-     </nav>
-
  </aside>
+
+ <script>
+     // JavaScript to toggle the dropdown visibilityaa
+     document.getElementById('dashboardButton').addEventListener('click', function() {
+         var dropdownMenu = document.getElementById('dropdownMenu');
+         // Toggle visibility
+         dropdownMenu.classList.toggle('hidden');
+     });
+ </script>
