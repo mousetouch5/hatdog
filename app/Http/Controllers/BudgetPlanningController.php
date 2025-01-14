@@ -17,14 +17,14 @@ public function index() {
 
     // List of committee names
     $committees = [
-        'Committee Chair Infrastructure & Finance',
         'Committee Chair on Barangay Affairs & Environment',
         'Committee Chair on Education',
         'Committee Chair Peace & Order',
         'Committee Chair on Laws & Good Governance',
         'Committee Chair on Elderly, PWD/VAWC',
         'Committee Chair on Health & Sanitation/ Nutrition',
-        'Committee Chair on Livelihood'
+        'Committee Chair on Livelihood',
+        'Committee Chair Infrastructure & Finance',
     ];
 
     // List of models that correspond to the committees
@@ -72,8 +72,6 @@ public function index() {
             }
         }
     }
-
-     
 
     // Return the view with committee names and data
     return view('Official.BudgetPlanning', compact('committeesData', 'currentYear', 'totalBudget'));
