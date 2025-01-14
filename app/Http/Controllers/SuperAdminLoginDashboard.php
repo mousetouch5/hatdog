@@ -169,49 +169,6 @@ public function listofAllUsers()
 
 
 
-public function CreateBullShit2(Request $request)
-{
-    // Validate the incoming request data
-    $request->validate([
-        'position' => 'required|string|max:255',
-        'committee' => 'required|string|max:255',
-        'first_name' => 'required|string|max:255',
-        'middle_name' => 'nullable|string|max:255',
-        'last_name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|string|min:8|confirmed',
-        'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-    ]);
-
-    // Handle file upload for profile picture
-    $profilePicturePath = $this->storeFileIfExists($request->all(), 'profile_picture', 'storage/profile_pictures');
-
-    // Create a new user with additional fields
-    User::create([
-        'name' => $request->first_name . ' ' . $request->middle_name . ' ' . $request->last_name, // Concatenate the name
-        'email' => $request->email,
-        'password' => Hash::make($request->password), // Hash the password for security
-        'profile_photo_path' => $profilePicturePath,
-        'first_name' =>$request['first_name'],
-        'middle_name' =>$request['middle_name'],
-        'last_name' => $request['last_name'],
-        'position' => $request['position'],
-        'comittee' => $request['committee'],
-        'user_type' => 'official', // Setting user type to 'official'
-        'is_approved' => true, // Automatically approve the user
-    ]);
-
-    // Return a JSON response with success message
-    return response()->json(['message' => 'User created successfully!'], 201);
-    
-  
-    // Optional: Add the location of the redirected page
-
-}
-
-
-
-
 
 public function CreateBullShit(Request $request)
 {

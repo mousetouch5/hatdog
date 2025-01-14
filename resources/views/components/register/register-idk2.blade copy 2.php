@@ -117,37 +117,22 @@
                 </div>
             </div>
 
-            <dialog id="terms_modal" class="modal">
-                <div class="modal-box flex flex-col justify-center items-center text-center">
-                    <h3 class="text-lg font-bold mb-4">Terms and Conditions</h3>
-                    <p class="py-4 text-justify">
-                        <strong>The Terms and Conditions</strong> for our digital liquidation software system govern
-                        your use of the Service, requiring you to provide accurate personal information such as your
-                        name, email, password, and address. By creating an account, you agree to maintain the security
-                        of your login details and use the Service lawfully. We reserve the right to terminate your
-                        access for any violations of these Terms. All content is protected by intellectual property
-                        laws, and we limit our liability to the fullest extent permitted by law.
-                    </p>
-                    <div class="modal-action">
-                        <!-- Cancel Button -->
-                        <button class="btn" type="button" onclick="closeTermsModal()">Close</button>
-                    </div>
-                </div>
-            </dialog>
 
 
-            <div class="flex items-center mt-4">
-                <input type="checkbox" id="agreeTerms" class="mr-2">
-                <label for="agreeTerms" class="text-sm">I agree to the <a href="#" onclick="openTermsModal()"
-                        class="text-blue-600 underline">Terms and Conditions</a>.</label>
-            </div>
+
+
+
+
+
+
+
+
 
             <!-- Modal Footer -->
             <div class="flex justify-center mt-4">
-                <button type="submit" id="signUpButton" disabled
-                    class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 w-80 disabled:opacity-50 disabled:cursor-not-allowed">
-                    Sign Up
-                </button>
+                <button type="submit" id="signUpButton"
+                    class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 w-80">Sign
+                    Up</button>
             </div>
         </form>
     </div>
@@ -155,54 +140,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const agreeTermsCheckbox = document.getElementById('agreeTerms');
-        const signUpButton = document.getElementById('signUpButton');
-        let hasOpenedModal = false; // Track if the modal has been opened
-
-        // Listen for changes on the checkbox
-        agreeTermsCheckbox.addEventListener('change', function() {
-            if (this.checked && !hasOpenedModal) {
-                // Open the modal if it's the first time checking
-                openTermsModal();
-                hasOpenedModal = true; // Mark that the modal has been opened
-                this.checked = false; // Uncheck the box until terms are accepted
-            } else {
-                // Enable or disable the button based on checkbox state
-                signUpButton.disabled = !this.checked;
-            }
-        });
-    });
-
-    // Open the Terms Modal
-    function openTermsModal() {
-        document.getElementById('terms_modal').showModal();
-    }
-
-    // Close the Terms Modal
-    function closeTermsModal() {
-        document.getElementById('terms_modal').close();
-    }
-
-    // Function when user accepts the terms
-    function acceptTerms() {
-        Swal.fire({
-            icon: 'success',
-            title: 'You have accepted the terms and conditions.',
-            position: 'top',
-            toast: true,
-            target: '#my_modal_3',
-        }).then(() => {
-            // Check the terms checkbox and enable the button
-            const agreeTermsCheckbox = document.getElementById('agreeTerms');
-            agreeTermsCheckbox.checked = true;
-            document.getElementById('signUpButton').disabled = false;
-            closeTermsModal();
-        });
-    }
-</script>
 
 <script>
     $(document).ready(function() {

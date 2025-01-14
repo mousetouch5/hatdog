@@ -14,25 +14,47 @@ class RegisterResponse implements RegisterResponseContract
         $this->guard = $guard;
     }
 
-     public function toResponse($request)
+    public function toResponse($request)
     {
-        // Check the user type after registration
+        // Get the authenticated user
         $user = $this->guard->user();
 
-        if ($user->user_type === 'official') {
-            // Log out the user immediately
-            $this->guard->logout();
+        // Check if the request is an AJAX request
+        if ($request->expectsJson()) {
+            if ($user->user_type === 'official') {
+                // Log out the user immediately
+                $this->guard->logout();
 
-            // Redirect to login page with a message
+                return response()->json([
+                    'message' => 'Registration successful! Please wait for admin approval.',
+                    'redirect' => route('login'), // Redirect URL for login page
+                ], 200);
+            }
+
+            if ($user->user_type === 'resident') {
+                return response()->json([
+                    'message' => 'Welcome! You are now logged in.',
+                    'redirect' => route('dashboard'), // Redirect URL for dashboard
+                ], 200);
+            }
+
+            // Default fallback for other user types
+            return response()->json([
+                'message' => 'Registration successful!',
+                'redirect' => url('/'), // Redirect URL for fallback
+            ], 200);
+        }
+
+        // Handle non-AJAX requests (default behavior)
+        if ($user->user_type === 'official') {
+            $this->guard->logout();
             return redirect()->route('login')->with('status', 'Registration successful! Please wait for admin approval.');
         }
 
         if ($user->user_type === 'resident') {
-            // Automatically log in the user and redirect to dashboard
             return redirect()->route('dashboard')->with('status', 'Welcome! You are now logged in.');
         }
 
-        // Default behavior (fallback)
         return redirect('/');
     }
 }
