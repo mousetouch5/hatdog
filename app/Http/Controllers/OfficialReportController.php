@@ -16,51 +16,58 @@ class OfficialReportController extends Controller
      //   dd($events);
         // Pass the events (with expenses) to the view
         return view('official.OfficialReport', compact('events'));
+
     }
 
 
 
 
-    public function showLiquidationReport()
-    {
-        // Fetch events with their related expenses
-        $events = Event::with('expenses')->get();
+public function showLiquidationReport()
+{
+    // Fetch events with their related expenses
+    $events = Event::with('expenses')->get();
 
-        // Initialize variables for summary calculations
-        $total_event_budget = 0;
-        $total_expense = 0;
-        $total_refunded = 0;
-        $total_to_be_reimbursed = 0;
+    // Initialize variables for summary calculations
+    $total_event_budget = 0;
+    $total_expense = 0;
+    $total_refunded = 0;
+    $total_to_be_reimbursed = 0;
 
-        // Loop through each event and calculate the totals
-        foreach ($events as $event) {
-            $event_budget = $event->budget; // Event's budget
-            $event_expenses = $event->expenses->sum('expense_amount'); // Sum up the event's expenses
+    // Loop through each event and calculate the totals
+    foreach ($events as $event) {
+        $event_budget = $event->budget; // Event's budget
 
-            // Calculate the refunded and reimbursed amounts
-            $amount_refunded = max(0, $event_expenses - $event_budget); // Refund if expenses exceed the budget
-            $amount_to_be_reimbursed = max(0, $event_budget - $event_expenses); // Reimbursement if budget exceeds expenses
+        // Sum up the event's expenses (multiplying 'expense_amount' and 'quantity_amount')
+        $event_expenses = $event->expenses->sum(function ($expense) {
+            return $expense->expense_amount * $expense->quantity_amount;
+        });
 
-            // Accumulate the totals
-            $total_event_budget += $event_budget;
-            $total_expense += $event_expenses;
-            $total_refunded += $amount_refunded;
-            $total_to_be_reimbursed += $amount_to_be_reimbursed;
-        }
+        // Calculate the refunded and reimbursed amounts
+        $amount_refunded = max(0, $event_expenses - $event_budget); // Refund if expenses exceed the budget
+        $amount_to_be_reimbursed = max(0, $event_budget - $event_expenses); // Reimbursement if budget exceeds expenses
 
-        // Get the current date
-        $date_today = Carbon::now()->format('F d, Y');
-
-        // Return the view and pass the data
-        return view('report.liquidation_report', compact(
-            'events',
-            'total_event_budget',
-            'total_expense',
-            'total_refunded',
-            'total_to_be_reimbursed',
-            'date_today'
-        ));
+        // Accumulate the totals
+        $total_event_budget += $event_budget;
+        $total_expense += $event_expenses;
+        $total_refunded += $amount_refunded;
+        $total_to_be_reimbursed += $amount_to_be_reimbursed;
     }
+
+    // Get the current date
+    $date_today = Carbon::now()->format('F d, Y');
+
+
+    
+    // Return the view and pass the data
+    return view('report.liquidation_report', compact(
+        'events',
+        'total_event_budget',
+        'total_expense',
+        'total_refunded',
+        'total_to_be_reimbursed',
+        'date_today'
+    ));
+}
 
 
 public function generateLiquidationReport(Event $event)

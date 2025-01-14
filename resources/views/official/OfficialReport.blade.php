@@ -103,10 +103,14 @@
                                     </td>
                                     <td class="px-4 py-2 text-red-500">
                                         @php
-                                            $totalExpense = $event->expenses->sum('expense_amount');
+                                            // Calculate the total expense by multiplying 'expense_amount' and 'quantity_amount' for each expense
+                                            $totalExpense = $event->expenses->sum(function ($expense) {
+                                                return $expense->expense_amount * $expense->quantity_amount;
+                                            });
                                         @endphp
                                         {{ number_format($totalExpense, 2) }}
                                     </td>
+
                                     <td class="px-4 py-2">
                                         <button class="btn btn-secondary btn-sm" title="Print"
                                             data-event-id="{{ $event->id }}"
