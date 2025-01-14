@@ -8,11 +8,13 @@
              <!-- Readonly Input Fields with Sample Data -->
              <div>
                  <label for="eventDate" class="block text-sm font-medium text-gray-700">Date</label>
-                 <input type="date" id="eventDate" class="input input-bordered w-full" readonly>
+                 <input type="date" id="eventDate" class="input input-bordered w-full" readonly
+                     style="border: none; background: transparent; padding: 0;">
              </div>
              <div>
                  <label for="eventTime" class="block text-sm font-medium text-gray-700">Time</label>
-                 <input type="time" id="eventTime" class="input input-bordered w-full" readonly>
+                 <input type="time" id="eventTime" class="input input-bordered w-full" readonly
+                     style="border: none; background: transparent; padding: 0;">
              </div>
              <div>
                  <label for="eventDescription" class="block text-sm font-medium text-gray-700">Description</label>
@@ -22,11 +24,13 @@
              </div>
              <div>
                  <label for="eventLocation" class="block text-sm font-medium text-gray-700">Location</label>
-                 <input type="text" id="eventLocation" class="input input-bordered w-full" readonly>
+                 <input type="text" id="eventLocation" class="input input-bordered w-full" readonly
+                     style="border: none; background: transparent; padding: 0;">
              </div>
              <div>
                  <label for="eventOrganizer" class="block text-sm font-medium text-gray-700">Organizer</label>
-                 <input type="text" id="eventOrganizer" class="input input-bordered w-full" readonly>
+                 <input type="text" id="eventOrganizer" class="input input-bordered w-full" readonly
+                     style="border: none; background: transparent; padding: 0;">
              </div>
              <button type="button" class="btn btn-primary w-full mt-4" onclick="openBudgetModal()">Budget
                  Breakdown</button>
