@@ -85,7 +85,7 @@
                             </svg>
                         </button>
                         <div id="budget-data">
-                            <h2 class="text-sm font-semibold">Community Outreach</h2>
+                         
                             <p class="text-xs">Total Budget</p>
                             <p id="total-budget" class="text-2xl font-bold">₱0.00</p>
                             <p class="text-xs">Total Budget Used</p>
