@@ -1,6 +1,6 @@
 <div class="bg-white shadow-lg rounded-lg p-6 relative">
-    <!-- added 'relative' to allow absolute positioning of the emoji -->
-    <h4 class="text-lg font-semibold">Community Outreach</h4>
+    <!-- added 'relative' to allow absolute positioning of the emoji 
+    <h4 class="text-lg font-semibold">Community Outreach</h4>-->
     <canvas id="pieChart" class="mt-4 h-32"></canvas> <!-- Pie chart -->
 
 
