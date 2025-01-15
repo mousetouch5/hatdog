@@ -1,5 +1,5 @@
                     <div class="flex justify-between items-center" data-aos="fade-down" data-aos-duration="2000">
-                       
+                        <!-- <h2 class="text-lg font-semibold">Recent Projects</h2> -->
                         <div class="flex space-x-4">
                             <!-- Buttons for Filtering -->
                             <button onclick="showEvents('recent')" class="px-4 py-2 text-black rounded-lg filter-btn"
