@@ -334,6 +334,7 @@ public function UpdateUser($userId)
         $user->password = bcrypt($preStatedPassword); // Hash the pre-stated password securely
         $user->save();
 
+        
         return response()->json(['success' => true, 'message' => 'User updated successfully!']);
     }
 

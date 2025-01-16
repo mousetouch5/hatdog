@@ -245,6 +245,7 @@ function loadPendingUsers(page = 1) {
             if (data.success) {
                 alert(data.message);
             } else {
+                
                 alert(data.message);
             }
         })

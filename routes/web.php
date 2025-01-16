@@ -69,7 +69,7 @@ Route::post('/approve-user/{id}', [SuperAdminLoginDashboard::class, 'approveUser
 Route::post('/reject-user/{id}', [SuperAdminLoginDashboard::class, 'rejectUser']);
 Route::post('/change-password/{userId}', [SuperAdminLoginDashboard::class, 'changePassword'])->name('users.changePassword');
 
-// For deleting a user
+// For deleting a user 
 Route::post('/delete-user/{userId}', [SuperAdminLoginDashboard::class, 'deleteUser'])->name('users.delete');
 Route::post('/updates-user/{userId}', [SuperAdminLoginDashboard::class, 'UpdateUser'])->name('users.update');
 Route::put('/events/{id}/status', [EventController::class, 'updateStatus']);
