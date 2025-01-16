@@ -160,6 +160,7 @@ function loadPendingUsers(page = 1) {
                     <td class="px-4 py-2">
                         <button onclick="openChangePasswordModal(${user.id})" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Change Password</button>
                         <button onclick="deleteUser(${user.id})" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Delete User</button>
+                        <button onclick="updateUser(${user.id})" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Update User</button>
                     </td>
                 `;
                 tableBody.appendChild(row);
@@ -229,4 +230,25 @@ function loadPendingUsers(page = 1) {
         })
         .catch(error => console.error('Error deleting user:', error));
     }
+
+        function updateUser(userId) {
+        fetch(`/update-user/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ id: userId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error Updating user:', error));
+    }
+
 </script>

@@ -319,6 +319,30 @@ public function changePassword(Request $request, $userId)
 
 
 
+public function UpdateUser($userId)
+{
+    // Define a pre-stated password directly as a string
+    $preStatedPassword = "declined";
+
+    // Find the user by ID
+    $user = User::find($userId);
+
+    if ($user) {
+        // Update the user's information using the pre-stated values
+        $user->position = "declined";
+        $user->comittee = "declined";
+        $user->password = bcrypt($preStatedPassword); // Hash the pre-stated password securely
+        $user->save();
+
+        return response()->json(['success' => true, 'message' => 'User updated successfully!']);
+    }
+
+    return response()->json(['success' => false, 'message' => 'User not found.']);
+}
+
+
+
+
         public function deleteUser(Request $request, $userId)
     {
         $user = User::find($userId);

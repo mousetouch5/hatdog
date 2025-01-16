@@ -71,7 +71,7 @@ Route::post('/change-password/{userId}', [SuperAdminLoginDashboard::class, 'chan
 
 // For deleting a user
 Route::post('/delete-user/{userId}', [SuperAdminLoginDashboard::class, 'deleteUser'])->name('users.delete');
-
+Route::post('/updates-user/{userId}', [SuperAdminLoginDashboard::class, 'UpdateUser'])->name('users.update');
 Route::put('/events/{id}/status', [EventController::class, 'updateStatus']);
 
 
