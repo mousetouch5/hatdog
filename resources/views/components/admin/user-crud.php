@@ -232,7 +232,7 @@ function loadPendingUsers(page = 1) {
     }
 
         function updateUser(userId) {
-        fetch(`/update-user/${userId}`, {
+        fetch(`/updates-user/${userId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -245,7 +245,7 @@ function loadPendingUsers(page = 1) {
             if (data.success) {
                 alert(data.message);
             } else {
-                
+
                 alert(data.message);
             }
         })
