@@ -19,7 +19,7 @@
                             <option value="Barangay Captain">Barangay Captain</option>
                             <option value="Barangay Secretary">Barangay Secretary</option>
                             <option value="Barangay Treasurer">Barangay Treasurer</option>
-                            <option value="Assitant">Assistant</option>
+                            <option value="Assitant">Kagawad</option>
                         </select>
                     </div>
                 </div>
