@@ -177,6 +177,16 @@ public function approve($id)
         $newRemainingBudget = $remainingBudget - $amount;
         Log::info('New remaining budget: ' . $newRemainingBudget);
 
+        // Check if the new remaining budget is less than zero
+        if ($newRemainingBudget < 0) {
+    // Prevent further action or return an error message
+        Log::warning('Budget cannot go below zero. Action denied.');
+    // You can also return a response or throw an exception if needed
+        return response()->json(['error' => 'Insufficient funds'], 400);
+        } else {
+        Log::info('New remaining budget: ' . $newRemainingBudget);
+         }
+
         // Update the committee's budget record
         $newBudgetRecord = $modelClass::create([
             'budget' => $constBudget,
