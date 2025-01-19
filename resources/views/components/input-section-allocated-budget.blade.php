@@ -18,7 +18,7 @@
 
         <!-- Yearly Budget Input -->
         <div>
-            <label for="yearly_budget" class="block text-sm font-medium text-gray-700 mb-1">Yearly Budget:</label>
+            <label for="yearly_budget" class="block text-sm font-medium text-gray-700 mb-1">Year Budget:</label>
             <input 
                 type="number" 
                 id="yearly_budget" 
