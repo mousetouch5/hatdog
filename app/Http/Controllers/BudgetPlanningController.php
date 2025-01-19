@@ -7,11 +7,216 @@ use Illuminate\Http\Request;
 use App\Models\Budget;
 use Carbon\Carbon; // Make sure to include Carbon for date manipulation
 //use App\Models\Budget;
+use Illuminate\Support\Facades\DB;
 
-
+use Illuminate\Support\Facades\Log;
 
 class BudgetPlanningController extends Controller
 {   
+
+
+public function Total()
+{
+    // Define the models representing the committees
+    $models = [
+        'CommitteeBarangayAffairsEnvironment',
+        'CommitteeEducation',
+        'CommitteePeaceOrder',
+        'CommitteeLawsGoodGovernance',
+        'CommitteeElderlyPwdVawc',
+        'CommitteeHealthSanitationNutrition',
+        'CommitteeLivelihood',
+        'CommitteeInfrastructureFinance',
+    ];
+
+ 
+    $totalBudgetLeft = 0;
+
+    foreach ($models as $model) {
+        $modelClass = "App\\Models\\$model";
+
+        if (class_exists($modelClass)) {
+            $latestRecord = $modelClass::orderBy('updated_at', 'desc')->first();
+            if ($latestRecord) {
+                $totalBudgetLeft += $latestRecord->remaining_budget;
+            }
+        }
+    }
+
+    // Return the results as JSON
+    return response()->json(['totalBudgetLeft' => $totalBudgetLeft]);
+}
+public function editBudget(Request $request)
+{
+    try {
+        Log::info('Starting budget edit process.');
+
+        // Validate the request
+        $validated = $request->validate([
+            'committee_id' => 'required|string',
+            'new_budget' => 'required|numeric|min:0'
+        ]);
+
+        Log::info('Request validated.', ['validated_data' => $validated]);
+
+        // Get the committee name and new budget
+        $selectedCommittee = $validated['committee_id'];
+        $newBudget = $validated['new_budget'];
+
+        // Define committees and their corresponding models
+        $committees = [
+            'Committee Chair on Barangay Affairs & Environment',
+            'Committee Chair on Education',
+            'Committee Chair Peace & Order',
+            'Committee Chair on Laws & Good Governance',
+            'Committee Chair on Elderly, PWD/VAWC',
+            'Committee Chair on Health & Sanitation/ Nutrition',
+            'Committee Chair on Livelihood',
+            'Committee Chair Infrastructure & Finance',
+        ];
+
+        $models = [
+            'CommitteeBarangayAffairsEnvironment',
+            'CommitteeEducation',
+            'CommitteePeaceOrder',
+            'CommitteeLawsGoodGovernance',
+            'CommitteeElderlyPwdVawc',
+            'CommitteeHealthSanitationNutrition',
+            'CommitteeLivelihood',
+            'CommitteeInfrastructureFinance',
+        ];
+
+        // Find the index of the selected committee
+        $selectedIndex = array_search($selectedCommittee, $committees);
+        if ($selectedIndex === false) {
+            Log::warning('Invalid committee selected.', ['committee' => $selectedCommittee]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid committee selected'
+            ], 400);
+        }
+
+        // Get the corresponding model name for the selected committee
+        $modelName = "App\\Models\\" . $models[$selectedIndex];
+
+        // Calculate total remaining budget
+        $totalRemainingBudget = $this->getTotalRemainingBudget();
+        Log::info('Total remaining budget fetched.', ['totalRemainingBudget' => $totalRemainingBudget]);
+
+        // Ensure sufficient funds are available
+        if ($totalRemainingBudget - $newBudget < 0) {
+            Log::warning('Insufficient remaining budget.', [
+                'totalRemainingBudget' => $totalRemainingBudget,
+                'newBudget' => $newBudget
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Insufficient remaining budget'
+            ], 400);
+        }
+
+        // Calculate redistribution for other committees
+        $redistributionAmount = ($totalRemainingBudget - $newBudget) / (count($committees) - 1);
+
+        Log::info('Redistribution amount calculated.', ['redistributionAmount' => $redistributionAmount]);
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($models as $index => $model) {
+                // Get the model class for each committee
+                $modelClass = "App\\Models\\" . $model;
+
+                if ($index === $selectedIndex) {
+                    // Insert a new record for the selected committee with the new budget
+                    Log::info('Inserting new budget for selected committee.', ['committee' => $selectedCommittee, 'newBudget' => $newBudget]);
+                    $modelClass::create([
+                        'budget' => $newBudget,
+                        'year' => now()->year,
+                        'remaining_budget' => $newBudget,
+                        'expenses' => 0, // Assuming no expenses initially
+                        'user_id' => auth()->id() // Assuming current authenticated user
+                    ]);
+                } else {
+                    // Insert a new record for other committees with redistributed budgets
+                    Log::info('Inserting redistributed budget for other committees.', [
+                        'committee' => $committees[$index],
+                        'redistributionAmount' => $redistributionAmount
+                    ]);
+                    $modelClass::create([
+                        'budget' => $redistributionAmount, // No additional budget allocated directly
+                        'year' => now()->year,
+                        'remaining_budget' => $redistributionAmount,
+                        'expenses' => 0, // Assuming no expenses initially
+                        'user_id' => auth()->id() // Assuming current authenticated user
+                    ]);
+                }
+            }
+
+            DB::commit();
+            Log::info('Budgets inserted successfully.');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Budgets inserted successfully!'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error inserting budgets in database.', ['error' => $e->getMessage()]);
+
+            return response()->json([
+                'success' => false,
+                'message' => "Error inserting budgets: {$e->getMessage()}"
+            ], 500);
+        }
+    } catch (\Exception $e) {
+        Log::error('Error processing the budget edit request.', ['error' => $e->getMessage()]);
+        return response()->json([
+            'success' => false,
+            'message' => "Error processing request: {$e->getMessage()}"
+        ], 500);
+    }
+}
+
+// Helper method to get total remaining budget
+private function getTotalRemainingBudget()
+{
+    try {
+        // Array of committee models
+        $models = [
+            'CommitteeBarangayAffairsEnvironment',
+            'CommitteeEducation',
+            'CommitteePeaceOrder',
+            'CommitteeLawsGoodGovernance',
+            'CommitteeElderlyPwdVawc',
+            'CommitteeHealthSanitationNutrition',
+            'CommitteeLivelihood',
+            'CommitteeInfrastructureFinance'
+        ];
+
+        // Sum the most recent remaining_budget for each committee
+        $totalRemaining = collect($models)->sum(function ($model) {
+            // Get the latest remaining_budget value for each model
+            $latestRecord = "App\\Models\\{$model}"::latest()->first();
+            return $latestRecord ? $latestRecord->remaining_budget : 0;
+        });
+
+        Log::info('Total remaining budget calculated.', ['totalRemainingBudget' => $totalRemaining]);
+        return $totalRemaining;
+    } catch (\Exception $e) {
+        Log::error('Error fetching total remaining budget.', ['error' => $e->getMessage()]);
+        throw new \Exception("Error fetching total remaining budget: {$e->getMessage()}");
+    }
+}
+
+
+
+
+
+
+
+
 public function index() {
     $currentYear = Carbon::now()->year;
 

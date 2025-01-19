@@ -182,10 +182,11 @@ Route::get('/transactions/unconfirmed', [DashboardController::class, 'unconfirme
 Route::patch('/transactions/{id}/approve', [DashboardController::class, 'approve']);
 Route::delete('/transactions/{id}/reject', [DashboardController::class, 'reject']);
 
+Route::get('totalbudgetleft', [BudgetPlanningController::class, 'Total']);
 
 Route::get('official/BudgetPlanningEdit', [BudgetPlanningController::class, 'edits'])->name('Official.BudgetPlanningEdit.index');
 Route::post('/budget/store', [BudgetPlanningController::class, 'store'])->name('budget.store');
-
+Route::post('/update-committee-budget', [BudgetPlanningController::class, 'editBudget'])->name('update.committee.budget');
 /// waay nani 
 Route::get('official/BudgetPreparation', [BudgetPreparationController::class, 'index'])->name('Official.BudgetPreparation.index');
 // nevermind na kno boss ang budget preperation 

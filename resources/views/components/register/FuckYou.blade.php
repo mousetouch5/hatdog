@@ -125,66 +125,72 @@
 
             <!-- Submit Button -->
             <div class="form-control mt-6">
-                <button type="submit" class="btn btn-primary w-full">Create User</button>
+                <button type="button" id="submit_form" class="btn btn-primary w-full">Create User</button>
             </div>
         </form>
     </div>
 </dialog>
 <script>
-    document.getElementById("submit_form").addEventListener("click", async () => {
+    document.addEventListener("DOMContentLoaded", () => {
+        const submitButton = document.getElementById("submit_form");
         const form = document.getElementById("signup_form");
-        const formData = new FormData(form);
 
-        try {
-            const response = await fetch("{{ route('user.create') }}", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value,
-                },
-                body: formData,
-            });
+        submitButton.addEventListener("click", async (event) => {
+            event.preventDefault(); // Prevent default behavior
 
-            const result = await response.json();
+            const formData = new FormData(form); // Gather form data
 
-            if (response.ok) {
-                // Success
-                document.getElementById("modal_response").innerHTML =
-                    `<p class="text-green-500">User created successfully!</p>`;
-                form.reset(); // Reset the form
-            } else {
-                // Error
-                let errorMessages = Object.values(result.errors || {}).map(err =>
-                    `<p class="text-red-500">${err}</p>`).join("");
-                document.g etElementById("modal_response").innerHTML = errorMessages ||
-                    `<p class="text-red-500">${result.message || "An error occurred"}</p>`;
+            try {
+                // Send AJAX request
+                const response = await fetch(form.action, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('input[name="_token"]')
+                            .value,
+                    },
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    Swal.fire({
+                        title: "Success!",
+                        text: result.message || "User created successfully!",
+                        icon: "success",
+                        position: 'top',
+                        confirmButtonText: "OK",
+                    });
+                    form.reset(); // Reset the form
+                    my_modal_10.close(); // Close modal
+                } else {
+                    const errorMessages = Object.values(result.errors || {}).map(
+                        (err) => `<p>${err}</p>`
+                    ).join("");
+
+                    Swal.fire({
+                        title: "Error!",
+                        html: errorMessages || result.message || "An error occurred.",
+                        icon: "error",
+                        position: 'top',
+                        confirmButtonText: "OK",
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    title: "Oops!",
+                    text: "An unexpected error occurred. Please try again.",
+                    icon: "error",
+                    position: 'top',
+                    confirmButtonText: "OK",
+                });
             }
-        } catch (error) {
-            // Network error or unexpected issue
-            document.getElementById("modal_response").innerHTML =
-                `<p class="text-red-500">An unexpected error occurred. Please try again.</p>`;
-        }
-    });
-</script>
-
-<script>
-    /* debugging purposes
-    document.getElementById("signup_form").addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent form submission to inspect data
-
-        // Create a FormData object from the form
-        const formData = new FormData(event.target);
-
-        // Convert FormData to a key-value pair object for easy inspection
-        const dataObject = {};
-        formData.forEach((value, key) => {
-            dataObject[key] = value;
         });
-
-        // Log the form data to the console
-        console.log("Form Data:", dataObject);
-
-        // If ready to submit, you can manually trigger form submission
-        // event.target.submit();
     });
-    */
 </script>
+
+<!-- Include SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.0/dist/sweetalert2.min.css">
+
+<!-- Include SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.0/dist/sweetalert2.min.js"></script>
