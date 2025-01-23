@@ -46,6 +46,8 @@ class User extends Authenticatable
         'id_picture_path',
         'position',
         'comittee',
+        'is_blocked',
+
 
     ];
 

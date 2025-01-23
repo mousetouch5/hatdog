@@ -288,62 +288,81 @@ public function index() {
         return view('Official.BudgetPlanningEdit');
     }
 
-
 public function store(Request $request)
 {
     // Validate the incoming request
-    $request->validate([
+    $validatedData = $request->validate([
         'year' => [
             'required',
             'integer',
             'min:2000',
             'max:' . now()->year,
-            // Add unique constraint for the year in the budgets table
-            Rule::unique('budget_table', 'year'),
+            Rule::unique('budget_table', 'year'), // Ensure the year is unique in the budget table
         ],
-        'yearly_budget' => 'required|numeric|min:0',
+        'yearly_budget' => 'required|numeric|min:0', // Validate that the yearly budget is numeric and non-negative
     ]);
 
-    // Save data to the database
-    $budget = Budget::create([
-        'year' => $request->input('year'),
-        'amount' => $request->input('yearly_budget'),
-    ]);
+    try {
+        // Start a database transaction to ensure atomicity
+        DB::beginTransaction();
 
-    $amount = $request->input('yearly_budget');
-    
-    // Calculate the equal share for each committee (assuming 8 committees)
-    $value = $amount / 8;
-
-    // Assuming the user is authenticated, we can get the authenticated user's ID
-    $userId = auth()->id();
-
-    // Create records for each committee
-    $committees = [
-        'CommitteeBarangayAffairsEnvironment',
-        'CommitteeEducation',
-        'CommitteePeaceOrder',
-        'CommitteeLawsGoodGovernance',
-        'CommitteeElderlyPwdVawc',
-        'CommitteeHealthSanitationNutrition',
-        'CommitteeLivelihood',
-        'CommitteeInfrastructureFinance',
-    ];
-
-    foreach ($committees as $committee) {
-        // Dynamically create the committee record
-        $committeeClass = "App\Models\\$committee"; // Adjust the namespace according to your application
-        $committeeClass::create([
-            'year' => $request->input('year'),
-            'budget' => $value,
-            'remaining_budget' => $value,
-            'user_id' => $userId,  // Assuming you want to assign the current authenticated user
+        // Save the main budget entry
+        $budget = Budget::create([
+            'year' => $validatedData['year'],
+            'amount' => $validatedData['yearly_budget'],
         ]);
+
+        $amount = $validatedData['yearly_budget'];
+        $committeeCount = 8; // Total number of committees
+        $sharePerCommittee = $amount / $committeeCount; // Equal share for each committee
+
+        // Get the authenticated user's ID
+        $userId = auth()->id();
+
+        // Define committee model names
+        $committees = [
+            'CommitteeBarangayAffairsEnvironment',
+            'CommitteeEducation',
+            'CommitteePeaceOrder',
+            'CommitteeLawsGoodGovernance',
+            'CommitteeElderlyPwdVawc',
+            'CommitteeHealthSanitationNutrition',
+            'CommitteeLivelihood',
+            'CommitteeInfrastructureFinance',
+        ];
+
+        // Loop through each committee and create budget records
+        foreach ($committees as $committeeModel) {
+            $fullModelClass = "App\\Models\\$committeeModel"; // Ensure the namespace is correct
+            if (class_exists($fullModelClass)) {
+                $fullModelClass::create([
+                    'year' => $validatedData['year'],
+                    'budget' => $sharePerCommittee,
+                    'remaining_budget' => $sharePerCommittee,
+                    'user_id' => $userId, // Associate with the authenticated user
+                ]);
+            } else {
+                throw new Exception("Model class $fullModelClass does not exist.");
+            }
+        }
+
+        // Commit the transaction
+        DB::commit();
+
+        // Redirect or return success response
+        return redirect()->route('Official.BudgetPlanning.index')->with('success', 'Budget added successfully!');
+    } catch (\Exception $e) {
+        // Rollback the transaction in case of an error
+        DB::rollBack();
+
+        // Log the error for debugging
+        Log::error('Failed to store budget: ' . $e->getMessage(), [
+            'stack' => $e->getTraceAsString(),
+        ]);
+
+        // Redirect back with an error message
+        return redirect()->back()->withErrors('An error occurred while adding the budget. Please try again.');
     }
-    // Redirect or return a response
-  return redirect()->route('Official.BudgetPlanning.index')->with('success', 'Budget added successfully!');
-
-
-
 }
+
 }

@@ -47,7 +47,17 @@ Route::middleware([
 ])->group(function () {
     Route::get('/', function () {
 
+
+
+
     $user = Auth::user();
+
+     // Check if the user is blocked
+     if ($user->is_blocked) {
+        Auth::logout(); // Log the user out
+        return redirect()->route('login')->with('error', 'Your account has been blocked.');
+    }
+
 // Check user type and redirect accordingly
     if ($user->user_type === 'resident') {
     return redirect()->route('dashboard'); // Redirect to resident dashboard
@@ -152,6 +162,12 @@ Route::post('/events/print', [OfficialReportController::class, 'print'])->name('
 Route::post('/store-like-unlike', [SurveyLikeController::class, 'storeLikeUnlike']);
 Route::get('/survey-count', [SurveyLikeController::class, 'getSurveyCounts']);
 
+
+
+
+
+Route::post('/users/block/{id}', [SuperAdminLoginDashboard::class, 'blockUser'])->name('users.block');
+Route::post('/users/unblock/{id}', [SuperAdminLoginDashboard::class, 'unblockUser'])->name('users.unblock');
 
 
 

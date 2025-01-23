@@ -4,7 +4,7 @@
     <div class="modal-box w-full max-w-4xl p-6 mt-6">
         <span class="absolute top-4 right-4 text-2xl cursor-pointer" onclick="closeModal1()">&times;</span>
         <div class="modal-header">
-            <h2 class="text-3xl font-semibold text-gray-800">Verified Users Control</h2>
+            <h2 class="text-3xl font-semibold text-gray-800 py-9">Verified Users Control</h2>
         </div>
         <div class="modal-body mt-4">
             <p class="text-gray-600 mb-4">Here you can see all the pending user approvals that need to be processed. You can change password or delete them accordingly.</p>
@@ -149,19 +149,25 @@ function loadPendingUsers(page = 1) {
                 const row = document.createElement('tr');
                 row.setAttribute('id', `user-row-${user.id}`);
                 row.innerHTML = `
-                    <td class="px-4 py-2">${user.name}</td>
-                    <td class="px-4 py-2">${user.email}</td>
-                    <td class="px-4 py-2">
+                    <td class="px-4 py-2 text-xs">${user.name}</td>
+                    <td class="px-4 py-2 text-xs">${user.email}</td>
+                    <td class="px-4 py-2 text-xs">
                             ${user.id_picture_path
                               ? `<img src="${user.id_picture_path}" alt="ID Photo" class="id-photo rounded-full" style="width: 50px; height: 50px; object-fit: cover;" onclick="zoomImage('${user.id_picture_path}')">`
                               : 'No ID Photo'}
                         </td>
-                    <td class="px-4 py-2">${user.comittee}</td>
+                    <td class="px-4 py-2 text-xs">${user.comittee}</td>
                     <td class="px-4 py-2">
-                        <button onclick="openChangePasswordModal(${user.id})" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Change Password</button>
-                        <button onclick="deleteUser(${user.id})" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Delete User</button>
-                        <button onclick="updateUser(${user.id})" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Update User</button>
-                    </td>
+                    <div class="flex gap-2">
+                    <button onclick="openChangePasswordModal(${user.id})" class="bg-blue-500 text-white text-xs px-3 py-1.5 rounded-md hover:bg-blue-600">Change Password</button>
+                    <button onclick="deleteUser(${user.id})" class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-md hover:bg-red-600">Delete</button>
+                    <button onclick="updateUser(${user.id})" class="bg-gray-500 text-white text-xs px-3 py-1.5 rounded-md hover:bg-gray-600">Update</button>
+                    <button id="block-unblock-btn-${user.id}" onclick="toggleBlock(${user.id}, this)" class="bg-yellow-500 text-white text-xs px-3 py-1.5 rounded-md hover:bg-yellow-600">
+                        ${user.is_blocked ? 'Unblock' : 'Block'}
+                    </button>
+                </div>
+
+        </td>
                 `;
                 tableBody.appendChild(row);
             });
@@ -251,5 +257,45 @@ function loadPendingUsers(page = 1) {
         })
         .catch(error => console.error('Error Updating user:', error));
     }
+
+
+
+
+    // block - unblock 
+
+    function toggleBlock(userId, button) {
+    const isBlocked = button.textContent.trim() === 'Unblock';
+    const action = isBlocked ? 'unblock' : 'block'; // Determine action dynamically
+    const url = `/users/${action}/${userId}`; // Use the correct endpoint
+
+    // Send a POST request to block/unblock user
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                // Toggle button text and style
+                if (isBlocked) {
+                    button.textContent = 'Block';
+                    button.classList.remove('bg-green-500', 'hover:bg-green-600');
+                    button.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
+                } else {
+                    button.textContent = 'Unblock';
+                    button.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
+                    button.classList.add('bg-green-500', 'hover:bg-green-600');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while processing the request.');
+        });
+}
+
 
 </script>

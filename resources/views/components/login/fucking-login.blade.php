@@ -37,61 +37,70 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const loginFormAction = document.getElementById('loginFormAction');
+   document.addEventListener('DOMContentLoaded', function () {
+    const loginFormAction = document.getElementById('loginFormAction');
 
-        loginFormAction.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting immediately
+    loginFormAction.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent default form submission
 
-            // Create FormData from the form
-            const formData = new FormData(loginFormAction);
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const formData = new FormData(loginFormAction);
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            // Send the login data to the controller (login action)
-            fetch("{{ route('login') }}", {
-                    method: "POST",
-                    headers: {
-                        "X-CSRF-TOKEN": csrfToken,
-                        "Accept": "application/json" // Specify that we expect a JSON response
-                    },
-                    body: formData
-                })
-                .then(response => response.json()) // Parse response as JSON
-                .then(data => {
-                    if (data.success) {
-                        // Show success message
-                        Swal.fire({
-                            title: 'Login Successful',
-                            text: 'Redirecting to your homepage...',
-                            icon: 'success',
-                            timer: 3000, // Show for 3 seconds
-                            showConfirmButton: false
-                        }).then(() => {
-                            // Redirect to the homepage after 3 seconds
-                            window.location.href = data
-                                .redirect_url; // Update this URL as needed
-                        });
-                    } else {
-                        // Show error message if login fails
-                        Swal.fire({
-                            title: 'Login Failed',
-                            text: data.message || 'Something went wrong!',
-                            icon: 'error',
-                            confirmButtonText: 'Try Again'
-                        });
-                    }
-                })
-                .catch(error => {
-                    // Handle any network or other errors
+        fetch("{{ route('login') }}", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+                "Accept": "application/json",
+            },
+            body: formData,
+        })
+            .then(response => {
+                if (!response.ok) {
+                    // Handle non-200 responses
+                    return response.json().then(data => Promise.reject(data));
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Login Successful',
+                        text: 'Redirecting to your homepage...',
+                        icon: 'success',
+                        timer: 3000,
+                        showConfirmButton: false,
+                    }).then(() => {
+                        window.location.href = data.redirect_url;
+                    });
+                }
+            })
+            .catch(error => {
+                if (error.message) {
                     Swal.fire({
                         title: 'Error',
                         text: error.message,
                         icon: 'error',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
                     });
-                });
-        });
+                } else if (error.status === 403) {
+                    Swal.fire({
+                        title: 'Account Blocked',
+                        text: 'Your account is blocked. Please contact support.',
+                        icon: 'error',
+                        confirmButtonText: 'Contact Support',
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Login Failed',
+                        text: 'Invalid email or password.',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again',
+                    });
+                }
+            });
     });
+});
+
 </script>
 <script>
     function togglePassword() {
@@ -99,4 +108,7 @@
         const showPasswordCheckbox = document.getElementById("showPassword");
         passwordInput.type = showPasswordCheckbox.checked ? "text" : "password";
     }
+</script>
+
+
 </script>

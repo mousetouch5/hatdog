@@ -364,4 +364,31 @@ public function UpdateUser($userId)
     }
 
 
+
+    
+    public function blockUser($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->update(['is_blocked' => 1]); // Save 1 for blocked
+    
+            return response()->json(['message' => 'User blocked successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to block user: ' . $e->getMessage()], 500);
+        }
+    }
+    
+    public function unblockUser($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->update(['is_blocked' => 0]); // Save 0 for unblocked
+    
+            return response()->json(['message' => 'User unblocked successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to unblock user: ' . $e->getMessage()], 500);
+        }
+    }
+    
+    
 }
