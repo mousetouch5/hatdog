@@ -85,7 +85,7 @@
                             </svg>
                         </button>
                         <div id="budget-data">
-                         
+
                             <p class="text-xs">Total Budget</p>
                             <p id="total-budget" class="text-2xl font-bold">₱0.00</p>
                             <p class="text-xs">Total Budget Used</p>
@@ -193,6 +193,16 @@
                                         {{ $official->name }} - {{ $official->position }}
                                     </option>
                                 @endforeach
+                            </select>
+
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Select</label>
+                            <select id="category" name="category" required
+                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                <option value="" disabled selected>Select a category</option>
+                                <option value="event">Event</option>
+                                <option value="project">Project</option>
                             </select>
                         </div>
 

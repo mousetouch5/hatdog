@@ -22,6 +22,7 @@ return new class extends Migration
             $table->boolean('is_approved')->default(false);
             $table->date('date'); // Transaction date
             $table->text('description')->nullable(); // Optional description
+            $table->text('category')->nullable(); // Optional description
             $table->timestamps(); // created_at and updated_at
             $table->boolean('archive')->default(false); //archive shit
         });

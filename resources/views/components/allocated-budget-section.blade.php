@@ -27,8 +27,8 @@
     <!-- Header Row -->
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 font-semibold text-gray-700">
         <span>Committee</span>
-        <span class="text-center">Allocated Budget</span>
-        <span class="text-center">Remaining Balance</span>
+        <span>Allocated Budget</span>
+        <span>Remaining Balance</span>
     </div>
 
     <!-- Loop through the committees data and display each committee's details -->
@@ -51,13 +51,17 @@
                     value="₱{{ number_format($data['remaining_budget'], 2) }}" readonly>
 
                 <!-- Edit Button -->
+                <!-- Edit Button -->
                 <div class="mt-2">
-                    <button
-                        onclick="openChangeComitteeModal('{{ $data['committee_name'] }}', {{ $data['remaining_budget'] }})"
-                        class="bg-indigo-500 text-white py-1 px-4 rounded-md hover:bg-indigo-600 focus:outline-none">
-                        Edit
-                    </button>
+                    @if ($selectedYear == now()->year)
+                        <button
+                            onclick="openChangeComitteeModal('{{ $data['committee_name'] }}', {{ $data['remaining_budget'] }})"
+                            class="bg-indigo-500 text-white py-1 px-4 rounded-md hover:bg-indigo-600 focus:outline-none">
+                            Edit
+                        </button>
+                    @endif
                 </div>
+
             </div>
         @endforeach
     </div>

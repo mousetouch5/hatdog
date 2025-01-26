@@ -22,6 +22,7 @@ class Transaction extends Model {
             'reciept',
             'is_approved',
             'archive',
+            'category',
         ];
 
         // Relationship with User
@@ -33,10 +34,6 @@ class Transaction extends Model {
         {
              return $this->belongsTo(User::class, 'recieve_by');
         }
-
-        
-
-
 }
 
     ?>

@@ -171,18 +171,20 @@ public function store(Request $request)
     Log::info('Transaction creation requested', $request->all());
 
     // Validate the incoming request data
-    $request->validate([
-        'budget' => 'required|numeric',
-        'money_spent' => 'required|numeric',
-        'recieve_by' => 'required|exists:users,id',
-        'date' => 'required|date',
-        'description' => [
-            'nullable',
-            'string',
-            'unique:events,eventName', // Ensure 'description' is unique in the 'events' table
-        ],
-        'reciept' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-    ]);
+$request->validate([
+    'budget' => 'required|numeric', // Ensure 'budget' is required and numeric
+    'money_spent' => 'required|numeric', // Ensure 'money_spent' is required and numeric
+    'recieve_by' => 'required|exists:users,id', // Ensure 'recieve_by' exists in the users table
+    'date' => 'required|date', // Ensure 'date' is required and a valid date
+    'description' => [
+        'nullable', // 'description' is optional
+        'string', // Ensure 'description' is a string if provided
+        'unique:events,eventName', // Ensure the 'description' is unique in the 'events' table (can be adjusted if you meant to check 'eventName' instead)
+    ],
+    'reciept' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ensure 'reciept' is an image and meets file constraints
+    'category' => 'required|in:event,project', // Ensure 'category' is required and its value is either 'event' or 'project'
+]);
+
 
     Log::info('Validation passed successfully.');
 
@@ -213,6 +215,7 @@ public function store(Request $request)
         'date' => $request->input('date'),
         'description' => $request->input('description'),
         'reciept' => "sample",
+        'category' => $request->input('category'),
     ]);
 
     Log::info('Transaction created successfully', [

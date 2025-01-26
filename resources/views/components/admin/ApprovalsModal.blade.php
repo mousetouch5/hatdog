@@ -23,7 +23,7 @@
                                     <th class="p-2 border-b border-gray-300">Date</th>
                                     <th class="p-2 border-b border-gray-300">Time</th>
                                     <th class="p-2 border-b border-gray-300">Amount</th>
-                                    <th class="p-2 border-b border-gray-300">Proof</th>
+                                    <th class="p-2 border-b border-gray-300">For</th>
                                     <th class="p-2 border-b border-gray-300">Initiated</th>
                                     <th class="p-2 border-b border-gray-300">Action</th>
                                 </tr>
@@ -103,6 +103,7 @@
                     <td class="p-2 border-b border-gray-300">${formattedDate}</td>
                       <td class="p-2 border-b border-gray-300">${formattedTime}</td>
                         <td class="p-2 border-b border-gray-300">${formattedBudget}</td>
+                        <!--
                         <td class="p-2 border-b border-gray-300">
                             ${transaction.reciept 
                                 ? `<img src="/storage/${transaction.reciept}" 
@@ -111,6 +112,9 @@
                                      onclick="zoomImage('/storage/${transaction.reciept}')">`
                                 : 'No Receipt'}
                         </td>
+                        -->
+                        <td class="p-2 border-b border-gray-300">${transaction.category}</td>
+
                         <td class="p-2 border-b border-gray-300">${transaction.authorize_official.name}</td>
                         <td class="p-2 border-b border-gray-300">
                             <button onclick="approveTransaction(event, ${transaction.id})" 

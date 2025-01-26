@@ -35,17 +35,23 @@ public function Total()
     foreach ($models as $model) {
         $modelClass = "App\\Models\\$model";
 
-        if (class_exists($modelClass)) {
-            $latestRecord = $modelClass::orderBy('updated_at', 'desc')->first();
-            if ($latestRecord) {
-                $totalBudgetLeft += $latestRecord->remaining_budget;
-            }
-        }
+if (class_exists($modelClass)) {
+    $currentYear = now()->year; // Get the current year
+    $latestRecord = $modelClass::where('year', $currentYear)
+                               ->orderBy('updated_at', 'desc')
+                               ->first();
+
+    if ($latestRecord) {
+        $totalBudgetLeft += $latestRecord->remaining_budget;
+    }
+}
+
     }
 
     // Return the results as JSON
     return response()->json(['totalBudgetLeft' => $totalBudgetLeft]);
 }
+
 public function editBudget(Request $request)
 {
     try {
