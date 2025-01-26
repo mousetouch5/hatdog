@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Event extends Model
 {
@@ -26,15 +27,14 @@ class Event extends Model
         'eventStatus',
         'type',
         'reciept',
+        'user_id', // Include the user_id in the fillable attributes
     ];
 
     protected $casts = [
         'eventStartDate' => 'date',
-        'eventEndDate' =>'date', // Ensure eventDate is cast to a date format
+        'eventEndDate' => 'date', // Ensure eventDate is cast to a date format
         'budget' => 'decimal:2', // Ensure budget is cast to a decimal with 2 places
     ];
-
-
 
     public function getIsExpiredAttribute()
     {
@@ -54,10 +54,11 @@ class Event extends Model
         return '$' . number_format($this->budget, 2);
     }
 
-    public function likes(){
-    return $this->hasMany(SurveyLike::class, 'event_id');
+    public function likes()
+    {
+        return $this->hasMany(SurveyLike::class, 'event_id');
     }
-       
+
     public function expenses()
     {
         return $this->hasMany(Expense::class, 'event_id'); // Correct relationship
@@ -68,4 +69,9 @@ class Event extends Model
         return $this->hasMany(SurveyLike::class, 'event_id');
     }
 
+    // Relationship with User
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

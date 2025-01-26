@@ -94,6 +94,9 @@ Route::get('/fetch-officials', [OfficialTransactionController::class, 'fetchOffi
 Route::get('/OfficialActivityLog', [OfficialActivityLogController::class, 'index'])->name('Official.OfficialActivityLog.index');
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+Route::get('/events/upcoming', [EventController::class, 'getUpcomingEvents']);
+
+
 // Resident
 Route::get('/Resident/Event', [EventController::class, 'index'])->name('Resident.Event.index');
 Route::get('/Resident/Project', [ProjectController::class, 'index'])->name('Resident.Project.index');
@@ -192,6 +195,10 @@ Route::get('/download-survey/{id}', [SurveyLikeController::class, 'downloadPDF']
 Route::get('/schedules/unconfirmed/count', [DashboardController::class, 'getUnconfirmedSchedules']);
 
 Route::get('/transactions/unconfirmed', [DashboardController::class, 'unconfirmed']);
+
+
+
+
 
 
 // In your web.php or api.php

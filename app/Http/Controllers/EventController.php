@@ -12,6 +12,22 @@ use Illuminate\Support\Facades\Validator;
 class EventController extends Controller
 {
     // Display a listing of events
+
+    // In your EventController or relevant controller
+    public function getUpcomingEvents()
+    {
+    $events = Event::where('user_id', Auth::id()) // Ensure the event is for the logged-in user
+                    ->where('eventEndDate', '>', now()) // Ensure event is still ongoing
+                    ->whereRaw('DATEDIFF(eventEndDate, ?) <= 7', [now()]) // Events ending within the next 7 days
+                    ->get();
+
+    return response()->json($events);
+    }
+
+
+
+
+
     public function index()
     {
     $user = Auth::user(); // Get the currently authenticated user
@@ -327,6 +343,7 @@ if ($request->hasFile('reciept')) {
         'eventTime' => $validated['eventTime'],
         'eventStatus' => $eventStatus,
         'type' => $validated['type'],
+        'user_id' => Auth::id(),
     ]);
 
     // Process expenses if provided
