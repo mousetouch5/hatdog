@@ -212,10 +212,158 @@ private function getTotalRemainingBudget()
 
 
 
+public function index(Request $request) {
+    $currentYear = Carbon::now()->year;
+
+    // Fetch all available years from the Budget model
+    $availableYears = Budget::distinct('year')->pluck('year')->sort()->reverse(); // Sorting from newest to oldest
+
+    // Get the selected year from the request, or default to the current year
+    $selectedYear = $request->input('year', $currentYear);
+
+    // Fetch the budget for the selected year
+    $totalBudget = Budget::where('year', $selectedYear)->first();
+
+    // List of committee names
+    $committees = [
+        'Committee Chair on Barangay Affairs & Environment',
+        'Committee Chair on Education',
+        'Committee Chair Peace & Order',
+        'Committee Chair on Laws & Good Governance',
+        'Committee Chair on Elderly, PWD/VAWC',
+        'Committee Chair on Health & Sanitation/ Nutrition',
+        'Committee Chair on Livelihood',
+        'Committee Chair Infrastructure & Finance',
+    ];
+
+    // List of models that correspond to the committees
+    $Models = [
+        'CommitteeBarangayAffairsEnvironment',
+        'CommitteeEducation',
+        'CommitteePeaceOrder',
+        'CommitteeLawsGoodGovernance',
+        'CommitteeElderlyPwdVawc',
+        'CommitteeHealthSanitationNutrition',
+        'CommitteeLivelihood',
+        'CommitteeInfrastructureFinance',
+    ];
+
+    $committeesData = [];
+
+    // Fetch the committee budgets for the selected year (not current year)
+    foreach ($Models as $index => $committee) {
+        $committeeClass = "App\Models\\" . str_replace(' ', '', str_replace('&', 'And', $committee));
+
+        if (class_exists($committeeClass)) {
+            $committeeRecord = $committeeClass::where('year', $selectedYear) // Use selected year here
+                                                ->orderBy('updated_at', 'desc')
+                                                ->first();
+
+            if ($committeeRecord) {
+                $committeesData[] = [
+                    'committee_name' => $committees[$index],
+                    'budget' => $committeeRecord->budget,
+                    'remaining_budget' => $committeeRecord->remaining_budget
+                ];
+            } else {
+                $committeesData[] = [
+                    'committee_name' => $committees[$index],
+                    'budget' => 0,
+                    'remaining_budget' => 0
+                ];
+            }
+        }
+    }
+
+    // Return the view with available years and other data
+    return view('Official.BudgetPlanning', compact('committeesData', 'currentYear', 'totalBudget', 'availableYears', 'selectedYear'));
+}
 
 
 
 
+
+/*
+public function index(Request $request) {
+    $currentYear = Carbon::now()->year;
+
+    // Fetch all available years from the Budget model
+    $availableYears = Budget::distinct('year')->pluck('year')->sort()->reverse(); // Sorting from newest to oldest
+
+    $currentYear = Carbon::now()->year;
+
+    // Get the selected year from the request, or default to the current year
+    $selectedYear = $request->input('year', $currentYear);
+
+    // Fetch all available years from the Budget model
+    $availableYears = Budget::distinct('year')->pluck('year')->sort()->reverse();
+
+    // Fetch the budget for the selected year
+    $totalBudget = Budget::where('year', $selectedYear)->first();
+
+
+    // List of committee names
+    $committees = [
+        'Committee Chair on Barangay Affairs & Environment',
+        'Committee Chair on Education',
+        'Committee Chair Peace & Order',
+        'Committee Chair on Laws & Good Governance',
+        'Committee Chair on Elderly, PWD/VAWC',
+        'Committee Chair on Health & Sanitation/ Nutrition',
+        'Committee Chair on Livelihood',
+        'Committee Chair Infrastructure & Finance',
+    ];
+
+    // List of models that correspond to the committees
+    $Models = [
+        'CommitteeBarangayAffairsEnvironment',
+        'CommitteeEducation',
+        'CommitteePeaceOrder',
+        'CommitteeLawsGoodGovernance',
+        'CommitteeElderlyPwdVawc',
+        'CommitteeHealthSanitationNutrition',
+        'CommitteeLivelihood',
+        'CommitteeInfrastructureFinance',
+    ];
+
+    $committeesData = [];
+
+    $totalBudget = Budget::where('year', $currentYear)->first();
+    
+    foreach ($Models as $index => $committee) {
+        $committeeClass = "App\Models\\" . str_replace(' ', '', str_replace('&', 'And', $committee));
+
+        if (class_exists($committeeClass)) {
+            $committeeRecord = $committeeClass::where('year', $currentYear)
+                                                ->orderBy('updated_at', 'desc')
+                                                ->first();
+
+            if ($committeeRecord) {
+                $committeesData[] = [
+                    'committee_name' => $committees[$index],
+                    'budget' => $committeeRecord->budget,
+                    'remaining_budget' => $committeeRecord->remaining_budget
+                ];
+            } else {
+                $committeesData[] = [
+                    'committee_name' => $committees[$index],
+                    'budget' => 0,
+                    'remaining_budget' => 0
+                ];
+            }
+        }
+    }
+
+    // Return the view with available years and other data
+    
+    return view('Official.BudgetPlanning', compact('committeesData', 'currentYear', 'totalBudget', 'availableYears', 'selectedYear'));
+}
+
+
+*/
+
+
+/*
 
 public function index() {
     $currentYear = Carbon::now()->year;
@@ -283,10 +431,99 @@ public function index() {
 }
 
 
-
+*/
     public function edits() {
         return view('Official.BudgetPlanningEdit');
     }
+
+
+
+/*
+    
+public function store(Request $request)
+{
+    // Validate the incoming request
+    $validatedData = $request->validate([
+        'year' => [
+            'required',
+            'integer',
+            'min:2000',
+            'max:' . now()->year,
+            Rule::unique('budget_table', 'year'), // Ensure the year is unique in the budget table
+        ],
+        'yearly_budget' => 'required|numeric|min:0', // Validate that the yearly budget is numeric and non-negative
+    ]);
+
+    // Capture the committee-specific budgets
+    $committeeBudgets = $request->except(['_token', 'year', 'yearly_budget']);
+
+    try {
+        // Start a database transaction to ensure atomicity
+        DB::beginTransaction();
+
+        // Save the main budget entry
+        $budget = Budget::create([
+            'year' => $validatedData['year'],
+            'amount' => $validatedData['yearly_budget'],
+        ]);
+
+        // Get the authenticated user's ID
+        $userId = auth()->id();
+
+        // Define committee model names with corresponding input keys
+        $committees = [
+            'committee_barangay_affairs_environment' => 'CommitteeBarangayAffairsEnvironment',
+            'committee_education' => 'CommitteeEducation',
+            'committee_peace_order' => 'CommitteePeaceOrder',
+            'committee_laws_good_governance' => 'CommitteeLawsGoodGovernance',
+            'committee_elderly_pwd_vawc' => 'CommitteeElderlyPwdVawc',
+            'committee_health_sanitation_nutrition' => 'CommitteeHealthSanitationNutrition',
+            'committee_livelihood' => 'CommitteeLivelihood',
+            'committee_infrastructure_finance' => 'CommitteeInfrastructureFinance',
+        ];
+
+        // Loop through each committee and create budget records
+        foreach ($committees as $inputKey => $committeeModel) {
+            $fullModelClass = "App\\Models\\$committeeModel"; // Ensure the namespace is correct
+            if (class_exists($fullModelClass)) {
+                $allocatedBudget = isset($committeeBudgets[$inputKey]) 
+                    ? (float) str_replace(['₱', ','], '', $committeeBudgets[$inputKey]) 
+                    : 0;
+
+                $fullModelClass::create([
+                    'year' => $validatedData['year'],
+                    'budget' => $allocatedBudget,
+                    'remaining_budget' => $allocatedBudget,
+                    'user_id' => $userId, // Associate with the authenticated user
+                ]);
+            } else {
+                throw new Exception("Model class $fullModelClass does not exist.");
+            }
+        }
+
+        // Commit the transaction
+        DB::commit();
+
+        // Redirect or return success response
+        return redirect()->route('Official.BudgetPlanning.index')->with('success', 'Budget added successfully!');
+    } catch (\Exception $e) {
+        // Rollback the transaction in case of an error
+        DB::rollBack();
+
+        // Log the error for debugging
+        Log::error('Failed to store budget: ' . $e->getMessage(), [
+            'stack' => $e->getTraceAsString(),
+        ]);
+
+        // Redirect back with an error message
+        return redirect()->back()->withErrors('An error occurred while adding the budget. Please try again.');
+    }
+}
+*/
+
+
+
+    
 
 public function store(Request $request)
 {

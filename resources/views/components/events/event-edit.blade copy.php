@@ -25,15 +25,47 @@
                 @enderror
             </div>
 
-            <!-- Event Date -->
-            <div class="mb-4">
-                <label for="event_date" class="block text-sm font-semibold text-gray-700">Event Date:</label>
-                <input type="date" id="event_date" name="eventDate"
-                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-                @error('eventDate')
-                    <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                @enderror
-            </div>
+       <div class="mb-4">
+    <label for="event_date" class="block text-sm font-semibold text-gray-700">Event Date:</label>
+    <input type="date" id="event_date" name="eventDate"
+        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+    @error('eventDate')
+        <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+    @enderror
+</div>
+
+<script>
+    // Disabling weekends (Saturday and Sunday)
+    document.getElementById('event_date').addEventListener('focus', function() {
+        var input = this;
+        input.setAttribute('min', new Date().toISOString().split("T")[0]);  // Disable past dates
+
+        var datepicker = input;
+        var unavailableDates = ['2025-01-30', '2025-02-01'];  // Add your unavailable dates here
+
+        // Disable unavailable dates
+        datepicker.addEventListener('input', function() {
+            var selectedDate = new Date(datepicker.value);
+            if (unavailableDates.includes(datepicker.value)) {
+                alert('Selected date is unavailable.');
+                datepicker.value = '';  // Reset the input if date is unavailable
+            }
+        });
+
+        // Disabling weekends using JavaScript
+        input.addEventListener('input', function() {
+            var selectedDate = new Date(input.value);
+            if (selectedDate.getDay() === 0 || selectedDate.getDay() === 6) {
+                alert('Weekends are unavailable.');
+                input.value = '';  // Reset the input if weekend is selected
+            }
+        });
+    });
+</script>
+
+
+
+
 
             <!-- Event Time -->
             <div class="mb-4">

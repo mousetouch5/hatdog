@@ -154,6 +154,7 @@
                             <th>End Date</th>
                             <th>Budget</th>
                             <th>Expenses</th>
+                            <th>Liquidated</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -180,6 +181,14 @@
                                         </div>
                                     @endif
                                 </td>
+                                <td>
+                                    @if ($event->reciept)
+                                        ✔
+                                    @else
+                                        —
+                                    @endif
+                                </td>
+
                             </tr>
                         @endforeach
                     </tbody>

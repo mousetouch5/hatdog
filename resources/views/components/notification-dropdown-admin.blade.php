@@ -82,7 +82,7 @@
                         const item = document.createElement('div');
                         item.className = 'border-b border-gray-300 py-2';
                         item.innerHTML =
-                            `<p class="text-sm text-gray-600">Event ${event.eventName} Deadline is approaching Date: ${eventEndDate.toLocaleString()}</p>`;
+                            `<p class="text-sm text-gray-600">Event ${event.eventName} Liquidation Deadline is approaching Date: ${eventEndDate.toLocaleString()}</p>`;
                         notificationList.appendChild(item);
                     });
                 }

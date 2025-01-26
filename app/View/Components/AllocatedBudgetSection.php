@@ -15,13 +15,18 @@ class AllocatedBudgetSection extends Component
 public $committeesData;
 public $totalBudget;
 public $currentYear;
+public $availableYears;
+public $selectedYear;
+
 
 // Constructor to accept data
-public function __construct($committeesData, $currentYear, $totalBudget)
+public function __construct($committeesData, $currentYear, $totalBudget, $availableYears, $selectedYear)
 {
     $this->committeesData = $committeesData;
     $this->currentYear = $currentYear;
     $this->totalBudget = $totalBudget;
+    $this->availableYears = $availableYears;
+    $this->selectedYear = $selectedYear;
 }
 
 

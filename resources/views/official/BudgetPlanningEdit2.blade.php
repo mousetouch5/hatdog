@@ -9,7 +9,6 @@
                 <!-- Title -->
                 <h1 class="text-2xl font-bold mb-8 text-center">Budget Planning</h1>
 
-
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
@@ -19,8 +18,6 @@
                         </ul>
                     </div>
                 @endif
-
-
 
                 <!-- Form -->
                 <form id="addTransactionForm" action="{{ route('budget.store') }}" method="POST">
@@ -32,7 +29,8 @@
                         <div>
                             <label for="year" class="block text-sm font-medium text-gray-700 mb-1">Year:</label>
                             <select id="year" name="year"
-                                class="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                class="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                required>
                                 <option value="" disabled selected>Select Year</option>
                                 @for ($i = now()->year; $i >= 2000; $i--)
                                     <option value="{{ $i }}">{{ $i }}</option>
@@ -42,59 +40,40 @@
 
                         <!-- Yearly Budget Input -->
                         <div>
-                            <label for="yearly_budget" class="block text-sm font-medium text-gray-700 mb-1">Yearly
+                            <label for="yearly_budget" class="block text-sm font-medium text-gray-700 mb-1">Year
                                 Budget:</label>
-                            <input type="text" id="yearly_budget" name="yearly_budget"
+                            <input type="number" id="yearly_budget" name="yearly_budget"
                                 class="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                                placeholder="Enter Budget" oninput="formatExpenseAmount(this)">
+                                placeholder="Enter Budget" required step="0.01" min="0" />
+
                         </div>
                     </div>
 
                     <!-- Allocated Budget Section -->
                     <h3 class="text-lg font-semibold mb-6">Allocated Budget</h3>
-                    <div class="space-y-4">
-                        <!-- Repeatable Rows for Committees -->
+                    <div id="committee-container" class="space-y-4">
+                        @php
+                            $committees = [
+                                'Committee Chair Infrastructure & Finance',
+                                'Committee Chair on Barangay Affairs & Environment',
+                                'Committee Chair on Education',
+                                'Committee Chair Peace & Order',
+                                'Committee Chair on Laws & Good Governance',
+                                'Committee Chair on Elderly, PWD/VAWC',
+                                'Committee Chair on Health & Sanitation/ Nutrition',
+                                'Committee Chair on Livelihood',
+                            ];
+                        @endphp
+
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
-                                <span class="text-gray-700">Committee Chair Infrastructure & Finance</span>
-                                <input type="text" name="committee_infrastructure_finance"
-                                    class="committee-input w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                            </div>
-                            <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
-                                <span class="text-gray-700">Committee Chair on Barangay Affairs & Environment</span>
-                                <input type="text" name="committee_barangay_affairs"
-                                    class="committee-input w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                            </div>
-                            <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
-                                <span class="text-gray-700">Committee Chair on Education</span>
-                                <input type="text" name="committee_education"
-                                    class="committee-input w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                            </div>
-                            <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
-                                <span class="text-gray-700">Committee Chair Peace & Order</span>
-                                <input type="text" name="committee_peace_order"
-                                    class="committee-input w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                            </div>
-                            <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
-                                <span class="text-gray-700">Committee Chair on Laws & Good Governance</span>
-                                <input type="text" name="committee_laws_governance"
-                                    class="committee-input w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                            </div>
-                            <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
-                                <span class="text-gray-700">Committee Chair on Elderly, PWD/VAWC</span>
-                                <input type="text" name="committee_elderly_pwd"
-                                    class="committee-input w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                            </div>
-                            <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
-                                <span class="text-gray-700">Committee Chair on Health & Sanitation/ Nutrition</span>
-                                <input type="text" name="committee_health_sanitation"
-                                    class="committee-input w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                            </div>
-                            <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
-                                <span class="text-gray-700">Committee Chair on Livelihood</span>
-                                <input type="text" name="committee_livelihood"
-                                    class="committee-input w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
-                            </div>
+                            @foreach ($committees as $committee)
+                                <div class="flex items-center justify-between bg-gray-100 p-3 rounded-md">
+                                    <span class="text-gray-700">{{ $committee }}</span>
+                                    <input type="text" name="{{ Str::snake($committee) }}"
+                                        class="committee-input w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                        placeholder="₱0.00" />
+                                </div>
+                            @endforeach
                         </div>
                     </div>
 
@@ -109,67 +88,113 @@
 
                     <!-- Save Button -->
                     <div class="mt-8 text-right">
-                        <button type="submit"
-                            class="px-6 py-2 bg-gray-700 text-white rounded-md shadow hover:bg-gray-500 focus:ring-2 focus:ring-indigo-500">
+                        <button type="button"
+                            class="px-6 py-2 bg-gray-700 text-white rounded-md shadow hover:bg-gray-500 focus:ring-2 focus:ring-indigo-500"
+                            onclick="document.getElementById('my_modal_2').showModal()">
                             Save
                         </button>
                     </div>
+
+                    <!-- Modal -->
+                    <dialog id="my_modal_2" class="modal">
+                        <div class="modal-box">
+                            <h3 class="text-lg font-bold">Confirmation</h3>
+                            <p class="py-4">Please review the following information carefully. Do you want to save
+                                these changes?</p>
+                            <div class="modal-action">
+                                <!-- Cancel Button -->
+                                <button class="btn" type="button"
+                                    onclick="document.getElementById('my_modal_2').close()">No</button>
+                                <!-- Confirm Button -->
+                                <!-- Yes Button -->
+                                <button type="button" class="btn btn-primary bg-gray-700"
+                                    onclick="document.getElementById('my_modal_2').close(); document.getElementById('addTransactionForm').submit();">
+                                    Yes
+                                </button>
+
+                            </div>
+                        </div>
+                    </dialog>
                 </form>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('yearly_budget').addEventListener('input', function() {
-            const yearlyBudget = parseFloat(this.value) || 0;
-            const committeeInputs = document.querySelectorAll('.committee-input');
-            const numberOfCommittees = committeeInputs.length;
-            const dividedAmount = yearlyBudget / numberOfCommittees;
-
-            committeeInputs.forEach(input => {
-                // Format the dividedAmount with a peso sign, commas, and 2 decimal places
-                const formattedAmount =
-                    `₱${dividedAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-                input.value = formattedAmount;
-            });
-
-        });
 
 
+                <!-- External JavaScript -->
+                <script>
+                    // Function to close the modal
+                    // Function to close the modal
+                    function closeModal() {
+                        const modal = document.getElementById('my_modal_2');
+                        modal.close(); // Close the modal
+                    }
 
-        function formatExpenseAmount(input) {
-            // Remove all non-digit characters except for the period
-            let value = input.value.replace(/[^0-9.]/g, '');
+                    // Format yearly budget input
+                    function formatExpenseAmount(input) {
+                        let value = input.value.replace(/[^0-9.]/g, '');
+                        const parts = value.split('.');
+                        if (parts.length > 2) value = parts[0] + '.' + parts[1];
+                        const [integerPart, decimalPart] = value.split('.');
+                        const formattedInteger = integerPart ? parseInt(integerPart, 10).toLocaleString() : '';
+                        input.value = decimalPart !== undefined ? `₱${formattedInteger}.${decimalPart.slice(0, 2)}` :
+                            `₱${formattedInteger}`;
+                    }
 
-            // Prevent more than one period in the value
-            const parts = value.split('.');
-            if (parts.length > 2) {
-                value = parts[0] + '.' + parts[1]; // Keep only the first two parts
-            }
+                    // Distribute budget equally among committees and update percentages
+                    document.getElementById('yearly_budget').addEventListener('input', function() {
+                        const yearlyBudget = parseFloat(this.value.replace(/[₱,]/g, '')) || 0;
+                        const committeeInputs = document.querySelectorAll('.committee-input');
+                        const dividedAmount = yearlyBudget / committeeInputs.length;
 
-            // Split the value into integer and decimal parts
-            const [integerPart, decimalPart] = value.split('.');
+                        committeeInputs.forEach(input => {
+                            input.value = dividedAmount ?
+                                `₱${dividedAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}` : '';
+                            updatePercentage(input, yearlyBudget); // Update percentage
+                        });
+                    });
 
-            // Format the integer part with commas
-            const formattedInteger = integerPart ? parseInt(integerPart, 10).toLocaleString() : '';
+                    // Update percentage dynamically when a committee budget is edited
+                    document.querySelectorAll('.committee-input').forEach(input => {
+                        input.addEventListener('input', function() {
+                            const yearlyBudget = parseFloat(document.getElementById('yearly_budget').value.replace(
+                                /[₱,]/g, '')) || 0;
+                            updatePercentage(this, yearlyBudget);
+                        });
+                    });
 
-            // Combine integer and decimal parts
-            let formattedValue = decimalPart !== undefined ?
-                `${formattedInteger}.${decimalPart.slice(0, 2)}` // Limit decimals to two places
-                :
-                formattedInteger;
+                    // Function to calculate and display percentage
+                    function updatePercentage(input, yearlyBudget) {
+                        const allocatedAmount = parseFloat(input.value.replace(/[₱,]/g, '')) || 0;
+                        const percentage = yearlyBudget ? ((allocatedAmount / yearlyBudget) * 100).toFixed(2) : 0;
 
-            // Prepend the peso sign and update the input field
-            input.value = formattedValue ? `₱${formattedValue}` : '';
-        }
+                        // Find the percentage display element
+                        let percentageDisplay = input.nextElementSibling;
+                        if (!percentageDisplay || !percentageDisplay.classList.contains('percentage-display')) {
+                            // Create a percentage display element if it doesn't exist
+                            percentageDisplay = document.createElement('span');
+                            percentageDisplay.classList.add('percentage-display', 'ml-2', 'text-sm');
+                            input.parentNode.appendChild(percentageDisplay);
+                        }
 
-        // Remove formatting before submission
-        document.getElementById('addTransactionForm').addEventListener('submit', function(e) {
-            const budgetInput = document.querySelector('input[name="yearly_budget"]');
-            if (budgetInput) {
-                // Remove peso sign and commas
-                budgetInput.value = budgetInput.value.replace(/[₱,]/g, '');
-            }
-        });
-    </script>
+                        // Set the percentage text
+                        percentageDisplay.textContent = `(${percentage}%)`;
+
+                        // Change the color to red if the percentage exceeds 100%
+                        if (percentage > 100) {
+                            percentageDisplay.classList.add('text-red-500'); // Add red color class
+                        } else {
+                            percentageDisplay.classList.remove('text-red-500'); // Remove red color class if <= 100%
+                        }
+                    }
+
+
+                    // Remove formatting before form submission
+                    document.getElementById('addTransactionForm').addEventListener('submit', function(e) {
+                        const budgetInput = document.querySelector('input[name="yearly_budget"]');
+                        if (budgetInput) budgetInput.value = budgetInput.value.replace(/[₱,]/g, '');
+
+                        const committeeInputs = document.querySelectorAll('.committee-input');
+                        committeeInputs.forEach(input => {
+                            input.value = input.value.replace(/[₱,]/g, ''); // Remove formatting
+                        });
+                    });
+                </script>
 </x-app-layout>
