@@ -8,6 +8,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Event;
+    
+use App\Models\UserBackup;
+use Illuminate\Support\Facades\DB;
 
 class SuperAdminLoginDashboard extends Controller
 {
@@ -365,30 +368,71 @@ public function UpdateUser($userId)
 
 
 
-    
-    public function blockUser($id)
-    {
-        try {
-            $user = User::findOrFail($id);
-            $user->update(['is_blocked' => 1]); // Save 1 for blocked
-    
-            return response()->json(['message' => 'User blocked successfully'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to block user: ' . $e->getMessage()], 500);
-        }
+
+
+public function blockUser($id)
+{
+    DB::beginTransaction();
+
+    try {
+        // Find the user by ID
+        $user = User::findOrFail($id);
+
+        // Back up user info (position, password, and user_id)
+        UserBackup::create([
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'position' => $user->position,
+            'password' => $user->password, // This will store the current password
+        ]);
+
+        // Update the user's position and password to "decline"
+        $user->update([
+            'position' => 'decline',
+            'password' => bcrypt('decline'), // Store a hashed "decline" password
+            'is_blocked' => 1,
+        ]);
+
+        DB::commit();
+
+        return response()->json(['message' => 'User blocked and backed up successfully'], 200);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json(['error' => 'Failed to block user: ' . $e->getMessage()], 500);
     }
+}
+
     
-    public function unblockUser($id)
-    {
-        try {
-            $user = User::findOrFail($id);
-            $user->update(['is_blocked' => 0]); // Save 0 for unblocked
-    
-            return response()->json(['message' => 'User unblocked successfully'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to unblock user: ' . $e->getMessage()], 500);
+
+
+public function unblockUser($id)
+{
+    try {
+        // Find the user by ID
+        $user = User::findOrFail($id);
+
+        // Retrieve the most recent backup of the user
+        $backup = UserBackup::where('user_id', $user->id)->latest()->first();
+
+        if ($backup) {
+            // Restore the user's original position and password from the backup
+            $user->update([
+                'position' => $backup->position,
+                'password' => $backup->password, // The password is already hashed in the backup
+                'is_blocked' => 0, // Set the user as unblocked
+            ]);
+
+            return response()->json(['message' => 'User unblocked and restored successfully'], 200);
+        } else {
+            return response()->json(['error' => 'No backup found for the user'], 404);
         }
+
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Failed to unblock user: ' . $e->getMessage()], 500);
     }
+}
+
     
     
 }
