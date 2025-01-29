@@ -36,20 +36,56 @@
                 @enderror
             </div>
 
-            <!-- Event Start Date -->
+            <!-- Event Start Date 
             <div class="mb-4">
                 <label for="event_start_date" class="block text-sm font-semibold text-gray-700">Event Start
                     Date:</label>
                 <input type="date" id="event_start_date" name="eventStartDate" readonly
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
-
-            <!-- Event End Date -->
+-->
+            <!-- Event End Date
             <div class="mb-4">
                 <label for="event_end_date" class="block text-sm font-semibold text-gray-700">Event End Date:</label>
                 <input type="date" id="event_end_date" name="eventEndDate"
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-            </div>
+            </div> -->
+
+
+
+
+
+           <!-- Event Start Date -->
+                    <!-- Event Start Date -->
+                    <div class="mb-4">
+                        <label for="event_start_date" class="block text-sm font-semibold text-gray-700">Event Start Date:</label>
+                        <input type="date" id="event_start_date" name="eventStartDate"
+                            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    </div>
+
+                    <!-- Event End Date -->
+                    <div class="mb-4">
+                        <label for="event_end_date" class="block text-sm font-semibold text-gray-700">Event End Date:</label>
+                        <input type="date" id="event_end_date" name="eventEndDate"
+                            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    </div>
+
+                    <script>
+                        document.getElementById("event_start_date").addEventListener("change", function () {
+                            let startDate = this.value; // Get the selected start date
+                            let endDateInput = document.getElementById("event_end_date");
+
+                            if (startDate) {
+                                endDateInput.min = startDate; // Allow the same day selection
+                                endDateInput.value = ""; // Reset end date if it was previously selected
+                            }
+                        });
+                    </script>
+
+
+
+
+
 
             <!-- Event Time -->
             <div class="mb-4">
