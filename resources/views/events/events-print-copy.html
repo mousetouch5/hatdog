@@ -1,4 +1,4 @@
-
+<!--
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,81 +10,26 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            color: #333;
-            background: #fff;
-            margin: 0;
-            padding: 20px;
         }
 
         .container {
             width: 100%;
-            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
         }
 
-        .header {
+        .header,
+        .footer {
             text-align: center;
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #000;
         }
 
-        h1 {
-            margin: 0;
-            font-size: 24px;
-            text-transform: uppercase;
-        }
-
-        .sub-header {
-            font-size: 16px;
-            color: #555;
-            margin-top: 5px;
-        }
-
-        .content p {
-            margin: 5px 0;
-            font-size: 14px;
+        .content {
+            margin-bottom: 20px;
         }
 
         .text-muted {
             color: gray;
-            font-style: italic;
-        }
-
-        ul {
-            padding-left: 20px;
-            margin-top: 10px;
-        }
-
-        li {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .expense-amount {
-            font-weight: bold;
-            color: #d9534f;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 12px;
-            color: #777;
-        }
-
-        @media print {
-            body {
-                padding: 0;
-            }
-
-            .container {
-                border: none;
-                box-shadow: none;
-            }
         }
     </style>
 </head>
@@ -93,7 +38,7 @@
     <div class="container">
         <div class="header">
             <h1>{{ $event->eventName }}</h1>
-            <p class="sub-header">{{ $event->eventType }} - {{ \Carbon\Carbon::parse($event->eventDate)->format('F Y') }}</p>
+            <p>{{ $event->eventType }} - {{ \Carbon\Carbon::parse($event->eventDate)->format('F Y') }}</p>
         </div>
         <div class="content">
             <p><strong>Description:</strong> {{ $event->eventDescription }}</p>
@@ -112,7 +57,7 @@
                         <li>
                             <strong>{{ $expense->expense_description }}:</strong>
                             <span class="expense-amount">{{ number_format($expense->expense_amount, 2) }}</span>
-                            (Qty: {{ number_format($expense->quantity_amount, 0) }})
+                            <span class="quantity-amount">{{ number_format($expense->quantity_amount, 0) }}</span>
                         </li>
                     @endforeach
                 </ul>
@@ -127,3 +72,5 @@
     window.print();
 </script>
 
+
+-->
