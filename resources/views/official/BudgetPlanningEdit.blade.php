@@ -49,18 +49,20 @@
                         </div>
                     </div>
 
+
+
                     <!-- Allocated Budget Section -->
                     <h3 class="text-lg font-semibold mb-6">Allocated Budget</h3>
                     <div id="committee-container" class="space-y-4">
                         @php
                             $committees = [
-                                'Committee Chair Infrastructure & Finance',
-                                'Committee Chair on Barangay Affairs & Environment',
+                                'Committee Chair Infrastructure Finance',
+                                'Committee Chair on Barangay Affairs Environment',
                                 'Committee Chair on Education',
-                                'Committee Chair Peace & Order',
-                                'Committee Chair on Laws & Good Governance',
-                                'Committee Chair on Elderly, PWD/VAWC',
-                                'Committee Chair on Health & Sanitation/ Nutrition',
+                                'Committee Chair Peace Order',
+                                'Committee Chair on Laws Good Governance',
+                                'Committee Chair on Elderly PWD VAWC',
+                                'Committee Chair on Health Sanitation Nutrition',
                                 'Committee Chair on Livelihood',
                             ];
                         @endphp
@@ -69,56 +71,69 @@
                             @foreach ($committees as $committee)
                                 <div class="flex items-center justify-between bg-gray-100 p-3 rounded-md">
                                     <span class="text-gray-700">{{ $committee }}</span>
-                                    <input type="text" name="{{ Str::snake($committee) }}"
+                                    <input type="text"
+                                        name="{{ Str::snake(str_replace([' ', ',', '&', '/'], '_', $committee)) }}"
                                         class="committee-input w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                                         placeholder="₱0.00" />
                                 </div>
                             @endforeach
                         </div>
-                    </div>
 
-                    <!-- Calendar of Activities -->
-                    <div class="mt-5">
-                        <button type="button"
-                            onclick="window.location.href='{{ route('Official.CalendarActivities.index') }}'"
-                            class="px-6 py-2 bg-gray-700 text-white rounded-md shadow hover:bg-gray-500 focus:ring-2 focus:ring-indigo-500">
-                            Calendar of Activities
-                        </button>
-                    </div>
 
-                    <!-- Save Button -->
-                    <div class="mt-8 text-right">
-                        <button type="button"
-                            class="px-6 py-2 bg-gray-700 text-white rounded-md shadow hover:bg-gray-500 focus:ring-2 focus:ring-indigo-500"
-                            onclick="document.getElementById('my_modal_2').showModal()">
-                            Save
-                        </button>
-                    </div>
 
-                    <!-- Modal -->
-                    <dialog id="my_modal_2" class="modal">
-                        <div class="modal-box">
-                            <h3 class="text-lg font-bold">Confirmation</h3>
-                            <p class="py-4">Please review the following information carefully. Do you want to save
-                                these changes?</p>
-                            <div class="modal-action">
-                                <!-- Cancel Button -->
-                                <button class="btn" type="button"
-                                    onclick="document.getElementById('my_modal_2').close()">No</button>
-                                <!-- Confirm Button -->
-                                <!-- Yes Button -->
-                                <button type="button" class="btn btn-primary bg-gray-700"
-                                    onclick="document.getElementById('my_modal_2').close(); document.getElementById('addTransactionForm').submit();">
-                                    Yes
-                                </button>
-
-                            </div>
+                        <!-- Calendar of Activities -->
+                        <div class="mt-5">
+                            <button type="button"
+                                onclick="window.location.href='{{ route('Official.CalendarActivities.index') }}'"
+                                class="px-6 py-2 bg-gray-700 text-white rounded-md shadow hover:bg-gray-500 focus:ring-2 focus:ring-indigo-500">
+                                Calendar of Activities
+                            </button>
                         </div>
-                    </dialog>
+
+                        <!-- Save Button -->
+                        <div class="mt-8 text-right">
+                            <button type="button"
+                                class="px-6 py-2 bg-gray-700 text-white rounded-md shadow hover:bg-gray-500 focus:ring-2 focus:ring-indigo-500"
+                                onclick="
+        if (validateBudgetForm()) { 
+            document.getElementById('my_modal_2').showModal(); 
+        }
+    ">
+                                Save
+                            </button>
+
+                        </div>
+
+                        <!-- Modal -->
+                        <dialog id="my_modal_2" class="modal">
+                            <div class="modal-box">
+                                <h3 class="text-lg font-bold">Confirmation</h3>
+                                <p class="py-4">Please review the following information carefully. Do you want to save
+                                    these changes?</p>
+                                <div class="modal-action">
+                                    <!-- Cancel Button -->
+                                    <button class="btn" type="button"
+                                        onclick="document.getElementById('my_modal_2').close()">No</button>
+                                    <!-- Confirm Button -->
+                                    <!-- Yes Button -->
+                                    <button type="button" class="btn btn-primary bg-gray-700"
+                                        onclick="
+        sanitizeInputs(); 
+        document.getElementById('my_modal_2').close(); 
+        document.getElementById('addTransactionForm').submit();
+    ">
+                                        Yes
+                                    </button>
+
+
+                                </div>
+                            </div>
+                        </dialog>
                 </form>
 
 
-                <!-- External JavaScript -->
+                <!-- External Ja
+                    vaScript -->
                 <script>
                     // Function to close the modal
                     // Function to close the modal
@@ -187,14 +202,75 @@
 
 
                     // Remove formatting before form submission
-                    document.getElementById('addTransactionForm').addEventListener('submit', function(e) {
-                        const budgetInput = document.querySelector('input[name="yearly_budget"]');
-                        if (budgetInput) budgetInput.value = budgetInput.value.replace(/[₱,]/g, '');
 
+
+
+
+
+
+
+
+
+
+
+                    function validateBudgetForm() {
+                        const form = document.getElementById('addTransactionForm');
+
+                        if (!form) {
+                            console.error("Form with id 'addTransactionForm' not found");
+                            return false; // Return false to indicate validation failure
+                        }
+
+                        // Retrieve the yearly budget value
+                        const yearlyBudgetInput = document.getElementById('yearly_budget');
+                        const yearlyBudget = parseFloat(yearlyBudgetInput.value.replace(/[₱,]/g, '')) || 0;
+
+                        // Retrieve all committee inputs and calculate total allocated budget
                         const committeeInputs = document.querySelectorAll('.committee-input');
+                        let totalAllocated = 0;
+
+                        // Log all committee input values
+                        console.log("Yearly Budget:", yearlyBudget);
+                        console.log("Committee Allocations:");
+
                         committeeInputs.forEach(input => {
-                            input.value = input.value.replace(/[₱,]/g, ''); // Remove formatting
+                            const value = parseFloat(input.value.replace(/[₱,]/g, '')) || 0;
+                            totalAllocated += value;
+                            console.log(`${input.name}: ${value}`);
                         });
-                    });
+
+                        // Check if the total allocated matches the yearly budget
+                        if (totalAllocated !== yearlyBudget) {
+                            alert(
+                                `The total allocated budget (${totalAllocated.toFixed(2)}) does not match the yearly budget (${yearlyBudget.toFixed(2)}). Please adjust the values.`
+                            );
+                            console.log("Validation failed: Form submission prevented due to mismatched budgets");
+                            return false; // Return false to indicate validation failure
+                        }
+
+                        console.log("Validation passed: Form submission allowed");
+                        return true; // Return true to indicate validation success
+                    }
+
+
+                    // Function to remove formatting before form submission
+                    function sanitizeInputs() {
+                        const committeeInputs = document.querySelectorAll('.committee-input');
+                        const yearlyBudgetInput = document.getElementById('yearly_budget');
+
+                        // Remove formatting from yearly budget
+                        yearlyBudgetInput.value = yearlyBudgetInput.value.replace(/[₱,]/g, '');
+
+                        // Remove formatting from committee inputs
+                        committeeInputs.forEach(input => {
+                            input.value = input.value.replace(/[₱,]/g, '');
+                        });
+
+                        console.log("Sanitized inputs before submission:");
+                        console.log("Yearly Budget:", yearlyBudgetInput.value);
+                        committeeInputs.forEach(input => {
+                            console.log(`${input.name}: ${input.value}`);
+                        });
+                    }
                 </script>
 </x-app-layout>

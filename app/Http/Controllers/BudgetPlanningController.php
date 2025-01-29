@@ -527,10 +527,102 @@ public function store(Request $request)
 }
 */
 
+public function store(Request $request)
+{
+    // Log request data for debugging
+    Log::info('Budget store request received', ['request' => $request->all()]);
+
+    // Validate the incoming request
+    $validatedData = $request->validate([
+        'year' => [
+            'required',
+            'integer',
+            'min:2000',
+            'max:' . now()->year,
+            Rule::unique('budget_table', 'year'), // Ensure the year is unique in the budget table
+        ],
+        'yearly_budget' => 'required|numeric|min:0', // Validate that the yearly budget is numeric and non-negative
+    ]);
+
+    try {
+        // Start a database transaction to ensure atomicity
+        DB::beginTransaction();
+        Log::info('Database transaction started');
+
+        // Remove formatting from yearly budget
+        $validatedData['yearly_budget'] = floatval($request->input('yearly_budget'));
+
+        // Save the main budget entry
+        $budget = Budget::create([
+            'year' => $validatedData['year'],
+            'amount' => $validatedData['yearly_budget'],
+        ]);
+        Log::info('Main budget entry created', ['budget' => $budget]);
+
+        // Get the authenticated user's ID
+        $userId = auth()->id();
+        Log::info('Authenticated user ID retrieved', ['user_id' => $userId]);
+
+        // Define committee model names and map them to form input names
+$committees = [
+    'CommitteeBarangayAffairsEnvironment' => 'committee__chair_on__barangay__affairs__environment',
+    'CommitteeEducation' =>'committee__chair_on__education',
+    'CommitteePeaceOrder' => 'committee__chair__peace__order',
+    'CommitteeLawsGoodGovernance' => 'committee__chair_on__laws__good__governance',
+    'CommitteeElderlyPwdVawc' => 'committee__chair_on__elderly__p_w_d__v_a_w_c',
+    'CommitteeHealthSanitationNutrition' => 'committee__chair_on__health__sanitation__nutrition',
+    'CommitteeLivelihood' => 'committee__chair_on__livelihood',
+    'CommitteeInfrastructureFinance' => 'committee__chair__infrastructure__finance',
+];
+
+
+        // Loop through each committee and create budget records
+foreach ($committees as $modelName => $inputName) {
+    $fullModelClass = "App\\Models\\$modelName";
+
+    if (class_exists($fullModelClass)) {
+        // Retrieve and sanitize the budget allocation from the request
+        $allocatedBudget = floatval($request->input($inputName, 0)); // Default to 0 if input is missing
+        Log::info("Processing committee: $modelName", [
+            'raw_value' => $request->input($inputName),
+            'allocated_budget' => $allocatedBudget,
+        ]);
+
+        // Save the data into the respective committee table
+        $fullModelClass::create([
+            'year' => $validatedData['year'],
+            'budget' => $allocatedBudget,
+            'remaining_budget' => $allocatedBudget,
+            'user_id' => $userId,
+        ]);
+        Log::info("Budget entry created for $modelName");
+    } else {
+        Log::error("Model class $fullModelClass does not exist.");
+        throw new Exception("Model class $fullModelClass does not exist.");
+    }
+}
+
+
+        // Commit the transaction
+        DB::commit();
+        Log::info('Database transaction committed successfully');
+
+        return redirect()->route('Official.BudgetPlanning.index')->with('success', 'Budget added successfully!');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('Failed to store budget: ', ['error' => $e->getMessage()]);
+        
+        return redirect()->back()->withErrors('An error occurred while adding the budget.');
+    }
+}
+
+
+
+
 
 
     
-
+/*
 public function store(Request $request)
 {
     // Validate the incoming request
@@ -607,5 +699,5 @@ public function store(Request $request)
         return redirect()->back()->withErrors('An error occurred while adding the budget. Please try again.');
     }
 }
-
+*/
 }
