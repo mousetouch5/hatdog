@@ -389,7 +389,7 @@ public function blockUser($id)
         // Update the user's position and password to "decline"
         $user->update([
             'position' => 'decline',
-            'password' => bcrypt('decline'), // Store a hashed "decline" password
+            'is_approved' => false, // Store a hashed "decline" password
             'is_blocked' => 1,
         ]);
 
@@ -419,7 +419,7 @@ public function unblockUser($id)
             // Restore the user's original position and password from the backup
             $user->update([
                 'position' => $backup->position,
-                'password' => $backup->password, // The password is already hashed in the backup
+                'is_approved' => true, // The password is already hashed in the backup
                 'is_blocked' => 0, // Set the user as unblocked
             ]);
 
