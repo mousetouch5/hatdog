@@ -163,7 +163,6 @@ function loadPendingUsers(page = 1) {
                     <div class="flex gap-2">
                     <button onclick="openChangePasswordModal(${user.id})" class="bg-blue-500 text-white text-xs px-3 py-1.5 rounded-md hover:bg-blue-600">Change Password</button>
                     <button onclick="deleteUser(${user.id})" class="bg-red-500 text-white text-xs px-3 py-1.5 rounded-md hover:bg-red-600">Delete</button>
-                    <button onclick="updateUser(${user.id})" class="bg-gray-500 text-white text-xs px-3 py-1.5 rounded-md hover:bg-gray-600">Update</button>
                     <button id="block-unblock-btn-${user.id}" onclick="toggleBlock(${user.id}, this)" class="bg-yellow-500 text-white text-xs px-3 py-1.5 rounded-md hover:bg-yellow-600">
                         ${user.is_blocked ? 'Unblock' : 'Block'}
                     </button>
