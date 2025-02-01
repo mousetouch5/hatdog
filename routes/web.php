@@ -206,9 +206,10 @@ Route::patch('/transactions/{id}/approve', [DashboardController::class, 'approve
 Route::delete('/transactions/{id}/reject', [DashboardController::class, 'reject']);
 
 Route::get('totalbudgetleft', [BudgetPlanningController::class, 'Total']);
-
+Route::get('official/BudgetPlanningEdits', [BudgetPlanningController::class, 'edits1'])->name('Official.BudgetPlanningEdits.index');
 Route::get('official/BudgetPlanningEdit', [BudgetPlanningController::class, 'edits'])->name('Official.BudgetPlanningEdit.index');
 Route::post('/budget/store', [BudgetPlanningController::class, 'store'])->name('budget.store');
+Route::post('/budget/store2', [BudgetPlanningController::class, 'store2'])->name('budget.store2');
 Route::post('/update-committee-budget', [BudgetPlanningController::class, 'editBudget'])->name('update.committee.budget');
 /// waay nani 
 Route::get('official/BudgetPreparation', [BudgetPreparationController::class, 'index'])->name('Official.BudgetPreparation.index');

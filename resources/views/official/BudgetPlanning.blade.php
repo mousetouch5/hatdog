@@ -23,6 +23,12 @@
                             Add
                         </button>
                     </a>
+                    <a href="{{ route('Official.BudgetPlanningEdits.index') }}">
+                        <button type="button"
+                            class="px-6 py-2 bg-gray-700 text-white rounded-md shadow hover:bg-gray-500 focus:ring-2 focus:ring-indigo-500">
+                            Edit Input
+                        </button>
+                    </a>
                 </div>
 
             </div>

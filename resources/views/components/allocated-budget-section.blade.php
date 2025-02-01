@@ -57,7 +57,7 @@
                         <button
                             onclick="openChangeComitteeModal('{{ $data['committee_name'] }}', {{ $data['remaining_budget'] }})"
                             class="bg-indigo-500 text-white py-1 px-4 rounded-md hover:bg-indigo-600 focus:outline-none">
-                            Edit
+                            Auto Budget Edit
                         </button>
                     @endif
                 </div>
