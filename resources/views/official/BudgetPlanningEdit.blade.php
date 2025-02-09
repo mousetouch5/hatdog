@@ -187,16 +187,40 @@
 
                     // Distribute budget equally among committees and update percentages
                     document.getElementById('yearly_budget').addEventListener('input', function() {
-                        const yearlyBudget = parseFloat(this.value.replace(/[₱,]/g, '')) || 0;
-                        const committeeInputs = document.querySelectorAll('.committee-input');
-                        const dividedAmount = yearlyBudget / committeeInputs.length;
+                        updateCommitteeBudgets();
+                    });
 
-                        committeeInputs.forEach(input => {
-                            input.value = dividedAmount ?
-                                `₱${dividedAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}` : '';
-                            updatePercentage(input, yearlyBudget); // Update percentage
+                    document.querySelectorAll('.percentage-input').forEach(input => {
+                        input.addEventListener('input', function() {
+                            updateCommitteeBudgets();
                         });
                     });
+
+                    function updateCommitteeBudgets() {
+                        const yearlyBudget = parseFloat(document.getElementById('yearly_budget').value.replace(/[₱,]/g, '')) || 0;
+                        const committeeInputs = document.querySelectorAll('.committee-input');
+                        let totalPercentage = 0;
+
+                        // Calculate total percentage to ensure it doesn't exceed 100
+                        document.querySelectorAll('.percentage-input').forEach(input => {
+                            totalPercentage += parseFloat(input.value) || 0;
+                        });
+
+                        if (totalPercentage > 100) {
+                            alert('Total percentage cannot exceed 100%');
+                            return;
+                        }
+
+                        committeeInputs.forEach(input => {
+                            const percentageInput = input.previousElementSibling;
+                            const percentage = parseFloat(percentageInput.value) || 0;
+                            const allocatedAmount = (yearlyBudget * percentage) / 100;
+
+                            input.value = allocatedAmount ?
+                                `₱${allocatedAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}` : '₱0.00';
+                        });
+                    }
+
 
                     // Update percentage dynamically when a committee budget is edited
                     document.querySelectorAll('.committee-input').forEach(input => {

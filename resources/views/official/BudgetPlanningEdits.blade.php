@@ -180,15 +180,39 @@
                         }
 
                         // Function to distribute budget equally among committees
-                        function distributeBudgetAutomatically() {
-                            const yearlyBudget = parseFloat(yearlyBudgetInput.value.replace(/[₱,]/g, '')) || 0;
-                            const dividedAmount = yearlyBudget / committeeInputs.length;
+                        document.getElementById('yearly_budget').addEventListener('input', function() {
+                            updateCommitteeBudgets();
+                        });
+
+                        document.querySelectorAll('.percentage-input').forEach(input => {
+                            input.addEventListener('input', function() {
+                                updateCommitteeBudgets();
+                            });
+                        });
+
+                        function updateCommitteeBudgets() {
+                            const yearlyBudget = parseFloat(document.getElementById('yearly_budget').value.replace(/[₱,]/g,
+                                '')) || 0;
+                            const committeeInputs = document.querySelectorAll('.committee-input');
+                            let totalPercentage = 0;
+
+                            // Calculate total percentage to ensure it doesn't exceed 100
+                            document.querySelectorAll('.percentage-input').forEach(input => {
+                                totalPercentage += parseFloat(input.value) || 0;
+                            });
+
+                            if (totalPercentage > 100) {
+                                alert('Total percentage cannot exceed 100%');
+                                return;
+                            }
 
                             committeeInputs.forEach(input => {
-                                input.value = dividedAmount ?
-                                    `₱${dividedAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}` :
-                                    '';
-                                updatePercentage(input, yearlyBudget);
+                                const percentageInput = input.previousElementSibling;
+                                const percentage = parseFloat(percentageInput.value) || 0;
+                                const allocatedAmount = (yearlyBudget * percentage) / 100;
+
+                                input.value = allocatedAmount ?
+                                    `₱${allocatedAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}` : '₱0.00';
                             });
                         }
 
