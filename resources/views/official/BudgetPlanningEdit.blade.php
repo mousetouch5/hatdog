@@ -46,6 +46,7 @@
                                 class="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                                 placeholder="Enter Budget" required step="0.01" min="0" />
 
+
                         </div>
                     </div>
 
@@ -71,14 +72,45 @@
                             @foreach ($committees as $committee)
                                 <div class="flex items-center justify-between bg-gray-100 p-3 rounded-md">
                                     <span class="text-gray-700">{{ $committee }}</span>
-                                    <input type="text"
-                                        name="{{ Str::snake(str_replace([' ', ',', '&', '/'], '_', $committee)) }}"
-                                        class="committee-input w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-                                        placeholder="₱0.00" />
+                                    <div class="flex gap-2">
+                                        <input type="number"
+                                            name="{{ Str::snake(str_replace([' ', ',', '&', '/'], '_', $committee)) }}_percentage"
+                                            class="percentage-input w-20 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                            placeholder="%" min="0" max="100" />
+                                        <input type="text"
+                                            name="{{ Str::snake(str_replace([' ', ',', '&', '/'], '_', $committee)) }}"
+                                            class="committee-input w-32 p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                            placeholder="₱0.00" readonly />
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
 
+
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                const totalBudgetInput = document.getElementById("yearly_budget");
+
+                                document.querySelectorAll(".percentage-input").forEach(input => {
+                                    input.addEventListener("input", function() {
+                                        const percentage = parseFloat(this.value) || 0;
+                                        const budgetInput = this.closest(".flex").querySelector(".committee-input");
+
+                                        // Get the numeric value from the yearly budget input
+                                        const totalBudget = parseFloat(totalBudgetInput.value.replace(/[^0-9.]/g,
+                                            "")) || 0;
+
+                                        //if (percentage >= 0 && percentage <= 100) {
+                                        const budgetValue = (percentage / 100) * totalBudget;
+                                        budgetInput.value =
+                                            `₱${budgetValue.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+                                        updatePercentage(budgetInput, totalBudget);
+
+                                    });
+                                });
+                            });
+                        </script>
 
 
                         <!-- Calendar of Activities -->

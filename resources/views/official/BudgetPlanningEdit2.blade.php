@@ -93,9 +93,39 @@
                             onclick="document.getElementById('my_modal_2').showModal()">
                             Save
                         </button>
+
+
+
+
                     </div>
 
+
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const totalBudgetInput = document.getElementById("yearly_budget");
+
+                            document.querySelectorAll(".percentage-input").forEach(input => {
+                                input.addEventListener("input", function() {
+                                    const percentage = parseFloat(this.value) || 0;
+                                    const budgetInput = this.closest(".flex").querySelector(".committee-input");
+
+                                    // Get the numeric value from the yearly budget input
+                                    const totalBudget = parseFloat(totalBudgetInput.value.replace(/[^0-9.]/g,
+                                        "")) || 0;
+
+                                    //if (percentage >= 0 && percentage <= 100) {
+                                    const budgetValue = (percentage / 100) * totalBudget;
+                                    budgetInput.value =
+                                        `₱${budgetValue.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+                                    updatePercentage(budgetInput, totalBudget);
+
+                                });
+                            });
+                        });
+                    </script>
                     <!-- Modal -->
+
                     <dialog id="my_modal_2" class="modal">
                         <div class="modal-box">
                             <h3 class="text-lg font-bold">Confirmation</h3>
