@@ -121,14 +121,11 @@
                                 Calendar of Activities
                             </button>
                         </div>
-
                         <div class="mt-8 text-right">
-                            <h4 class="text-lg font-semibold mb-4 ml-auto">Total Percentage: <div
-                                    id="percentage-warning"></div>
+                            <h4 class="text-lg font-semibold mb-4 ml-auto">
+                                Total Percentage: <span id="percentage-warning" class="font-bold"></span>
                             </h4>
-
                         </div>
-
 
 
 
@@ -145,16 +142,19 @@
                                     let remaining = 100 - total;
 
                                     if (remaining > 0) {
-                                        messageBox.textContent = `You have this Remaining Left: ${remaining.toFixed(2)}%`;
+                                        messageBox.textContent = `${total.toFixed(2)}% | Remaining: ${remaining.toFixed(2)}%`;
                                         messageBox.style.color = "orange";
                                     } else if (remaining < 0) {
-                                        messageBox.textContent = `Oh My God it Exceeded by: ${Math.abs(remaining).toFixed(2)}%`;
+                                        let exceeded = Math.abs(remaining);
+                                        messageBox.textContent =
+                                            `⚠ ${total.toFixed(2)}% | Exceeded by: ${exceeded.toFixed(2)}% (Please stop!)`;
                                         messageBox.style.color = "red";
                                     } else {
-                                        messageBox.textContent = `✅ Total: 100% (Perfect!) Amazing`;
+                                        messageBox.textContent = `✅ ${total.toFixed(2)}% (Perfect!)`;
                                         messageBox.style.color = "green";
                                     }
                                 }
+
                                 document.querySelectorAll(".percentage-input").forEach(input => {
                                     input.addEventListener("input", updateTotalPercentage);
                                 });
