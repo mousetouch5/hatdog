@@ -122,6 +122,51 @@
                             </button>
                         </div>
 
+                        <div class="mt-8 text-right">
+                            <h4 class="text-lg font-semibold mb-4 ml-auto">Total Percentage: <div
+                                    id="percentage-warning"></div>
+                            </h4>
+
+                        </div>
+
+
+
+
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                function updateTotalPercentage() {
+                                    let total = 0;
+                                    document.querySelectorAll(".percentage-input").forEach(input => {
+                                        total += parseFloat(input.value) || 0;
+                                    });
+
+                                    let messageBox = document.getElementById("percentage-warning");
+                                    let remaining = 100 - total;
+
+                                    if (remaining > 0) {
+                                        messageBox.textContent = `You have this Remaining Left: ${remaining.toFixed(2)}%`;
+                                        messageBox.style.color = "orange";
+                                    } else if (remaining < 0) {
+                                        messageBox.textContent = `Oh My God it Exceeded by: ${Math.abs(remaining).toFixed(2)}%`;
+                                        messageBox.style.color = "red";
+                                    } else {
+                                        messageBox.textContent = `✅ Total: 100% (Perfect!) Amazing`;
+                                        messageBox.style.color = "green";
+                                    }
+                                }
+                                document.querySelectorAll(".percentage-input").forEach(input => {
+                                    input.addEventListener("input", updateTotalPercentage);
+                                });
+
+                                updateTotalPercentage(); // Initialize on page load
+                            });
+                        </script>
+
+
+
+
+
                         <!-- Save Button -->
                         <div class="mt-8 text-right">
                             <button type="button"
