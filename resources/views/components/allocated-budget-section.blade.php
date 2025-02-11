@@ -51,17 +51,17 @@
                     value="₱{{ number_format($data['remaining_budget'], 2) }}" readonly>
 
                 <!-- Edit Button -->
-                <!-- Edit Button -->
+                <!-- Edit Button
                 <div class="mt-2">
                     @if ($selectedYear == now()->year)
-                        <button
+<button
                             onclick="openChangeComitteeModal('{{ $data['committee_name'] }}', {{ $data['remaining_budget'] }})"
                             class="bg-indigo-500 text-white py-1 px-4 rounded-md hover:bg-indigo-600 focus:outline-none">
                             Auto Budget Edit
                         </button>
-                    @endif
+@endif
                 </div>
-
+            -->
             </div>
         @endforeach
     </div>
