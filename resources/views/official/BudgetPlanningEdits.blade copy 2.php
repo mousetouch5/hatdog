@@ -58,7 +58,6 @@
                                 <div class="flex items-center justify-between bg-gray-100 p-3 rounded-md">
                                     <!-- Display Committee Name -->
                                     <span class="text-gray-700">{{ $committee['committee_name'] }}</span>
-
                                     <!-- Input Field for Budget -->
                                     <div class="flex gap-2">
                                         <input type="text"
@@ -101,8 +100,38 @@
 
 
 
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            function updateTotalPercentage() {
+                                let total = 0;
+                                document.querySelectorAll(".percentage-input").forEach(input => {
+                                    total += parseFloat(input.value) || 0;
+                                });
 
+                                let messageBox = document.getElementById("percentage-warning");
+                                let remaining = 100 - total;
 
+                                if (remaining > 0) {
+                                    messageBox.textContent = `${total.toFixed(2)}% | Remaining: ${remaining.toFixed(2)}%`;
+                                    messageBox.style.color = "orange";
+                                } else if (remaining < 0) {
+                                    let exceeded = Math.abs(remaining);
+                                    messageBox.textContent =
+                                        `⚠ ${total.toFixed(2)}% | Exceeded by: ${exceeded.toFixed(2)}% (Please stop!)`;
+                                    messageBox.style.color = "red";
+                                } else {
+                                    messageBox.textContent = `✅ ${total.toFixed(2)}% (Perfect!)`;
+                                    messageBox.style.color = "green";
+                                }
+                            }
+
+                            document.querySelectorAll(".percentage-input").forEach(input => {
+                                input.addEventListener("input", updateTotalPercentage);
+                            });
+
+                            updateTotalPercentage(); // Initialize on page load
+                        });
+                    </script>
 
 
 
@@ -149,39 +178,28 @@
                 </form>
 
 
-                <!-- External JavaScript -->
+                <!-- External Ja
+                    vaScript -->
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         const yearlyBudgetInput = document.getElementById('yearly_budget');
                         const committeeInputs = document.querySelectorAll('.committee-input');
 
                         // Automatically distribute budget and update percentages on page load
+                        if (yearlyBudgetInput && committeeInputs.length > 0) {
+                            distributeBudgetAutomatically();
+                        }
 
                         // Function to distribute budget equally among committees
                         document.getElementById('yearly_budget').addEventListener('input', function() {
                             updateCommitteeBudgets();
-                            updateTotalPercentage();
                         });
 
                         document.querySelectorAll('.percentage-input').forEach(input => {
                             input.addEventListener('input', function() {
                                 updateCommitteeBudgets();
-                                updateTotalPercentage();
                             });
                         });
-
-
-                        const percentageInputs = document.querySelectorAll('.percentage-input');
-
-                        // Attach event listeners to all percentage inputs
-                        percentageInputs.forEach(input => {
-                            input.addEventListener('input', function() {
-                                updateTotalPercentage(); // Update total percentage whenever an input changes
-                            });
-                        });
-
-                        // Initialize total percentage on page load
-                        updateTotalPercentage();
 
                         function updateCommitteeBudgets() {
                             const yearlyBudget = parseFloat(document.getElementById('yearly_budget').value.replace(/[₱,]/g,
@@ -203,29 +221,11 @@
                                 const percentageInput = input.previousElementSibling;
                                 const percentage = parseFloat(percentageInput.value) || 0;
                                 const allocatedAmount = (yearlyBudget * percentage) / 100;
-                                updateTotalPercentage();
+
                                 input.value = allocatedAmount ?
                                     `₱${allocatedAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}` : '₱0.00';
                             });
                         }
-
-
-                        const yearlyBudget = parseFloat(yearlyBudgetInput.value.replace(/[₱,]/g, '')) || 0;
-                        committeeInputs.forEach(input => {
-                            updatePercentage(input, yearlyBudget); // Call updatePercentage for each input on load
-                            updateTotalPercentage(input, yearlyBudget);
-                        });
-
-                        // Event listener for yearly budget input
-                        yearlyBudgetInput.addEventListener('input', function() {
-                            const yearlyBudget = parseFloat(yearlyBudgetInput.value.replace(/[₱,]/g, '')) || 0;
-                            committeeInputs.forEach(input => {
-                                updatePercentage(input, yearlyBudget);
-                                updateTotalPercentage(input,
-                                    yearlyBudget); // Recalculate percentages when budget changes
-                            });
-
-                        });
 
                         // Function to update percentage dynamically
                         function updatePercentage(input, yearlyBudget) {
@@ -249,118 +249,7 @@
                             } else {
                                 percentageDisplay.classList.remove('text-red-500'); // Remove red color class if <= 100%
                             }
-
-
                         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        // Function to calculate and update percentages dynamically
-                        function updateTotalPercentage() {
-                            const yearlyBudget = parseFloat(yearlyBudgetInput.value.replace(/[₱,]/g, '')) ||
-                                0; // Parse yearly budget
-                            let totalPercentage = 0;
-
-                            // Loop through all committee inputs to calculate their percentages
-                            committeeInputs.forEach(input => {
-                                const allocatedAmount = parseFloat(input.value.replace(/[₱,]/g, '')) ||
-                                    0; // Parse allocated amount
-                                const percentage = yearlyBudget ? (allocatedAmount / yearlyBudget) * 100 :
-                                    0; // Calculate percentage
-                                totalPercentage += percentage; // Add to total percentage
-
-                                // Find or create the percentage display element for each input
-                                let percentageDisplay = input.nextElementSibling;
-                                if (!percentageDisplay || !percentageDisplay.classList.contains(
-                                        'percentage-display')) {
-                                    percentageDisplay = document.createElement('span');
-                                    percentageDisplay.classList.add('percentage-display', 'ml-2',
-                                        'text-sm');
-                                    input.parentNode.appendChild(percentageDisplay);
-                                }
-
-                                // Update the percentage display for each committee input
-                                percentageDisplay.textContent = `(${percentage.toFixed(2)}%)`;
-
-                                // Change the color to red if the individual percentage exceeds 100%
-                                if (percentage > 100) {
-                                    percentageDisplay.classList.add('text-red-500'); // Add red color class
-                                } else {
-                                    percentageDisplay.classList.remove(
-                                        'text-red-500'); // Remove red color class if <= 100%
-                                }
-                            });
-
-                            // Calculate remaining or overflow percentage
-                            const remaining = 100 - totalPercentage;
-
-                            // Get the message box element
-                            const messageBox = document.getElementById("percentage-warning");
-
-                            // Update the message box based on the total percentage
-                            if (remaining > 0) {
-                                messageBox.textContent =
-                                    `${totalPercentage.toFixed(2)}% | Remaining: ${remaining.toFixed(2)}%`;
-                                messageBox.style.color = "orange"; // Warning color for remaining percentage
-                            } else if (remaining < 0) {
-                                const exceeded = Math.abs(remaining);
-                                messageBox.textContent =
-                                    `⚠ ${totalPercentage.toFixed(2)}% | Exceeded by: ${exceeded.toFixed(2)}% (Please adjust!)`;
-                                messageBox.style.color = "red"; // Error color for exceeding percentage
-                            } else {
-                                messageBox.textContent = `✅ ${totalPercentage.toFixed(2)}% (Perfect!)`;
-                                messageBox.style.color = "green"; // Success color for exactly 100%
-                            }
-                        }
-
-                        // Initialize on page load
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                         // Validate form submission
                         window.validateBudgetForm = function() {
@@ -398,34 +287,6 @@
                             });
                         });
                     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

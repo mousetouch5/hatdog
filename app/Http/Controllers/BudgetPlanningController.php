@@ -503,6 +503,8 @@ public function edits1(Request $request) {
         }
     }
 
+
+    
     // Return the view with available years and other data
     return view('Official.BudgetPlanningEdits', compact('currentYear', 'totalBudget', 'committeesData'));
 }
@@ -632,14 +634,14 @@ public function store2(Request $request)
 
         // Define committee model names and map them to form input names
 $committees = [
-    'CommitteeBarangayAffairsEnvironment' => 'committee__chair_on__barangay__affairs__environment',
+    'CommitteeBarangayAffairsEnvironment' => 'committee__chair_on__barangay__affairs____environment',
     'CommitteeEducation' =>'committee__chair_on__education',
-    'CommitteePeaceOrder' => 'committee__chair__peace__order',
-    'CommitteeLawsGoodGovernance' => 'committee__chair_on__laws__good__governance',
-    'CommitteeElderlyPwdVawc' => 'committee__chair_on__elderly__p_w_d__v_a_w_c',
-    'CommitteeHealthSanitationNutrition' => 'committee__chair_on__health__sanitation__nutrition',
+    'CommitteePeaceOrder' => 'committee__chair__peace____order',
+    'CommitteeLawsGoodGovernance' => 'committee__chair_on__laws____good__governance',
+    'CommitteeElderlyPwdVawc' => 'committee__chair_on__elderly___p_w_d__v_a_w_c',
+    'CommitteeHealthSanitationNutrition' => 'committee__chair_on__health____sanitation___nutrition',
     'CommitteeLivelihood' => 'committee__chair_on__livelihood',
-    'CommitteeInfrastructureFinance' => 'committee__chair__infrastructure__finance',
+    'CommitteeInfrastructureFinance' => 'committee__chair__infrastructure____finance',
 ];
 
 
