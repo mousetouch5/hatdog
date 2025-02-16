@@ -167,6 +167,7 @@
                             input.addEventListener('input', function() {
                                 updateCommitteeBudgets();
                                 updateTotalPercentage();
+                                console.log("this is line");
                             });
                         });
 
@@ -213,7 +214,7 @@
                         const yearlyBudget = parseFloat(yearlyBudgetInput.value.replace(/[₱,]/g, '')) || 0;
                         committeeInputs.forEach(input => {
                             updatePercentage(input, yearlyBudget); // Call updatePercentage for each input on load
-                            updateTotalPercentage(input, yearlyBudget);
+
                         });
 
                         // Event listener for yearly budget input
@@ -221,8 +222,7 @@
                             const yearlyBudget = parseFloat(yearlyBudgetInput.value.replace(/[₱,]/g, '')) || 0;
                             committeeInputs.forEach(input => {
                                 updatePercentage(input, yearlyBudget);
-                                updateTotalPercentage(input,
-                                    yearlyBudget); // Recalculate percentages when budget changes
+                                updateTotalPercentage(); // Recalculate percentages when budget changes
                             });
 
                         });
@@ -251,6 +251,8 @@
                             }
 
 
+                            updateTotalPercentage();
+
                         }
 
 
@@ -270,6 +272,8 @@
                             const yearlyBudget = parseFloat(yearlyBudgetInput.value.replace(/[₱,]/g, '')) ||
                                 0; // Parse yearly budget
                             let totalPercentage = 0;
+
+                            console.log("this function is getting called TOTAL");
 
                             // Loop through all committee inputs to calculate their percentages
                             committeeInputs.forEach(input => {
@@ -318,7 +322,7 @@
                                     `⚠ ${totalPercentage.toFixed(2)}% | Exceeded by: ${exceeded.toFixed(2)}% (Please adjust!)`;
                                 messageBox.style.color = "red"; // Error color for exceeding percentage
                             } else {
-                                messageBox.textContent = `✅ ${totalPercentage.toFixed(2)}% (Perfect!)`;
+                                messageBox.textContent = ` ${totalPercentage.toFixed(2)}% `;
                                 messageBox.style.color = "green"; // Success color for exactly 100%
                             }
                         }
